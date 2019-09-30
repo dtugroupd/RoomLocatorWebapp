@@ -16,19 +16,26 @@ export class MazemapComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.mapOptions = {
-      // The DOM element ID for the map
-      container: 'map',
-      // The ID of the campus to show
-      campuses: 89,
-      // Initial position of map
-      center: {lng: 12.5233250, lat: 55.78655},
-      // Initial zoom of map
-      zoom: 18,
-      // Initial floor z level of map
-      zLevel: 2,
-    };
 
+    // Vertical view of the library 
+    // this.mapOptions = {
+    //   container: 'map',
+    //   campuses: 89,
+    //   center: {lng: 12.5233, lat: 55.78685},
+    //   zoom: 19.25,
+    //   zLevel: 1,
+    //   bearing: -72.8
+    // };
+
+    // Horizontal view of the library
+    this.mapOptions = {
+      container: 'map',
+      campuses: 89,
+      center: {lng: 12.5233, lat: 55.78689},
+      zoom: 20,
+      zLevel: 1,
+      bearing: 17.3
+    };
     this.map = new Mazemap.Map(this.mapOptions);
   }
 
