@@ -9,7 +9,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbThemeModule, NbLayoutModule, NbButtonModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-import { MazeMapComponent } from './maze-map/maze-map.component';
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: LoginButtonComponent },
@@ -18,8 +17,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    LoginButtonComponent,
-    MazeMapComponent
+    LoginButtonComponent
   ],
   imports: [
     RouterModule.forRoot(
