@@ -11,6 +11,16 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 * Serve the project: `ng serve`
 * Visit <http://localhost:4200> in the browser
 
+## Build and Publish project
+
+* Install Docker
+* Login to docker hub: `docker login`
+* Make sure you have access to the docker hub team
+* `docker build -t dtugroupd/room-locator-fe:latest .`
+* `docker push dtugroupd/room-locator-fe:latest`
+
+To run the container: `docker run -p 4200:80 --name app -d dtugroupd/room-locator-fe:latest`
+
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
