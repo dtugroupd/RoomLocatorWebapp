@@ -12,10 +12,6 @@ export class LoginButtonComponent {
   serviceUrl: string;
 
   constructor() {
-    // this.serviceUrl = `${environment.frontendUrl}/validate`;
     this.serviceUrl = `${environment.backendUrl}/api/v1/auth/validate`
-    //https://localhost:5001/api/v1/auth/validate
   }
- 
-
 }
