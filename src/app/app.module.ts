@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { MazemapComponent } from './mazemap/mazemap.component';
 import { LoginButtonComponent } from './login-button/login-button.component';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
@@ -17,6 +18,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
+    MazemapComponent,
     LoginButtonComponent
   ],
   imports: [
