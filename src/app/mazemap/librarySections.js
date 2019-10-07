@@ -98,7 +98,7 @@ export const librarySectionLayers = [
         data: {
             type: 'Feature',
             properties: {
-            // zLevel: 1
+            zLevel: 1,
             name: "Hej hej"
             },
             geometry: {
@@ -125,8 +125,7 @@ export const librarySectionLayers = [
         }
     },
     paint: {
-        "fill-color": "#fc0",
-        "fill-outline-color": "white"
+        "fill-color": "rgba(220, 150, 120, 0.25)",
     }
     },
     {
@@ -137,7 +136,7 @@ export const librarySectionLayers = [
         data: {
             type: 'Feature',
             properties: {
-            // zLevel: 1,
+            zLevel: 1,
             // highlight: false,
             name: "Hej"
             },
@@ -169,8 +168,7 @@ export const librarySectionLayers = [
         }
     },
     paint: {
-        "fill-color": "#fc0",
-        "fill-outline-color": "white"
+        "fill-color": "rgba(220, 150, 120, 0.25)",
     }
     },
     {
@@ -181,7 +179,7 @@ export const librarySectionLayers = [
         data: {
             type: 'Feature',
             properties: {
-                // zLevel: 2,
+                zLevel: 2,
                 name: "Anden sal"
             },
             geometry: {
@@ -211,8 +209,10 @@ export const librarySectionLayers = [
             }
         }
     },
+    _vectorTileFeature: {
+        _z : 2
+    },
     paint: {
-        "fill-color": "#fc0",
-        "fill-outline-color": "white"
-    }
+        "fill-color": "rgba(220, 150, 120, 0.25)",
+    },
     }]

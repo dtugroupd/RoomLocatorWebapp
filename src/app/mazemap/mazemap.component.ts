@@ -53,15 +53,22 @@ export class MazemapComponent implements OnInit {
         fillColor: Mazemap.Util.Colors.MazeColors.MazeOrange  // optional
   });
 
+  
+  console.log(this.map);
   console.log("Layers: " + (librarySectionLayers.length))
       for (const layer of librarySectionLayers) {
         console.log(layer);
         this.map.addLayer(layer);
       }
       // this.map.highlighter.highlight(this.librarySections);
+
+      this.map.layerEventHandler.on('click', 'bottom2nd', (e, features) => {
+        console.log(e);
+        console.log(features);
+      });
   });
 
-    this.map.on('click', e => {
+  this.map.on('click', e => {
       const lngLat = e.lngLat;
       const zLevel = this.map.zLevel;
 
