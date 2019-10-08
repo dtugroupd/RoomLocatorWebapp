@@ -2,7 +2,7 @@
 name: ''
 about: Suggest an idea for this project
 title: ''
-labels: feature
+labels: feature frontend
 assignees: ''
 
 ---
