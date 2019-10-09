@@ -7,7 +7,10 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-validate',
   template: `
-    <p>Logged in as {{studentId}}</p>
+    <p>Logged in as {{jwt.sub}} {{register}} {{jwt.exp}}</p>
+    <p>Is Expired: {{expired}} (expires: {{expiration | date:"short"}}) </p>
+    <pre>{{jwt | json}}</pre>
+    <pre>{{token}}</pre>
   `,
   styles: []
 })
@@ -16,6 +19,7 @@ export class ValidateComponent implements OnInit, OnDestroy {
   prod: boolean;
 
   ticket: string;
+  token: string;
   studentId: string;
   jwt: {};
 
@@ -28,12 +32,25 @@ export class ValidateComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.route.queryParams.subscribe(params => {
       this.ticket = params['ticket'];
-      this.studentId = params['userId'];
+      this.token = params['token'];
+
+      this.jwt = JSON.parse(atob(this.token.split('.')[1]));
     }));
   }
 
   ngOnInit() {
     // this.validateLogin().then(x => this.jwt = x);
+  }
+
+  get register(): boolean {
+    return this.jwt.RegisterUser;
+  }
+
+  get expired(): boolean {
+    return Date.now() >= this.jwt.exp * 1000;
+  }
+  get expiration(): Date {
+    return new Date(this.jwt.exp * 1000);
   }
 
   ngOnDestroy() {
