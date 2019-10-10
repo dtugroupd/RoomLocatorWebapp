@@ -1,3 +1,7 @@
-export class GetTokenValue {
-    static readonly type = '[Token] Get';
+import { LoginToken } from '../models/login.model';
+
+export class AddToken {
+    static readonly type = '[Login] Add';
+
+    constructor(public payload: LoginToken) {}
 }
