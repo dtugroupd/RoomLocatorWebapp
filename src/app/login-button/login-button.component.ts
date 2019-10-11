@@ -4,14 +4,13 @@ import { LoginToken } from './../models/login.model';
 import { LoginState } from './../states/login.state';
 import { Observable } from 'rxjs';
 import { AddToken } from './../actions/login.action';
-import { Component } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login-button',
   template: `
   <div>
-    <a nbButton href="https://auth.dtu.dk/dtu/?service=http://localhost:4200/" >Login</a>
+    <a nbButton href="https://auth.dtu.dk/dtu/?service={{serviceUrl}}" >Login</a>
     <div>
       TicketValues:
         <span *ngFor="let token of tokens$ | async">
@@ -21,16 +20,15 @@ import { environment } from 'src/environments/environment';
   </div>
 `,
   styles: ['span { color: green;' ]
-  <a nbButton href="https://auth.dtu.dk/dtu/?service={{serviceUrl}}" >Login</a>
-  `,
-  styles: []
 })
 export class LoginButtonComponent {
   serviceUrl: string;
 
 @Select(LoginState.getTokens) tokens$: Observable<LoginToken>;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+    this.serviceUrl = `${environment.backendUrl}/api/v1/auth/validate`
+  }
 
   ngOnInit() {
     const ticket = this.getToken();
@@ -47,8 +45,5 @@ export class LoginButtonComponent {
     }
 
     return ticketVal;
-  }
-  constructor() {
-    this.serviceUrl = `${environment.backendUrl}/api/v1/auth/validate`
   }
 }
