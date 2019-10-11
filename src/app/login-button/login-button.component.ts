@@ -4,7 +4,8 @@ import { LoginToken } from './../models/login.model';
 import { LoginState } from './../states/login.state';
 import { Observable } from 'rxjs';
 import { AddToken } from './../actions/login.action';
-
+import { Component } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login-button',
@@ -20,10 +21,14 @@ import { AddToken } from './../actions/login.action';
   </div>
 `,
   styles: ['span { color: green;' ]
+  <a nbButton href="https://auth.dtu.dk/dtu/?service={{serviceUrl}}" >Login</a>
+  `,
+  styles: []
 })
 export class LoginButtonComponent {
+  serviceUrl: string;
 
-  @Select(LoginState.getTokens) tokens$: Observable<LoginToken>;
+@Select(LoginState.getTokens) tokens$: Observable<LoginToken>;
 
   constructor(private store: Store) {}
 
@@ -43,5 +48,7 @@ export class LoginButtonComponent {
 
     return ticketVal;
   }
-
+  constructor() {
+    this.serviceUrl = `${environment.backendUrl}/api/v1/auth/validate`
+  }
 }
