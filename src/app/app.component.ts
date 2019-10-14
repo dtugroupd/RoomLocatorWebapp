@@ -21,14 +21,17 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(new GetCoordinates()).subscribe(yo => {
+    this.store.dispatch(new GetCoordinates())
       /* In case we HAVE to subscribe/unsubsribe
+
+    .subscribe(yo => {
       this.coordinates$.subscribe(yoo => {
         console.log('Look at me now ', yoo);
         this.coordinates = yoo;
       });
-      */
+    
      this.coordinates$ = yo;
     });
+      */
   }
 }
