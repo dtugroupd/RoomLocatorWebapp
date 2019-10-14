@@ -15,13 +15,20 @@ export class AppComponent implements OnInit {
   title = 'RoomLocatorWebapp';
 
   @Select(MazemapState.getCoordinatesSet) coordinates$: Observable<Mazemap[]>
+  //coordinates = {};
 
   constructor(private store: Store) {
   }
 
   ngOnInit() {
-    this.store.dispatch(new GetCoordinates()).subscribe(result => {
-     this.coordinates$ = result;
+    this.store.dispatch(new GetCoordinates()).subscribe(yo => {
+      /* In case we HAVE to subscribe/unsubsribe
+      this.coordinates$.subscribe(yoo => {
+        console.log('Look at me now ', yoo);
+        this.coordinates = yoo;
+      });
+      */
+     this.coordinates$ = yo;
     });
   }
 }
