@@ -11,7 +11,7 @@ export class MazemapStateModel {
 @State<MazemapStateModel>({
     name: 'coordinates',
     defaults: {
-        coordinates: []
+        coordinates: null
     }
 })
 

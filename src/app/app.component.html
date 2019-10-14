@@ -6,10 +6,10 @@
   </nb-layout-header>
 
   <nb-layout-column>
-      <div>
-          Latitude: {{ (coordinates$ | async).latitude }}
+      <div *ngIf="coordinates$ | async as coordinates">
+          Latitude: {{ coordinates.latitude }}
           <br/>
-          Longitude: {{ (coordinates$ | async).longitude }}
+          Longitude: {{ coordinates.longitude }}
         </div>
     <router-outlet></router-outlet>
   </nb-layout-column>
