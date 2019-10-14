@@ -6,6 +6,11 @@
   </nb-layout-header>
 
   <nb-layout-column>
+      <div>
+          Latitude: {{ (coordinates$ | async).latitude }}
+          <br/>
+          Longitude: {{ (coordinates$ | async).longitude }}
+        </div>
     <router-outlet></router-outlet>
   </nb-layout-column>
 

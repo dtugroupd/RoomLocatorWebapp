@@ -15,6 +15,7 @@ import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { LoginState } from './states/login.state';
 import { NgxsModule } from '@ngxs/store';
 import { ValidateComponent } from './auth/validate/validate.component';
+import { MazemapState } from './states/mazemap.state';
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: LoginButtonComponent },
@@ -41,7 +42,8 @@ const appRoutes: Routes = [
     NbEvaIconsModule,
     NbButtonModule,
     NgxsModule.forRoot([
-      LoginState
+      LoginState,
+      MazemapState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),

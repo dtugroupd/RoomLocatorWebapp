@@ -27,7 +27,7 @@ export class LoginButtonComponent {
 @Select(LoginState.getTokens) tokens$: Observable<LoginToken>;
 
   constructor(private store: Store) {
-    this.serviceUrl = `${environment.backendUrl}/api/v1/auth/validate`
+    this.serviceUrl = `${environment.backendUrl}/api/v1/auth/validate`;
   }
 
   ngOnInit() {
@@ -36,6 +36,7 @@ export class LoginButtonComponent {
     if (ticket) {
       this.store.dispatch(new AddToken({tokenValue: ticket}));
     }
+
   }
 
   getToken() {
