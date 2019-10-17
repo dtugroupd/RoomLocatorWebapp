@@ -8,8 +8,8 @@ import { environment } from './../../environments/environment'
 })
 export class MazemapService {
 
-  frontendBaseUrl: string;
   backendBaseUrl: string;
+  frontendBaseUrl: string;
 
   constructor(private http: HttpClient) {
     this.backendBaseUrl = environment.backendUrl;
