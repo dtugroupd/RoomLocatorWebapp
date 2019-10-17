@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import * as d3 from 'd3-polygon';
 import { insidePolygon } from 'geolocation-utils';
-import { librarySections, librarySectionLayers, features } from './librarySections';
-// import * as d3 from 'd3-geo';
+import { Store, Select } from '@ngxs/store';
+import { GetLibrarySections } from './../actions/mazemap.action';
+import { LibrarySection, Question } from './../models/mazemap.model';
+import { MazemapState } from './../states/mazemap.state';
+import { Observable } from 'rxjs';
 
 declare let Mazemap: any;
 
@@ -17,13 +19,21 @@ export class MazemapComponent implements OnInit {
   map: any;
   mapOptions: object;
   lastHoveredLayer = null;
-  defaultColor = 'rgba(220, 150, 120, 0.25)';
+  defaultColor = 'rgba(220, 150, 120, 0.075)';
   hoverColor = 'rgba(220, 150, 120, 0.75)';
+  librarySections = [];
+  librarySectionLayers = [];
 
-  constructor() {
-  }
+  @Select(MazemapState.getLibrarySections) librarySections$: Observable<LibrarySection[]>;
+  constructor(private store: Store ) { }
 
   ngOnInit() {
+
+    // Get library sections from store and convert to layers
+    this.store.dispatch(GetLibrarySections).subscribe(x => {
+      this.librarySections = x.MazeMap.librarySections;
+      this.convertLibrarySectionsToLayers(this.librarySections);
+    });
 
     // Vertical view of the library
     // this.mapOptions = {
@@ -48,8 +58,6 @@ export class MazemapComponent implements OnInit {
     // Create map instance with these options
     this.map = new Mazemap.Map(this.mapOptions);
 
-    console.log(this.map);
-
     this.map.on('load', () => {
       this.map.highlighter = new Mazemap.Highlighter(this.map, {
         showOutline: true,
@@ -58,111 +66,87 @@ export class MazemapComponent implements OnInit {
         fillColor: Mazemap.Util.Colors.MazeColors.MazeOrange,
       });
 
-      // this.map.addLayer(librarySectionLayer);
-
       this.map.on('zlevel', () => {
-        this.updateFeatures();
-        console.log("Changed z level");
+        this.updateLayers();
       });
-
-      // const testToLngLat = [librarySections[0].geometry.coordinates.map(o => {
-      //   return [o.lng, o.lat];
-      // })];
-
-      // console.log(testToLngLat);
-
-      // const testFromLngLat = librarySectionLayers[0].source.data.geometry.coordinates[0].map(e => {
-      //   return { lng: e[0], lat: e[1] };
-      // });
-
-      // console.log(testFromLngLat);
 
       this.initLayers();
-
-      // this.map.highlighter.highlight(this.librarySections);
-
     });
 
-    this.map.on('click', e => {
-      const lngLat = e.lngLat;
-      const zLevel = this.map.zLevel;
+    this.map.on('click', (e: any) => {
       console.log(e.lngLat);
-      // var poi = librarySections.find(s => {
-      //   return insidePolygon(lngLat, s.geometry.coordinates) && zLevel === poi.properties.zLevel;
-      // });
-
-      // if (poi) {
-      //   this.map.highlighter.highlight(this.toMazemapPolygon(poi));
-      //   console.log(true);
-      // } else {
-      //   console.log(false);
-      // }
     });
   }
 
-  updateFeatures() {
-    const layerIds = librarySectionLayers.map(l => l.id);
+  // Runs every time map changes zLevel
+  updateLayers() {
     const zLevel = this.map.getZLevel();
-    const zLevelLayers = librarySectionLayers.filter(l => {
-      return l.id.includes(`B101_DI00${zLevel - 1}`);
+
+    // Hide all currently visible layers
+    this.librarySectionLayers.forEach(l => {
+      if (this.map.getLayer(l.id)) {
+        const visibility = this.map.getLayoutProperty(l.id, 'visibility');
+        if (visibility === 'visible') {
+          this.map.setLayoutProperty(l.id, 'visibility', 'none');
+        }
+      }
     });
 
-    for (const layer of layerIds) {
-      this.map.getSource(layer).setData(null);
-    }
+    const zLevelLayers = this.librarySectionLayers.filter(l => {
+      return l.zLevel === zLevel;
+    });
 
+    // Make all layers for current zLevel visible
     for (const layer of zLevelLayers) {
-      console.log(layer);
-      this.map.getSource(layer.id).setData(features.find(f => f.properties.name === layer.id));
+      const visibility = this.map.getLayoutProperty(layer.id, 'visibility');
+      if (visibility === 'none') {
+        this.map.setLayoutProperty(layer.id, 'visibility', 'visible');
+      }
     }
-
-    // const polygons = features.filter(f => {
-    //   return f.properties.zLevel === this.map.getZLevel();
-    // });
-
-    // const source = this.map.getSource('B101_DI000_02');
-    // console.log(this.map.getSource('B101_DI000_02'));
-
-    // source.setData({ type: 'FeatureCollection', features: polygons });
   }
 
+
+  // Add all layers and eventhandlers once
   initLayers() {
-    for (const layer of librarySectionLayers) {
+    this.librarySectionLayers.forEach(layer => {
       this.map.addLayer(layer);
 
-      this.map.layerEventHandler.on('click', layer.id, (e, features) => {
-        console.log(e);
-        console.log(features);
-        console.log('You clicked ' + features[0].properties.name);
+      this.map.layerEventHandler.on('click', layer.id, (e: any, features: any) => {
+        const id = features[0].properties.id;
+        const section = this.librarySections.find(x => x.id === id);
+        const questions = section.survey.questions.map((x: Question) => {
+          return `<li>${x.text}</li>`;
+        }).join('');
+
+        new Mazemap.Popup({ closeOnClick: true, offset: [0, -6] })
+        .setLngLat(e.lngLat)
+        .setHTML(
+        `
+        <strong>Clicked on layer id ${id}</strong>
+        <br/>
+        Survey id ${section.survey.id}:
+        <br/>
+        <ul>
+          ${questions}
+        </ul>
+        `)
+        .addTo(this.map);
       });
 
-      this.map.layerEventHandler.on('mousemove', layer.id, (e, features) => {
+      this.map.layerEventHandler.on('mousemove', layer.id, () => {
         this.setHoverState(layer.id);
       });
+    });
 
-    }
-
-    this.map.layerEventHandler.on('mousemove', null, (e, features) => {
-      // mouseover on NO specific layer
+    this.map.layerEventHandler.on('mousemove', null, () => {
       this.setHoverState(null);
     });
 
-    this.updateFeatures();
+    this.updateLayers();
   }
 
-  toMazemapPolygon(polygon) {
-    console.log(polygon);
-    const newPolygon = Object.assign({}, JSON.parse(JSON.stringify(polygon)));
-    newPolygon.geometry.coordinates = [newPolygon.geometry.coordinates.map(e =>
-      [e.lng, e.lat]
-    )];
-
-    console.log(newPolygon);
-
-    return newPolygon;
-  }
-
-  setHoverState(layerId) {
+  // Change layer style properties. Runs on layer 'mouseover' event.
+  setHoverState(layerId: number) {
     if (layerId === this.lastHoveredLayer) {
       return;
     }
@@ -176,4 +160,42 @@ export class MazemapComponent implements OnInit {
     this.lastHoveredLayer = layerId;
   }
 
+  // Convert sections from backend to layers readable by MazeMap
+  convertLibrarySectionsToLayers(ls: Array<LibrarySection>) {
+    ls.forEach(x => {
+      const coordinates = x.coordinates.map(c => {
+        return [c.longitude, c.latitude];
+      });
+
+      const lsLayer = {
+        id: `layer_${x.id}`,
+        type: 'fill',
+        zLevel: x.zLevel,
+        source: {
+          type: 'geojson',
+          data: {
+              type: 'Feature',
+              properties: {
+                  name: `${x.id}`,
+                  zLevel: x.zLevel,
+                  id: x.id
+              },
+              geometry: {
+                  type: 'Polygon',
+                  coordinates: [ coordinates ]
+              },
+          },
+        },
+        layout: {
+            visibility: 'visible'
+        },
+        paint:
+        {
+            'fill-color': 'rgba(220, 150, 120, 0.075)',
+        }
+      };
+
+      this.librarySectionLayers.push(lsLayer);
+    });
+  }
 }

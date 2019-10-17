@@ -1,6 +1,6 @@
 # RoomLocatorWebapp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.5.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.5
 
 ## Run the project
 
@@ -26,6 +26,7 @@ To run the container: `docker run -p 4200:80 --name app -d dtugroupd/room-locato
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
 ## Running end-to-end tests
+
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 

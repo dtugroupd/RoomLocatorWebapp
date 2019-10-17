@@ -89,13 +89,47 @@ export const librarySections = [{
     }
 }]
 
-export const librarySectionLayers =
+export const librarySectionLayers2 =
     [{
         id: 'B101_DI000_02',
         type: 'fill',
         source: {
             type: 'geojson',
-            data: null
+            data: {
+                type: 'Feature',
+                properties: {
+                    name: "B101_DI000_02",
+                    zLevel: 1
+                },
+                geometry: {
+                    type: 'Polygon',
+                    coordinates: [[
+                        [
+                            12.523394936706552,
+                            55.787009187536114
+                        ],
+                        [
+                            12.52317152962101,
+                            55.78704845759867
+                        ],
+                        [
+                            12.523106783718134,
+                            55.78693157515275
+                        ],
+                        [
+                            12.523328398202466,
+                            55.78689276418302
+                        ],
+                        [
+                            12.523394936706552,
+                            55.787009187536114
+                        ]
+                    ]]
+                },
+            },
+        },
+        layout: {
+            visibility: 'visible'
         },
         paint:
         {
@@ -107,7 +141,38 @@ export const librarySectionLayers =
         type: 'fill',
         source: {
             type: 'geojson',
-            data: null
+            data: {
+                type: 'Feature',
+                properties: {
+                    name: "B101_DI000_07",
+                    zLevel: 1
+                },
+                geometry: {
+                    type: 'Polygon',
+                    coordinates: [[
+                        [
+                            12.523259637399121,
+                            55.786766267668895
+                        ],
+                        [
+                            12.523328398202466,
+                            55.78689276418302
+                        ],
+                        [
+                            12.523106783718134,
+                            55.78693157515275
+                        ],
+                        [
+                            12.523038473405279,
+                            55.78680352605781
+                        ],
+                        [
+                            12.523259637399121,
+                            55.786766267668895
+                        ]
+                    ]]
+                },
+            }
         },
         paint:
         {
@@ -147,15 +212,6 @@ export const features = [{
             ]
         ]]
     },
-    style: {
-        __comment: "all SVG styles allowed",
-        fill: "rgba(220, 150, 120, 0.25)",
-        "stroke-width": "3",
-        "   fill-opacity": 0.3
-    },
-    // paint: {
-    //     "fill-color": "rgba(220, 150, 120, 0.25)",
-    // }
 },
 {
     type: 'Feature',
@@ -188,14 +244,5 @@ export const features = [{
             ]
         ]]
     },
-    style: {
-        "__comment": "all SVG styles allowed",
-        fill: "rgba(220, 150, 120, 0.25)",
-        "stroke-width": "3",
-        "fill-opacity": 0.3
-    },
-    // paint: {
-    //     "fill-color": "rgba(220, 150, 120, 0.25)",
-    // }
 }
 ]
