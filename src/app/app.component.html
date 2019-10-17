@@ -11,14 +11,6 @@
           <br/>
           Longitude: {{ coordinates.longitude }}
       </div>
-      
-      <br/>
-      Librarysections:
-
-      <div *ngFor=" let librarySection of librarySections$ | async ">
-        {{ librarySection | json }}
-        <br/>
-      </div>
   <router-outlet></router-outlet>
   </nb-layout-column>
   <nb-layout-footer fixed>

@@ -16,12 +16,10 @@ export class AppComponent implements OnInit {
   title = 'RoomLocatorWebapp';
 
   @Select(MazemapState.getCoordinatesSet) coordinates$: Observable<Mazemap[]>;
-  @Select(MazemapState.getLibrarySections) librarySections$: Observable<LibrarySection[]>;
 
   constructor(private store: Store) { }
 
   ngOnInit() {
-    this.store.dispatch(new GetLibrarySections());
     this.store.dispatch(new GetCoordinates());
 
       /* In case we HAVE to subscribe/unsubsribe
