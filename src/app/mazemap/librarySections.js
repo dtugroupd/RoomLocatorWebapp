@@ -1,73 +1,73 @@
-export const librarySections =  [{
+export const librarySections = [{
     type: 'Feature',
     properties: {
-      zLevel: 1
+        zLevel: 1
     },
     geometry: {
-      type: 'Polygon',
-      coordinates: [
-          {
-            lng: 12.523574624353444,
-            lat: 55.78697823298273
-          },
-          {
-            lng: 12.523729347640625,
-            lat: 55.78687781449358
-          },
-          {
-            lng: 12.52376656677427,
-            lat: 55.78694497114421
-          },
-          {
-            lng: 12.523574624353444,
-            lat: 55.78697823298273
-          },
-      ]
+        type: 'Polygon',
+        coordinates: [
+            {
+                lng: 12.523574624353444,
+                lat: 55.78697823298273
+            },
+            {
+                lng: 12.523729347640625,
+                lat: 55.78687781449358
+            },
+            {
+                lng: 12.52376656677427,
+                lat: 55.78694497114421
+            },
+            {
+                lng: 12.523574624353444,
+                lat: 55.78697823298273
+            },
+        ]
     }
-  },
-  {
-  type: 'Feature',
+},
+{
+    type: 'Feature',
     properties: {
-      zLevel: 1,
-      highlight: false,
+        zLevel: 1,
+        highlight: false,
     },
     geometry: {
-      type: 'Polygon',
-      coordinates: [
-          {
-            lng: 12.522994828289313,
-            lat: 55.78707842382289
-          },
-          {
-            lng: 12.523299885346887,
-            lat: 55.78702524210624
-          },
-          {
-            lng: 12.523260109306648,
-            lat: 55.78695225388648
-          },
-          {
-            lng: 12.522954558612383,
-            lat: 55.78700716886178
-          },
-          {
-            lng: 12.522994828289313,
-            lat: 55.78707842382289
-          }
-      ]
+        type: 'Polygon',
+        coordinates: [
+            {
+                lng: 12.522994828289313,
+                lat: 55.78707842382289
+            },
+            {
+                lng: 12.523299885346887,
+                lat: 55.78702524210624
+            },
+            {
+                lng: 12.523260109306648,
+                lat: 55.78695225388648
+            },
+            {
+                lng: 12.522954558612383,
+                lat: 55.78700716886178
+            },
+            {
+                lng: 12.522994828289313,
+                lat: 55.78707842382289
+            }
+        ]
     }
-  },
-    {
-      type: 'Feature',
-      properties: {
+},
+{
+    type: 'Feature',
+    properties: {
         zLevel: 2
-      },
-      geometry: {
+    },
+    geometry: {
         type: 'Polygon',
         coordinates: [
             {
                 lng: 12.523437716818705,
-                lat:55.786737824539216
+                lat: 55.786737824539216
             },
             {
                 lng: 12.523153306259474,
@@ -86,133 +86,116 @@ export const librarySections =  [{
                 lat: 55.786737824539216
             }
         ]
-      }
+    }
+}]
+
+export const librarySectionLayers =
+    [{
+        id: 'B101_DI000_02',
+        type: 'fill',
+        source: {
+            type: 'geojson',
+            data: null
+        },
+        paint:
+        {
+            "fill-color": "rgba(220, 150, 120, 0.25)",
+        }
+    },
+    {
+        id: 'B101_DI000_07',
+        type: 'fill',
+        source: {
+            type: 'geojson',
+            data: null
+        },
+        paint:
+        {
+            "fill-color": "rgba(220, 150, 120, 0.25)",
+        }
     }]
 
-export const librarySectionLayers = [
-    {
-    id: 'topRight',
-    type: 'fill',
-    source: {
-        type: 'geojson',
-        data: {
-            type: 'Feature',
-            properties: {
-            zLevel: 1,
-            name: "Hej hej"
-            },
-            geometry: {
-                type: 'Polygon',
-                coordinates: [[
-                    [
-                        12.523574624353444,
-                        55.78697823298273
-                    ],
-                    [
-                        12.523729347640625,
-                        55.78687781449358
-                    ],
-                    [
-                        12.52376656677427,
-                        55.78694497114421
-                    ],
-                    [
-                        12.523574624353444,
-                        55.78697823298273
-                    ],
-                ]]
-            }
-        }
+
+export const features = [{
+    type: 'Feature',
+    properties: {
+        name: "B101_DI000_02",
+        zLevel: 1
     },
-    paint: {
-        "fill-color": "rgba(220, 150, 120, 0.25)",
-    }
+    geometry: {
+        type: 'Polygon',
+        coordinates: [[
+            [
+                12.523394936706552,
+                55.787009187536114
+            ],
+            [
+                12.52317152962101,
+                55.78704845759867
+            ],
+            [
+                12.523106783718134,
+                55.78693157515275
+            ],
+            [
+                12.523328398202466,
+                55.78689276418302
+            ],
+            [
+                12.523394936706552,
+                55.787009187536114
+            ]
+        ]]
     },
-    {
-    id: 'topLeft',
-    type: 'fill',
-    source: {
-        type: 'geojson',
-        data: {
-            type: 'Feature',
-            properties: {
-            zLevel: 1,
-            // highlight: false,
-            name: "Hej"
-            },
-            geometry: {
-            type: 'Polygon',
-            coordinates: [[
-                [
-                    12.522994828289313,
-                    55.78707842382289
-                ],
-                [
-                    12.523299885346887,
-                    55.78702524210624
-                ],
-                [
-                    12.523260109306648,
-                    55.78695225388648
-                ],
-                [
-                    12.522954558612383,
-                    55.78700716886178
-                ],
-                [
-                    12.522994828289313,
-                    55.78707842382289
-                ]
-            ]]
-            }
-        }
+    style: {
+        __comment: "all SVG styles allowed",
+        fill: "rgba(220, 150, 120, 0.25)",
+        "stroke-width": "3",
+        "   fill-opacity": 0.3
     },
-    paint: {
-        "fill-color": "rgba(220, 150, 120, 0.25)",
-    }
+    // paint: {
+    //     "fill-color": "rgba(220, 150, 120, 0.25)",
+    // }
+},
+{
+    type: 'Feature',
+    properties: {
+        name: "B101_DI000_07",
+        zLevel: 1
     },
-    {
-    id: 'bottom2nd',
-    type: 'fill',
-    source: {
-        type: 'geojson',
-        data: {
-            type: 'Feature',
-            properties: {
-                zLevel: 2,
-                name: "Anden sal"
-            },
-            geometry: {
-            type: 'Polygon',
-            coordinates: [[
-                [ 
-                    12.523437716818705,
-                    55.786737824539216
-                ],
-                [
-                    12.523153306259474,
-                    55.786788042297616
-                ],
-                [
-                    12.523193688029892,
-                    55.78685831384567
-                ],
-                [
-                    12.523476108248644,
-                    55.78680844474647
-                ],
-                [
-                    12.523437716818705,
-                    55.786737824539216
-                ]
-            ]]
-            }
-        }
+    geometry: {
+        type: 'Polygon',
+        coordinates: [[
+            [
+                12.523259637399121,
+                55.786766267668895
+            ],
+            [
+                12.523328398202466,
+                55.78689276418302
+            ],
+            [
+                12.523106783718134,
+                55.78693157515275
+            ],
+            [
+                12.523038473405279,
+                55.78680352605781
+            ],
+            [
+                12.523259637399121,
+                55.786766267668895
+            ]
+        ]]
     },
-    _vectorTileFeature: {
-        _z : 2
+    style: {
+        "__comment": "all SVG styles allowed",
+        fill: "rgba(220, 150, 120, 0.25)",
+        "stroke-width": "3",
+        "fill-opacity": 0.3
     },
-    paint: {
-        "fill-color": "rgba(220, 150, 120, 0.25)",
-    },
-    }]
+    // paint: {
+    //     "fill-color": "rgba(220, 150, 120, 0.25)",
+    // }
+}
+]
