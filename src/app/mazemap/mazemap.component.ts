@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { insidePolygon } from 'geolocation-utils';
 import { Store, Select } from '@ngxs/store';
 import { GetLibrarySections } from './../actions/mazemap.action';
 import { LibrarySection, Question } from './../models/mazemap.model';
