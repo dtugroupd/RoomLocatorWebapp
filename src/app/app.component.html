@@ -6,9 +6,21 @@
   </nb-layout-header>
 
   <nb-layout-column>
-    <router-outlet></router-outlet>
-  </nb-layout-column>
+      <div *ngIf="coordinates$ | async as coordinates">
+          Latitude: {{ coordinates.latitude }}
+          <br/>
+          Longitude: {{ coordinates.longitude }}
+      </div>
+      
+      <br/>
+      Librarysections:
 
+      <div *ngFor=" let librarySection of librarySections$ | async ">
+        {{ librarySection | json }}
+        <br/>
+      </div>
+  <router-outlet></router-outlet>
+  </nb-layout-column>
   <nb-layout-footer fixed>
     <!-- Insert footer here -->
   </nb-layout-footer>
