@@ -10,10 +10,17 @@
           Latitude: {{ coordinates.latitude }}
           <br/>
           Longitude: {{ coordinates.longitude }}
-        </div>
-    <router-outlet></router-outlet>
-  </nb-layout-column>
+      </div>
+      
+      <br/>
+      Librarysections:
 
+      <div *ngFor=" let librarySection of librarySections$ | async ">
+        {{ librarySection | json }}
+        <br/>
+      </div>
+  <router-outlet></router-outlet>
+  </nb-layout-column>
   <nb-layout-footer fixed>
     <!-- Insert footer here -->
   </nb-layout-footer>
