@@ -1,5 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { faMeh } from '@fortawesome/free-solid-svg-icons';
+import { faMeh, faSmile, faGrin, faFrown, faAngry } from '@fortawesome/free-solid-svg-icons';
+import { faMeh as faMehReg,
+         faSmile as faSmileReg,
+         faGrin as faGrinReg,
+         faFrown as faFrownReg,
+         faAngry as faAngryReg
+} from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-feedback-smiley-row',
@@ -8,7 +14,17 @@ import { faMeh } from '@fortawesome/free-solid-svg-icons';
 })
 export class FeedbackSmileyRowComponent implements OnInit {
 
+  faAngry = faAngry;
+  faFrown = faFrown;
   faMeh = faMeh;
+  faSmile = faSmile;
+  faGrin = faGrin;
+  faAngryReg = faAngryReg;
+  faFrownReg = faFrownReg;
+  faMehReg = faMehReg;
+  faSmileReg = faSmileReg;
+  faGrinReg = faGrinReg;
+
 
   @Input() score: number;
   @Output() newScore = new EventEmitter();

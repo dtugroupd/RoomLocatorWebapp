@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { Survey, SurveyAnswerSubmition, QuestionAnswerSubmition } from '../models/mazemap.model';
-import { MazemapService } from '../services/survey.service';
+import { SurveyService } from '../services/survey.service';
 
 @Component({
   selector: 'app-feedback',
@@ -14,7 +14,7 @@ export class FeedbackComponent implements OnInit {
   survey: Survey;
   answer: SurveyAnswerSubmition;
   didSubmit: boolean;
-  constructor(protected dialogRef: NbDialogRef<any>, private service: MazemapService) { }
+  constructor(protected dialogRef: NbDialogRef<any>, private service: SurveyService) { }
 
   ngOnInit() {
     const qAnswers: QuestionAnswerSubmition[] = [];
@@ -32,7 +32,9 @@ export class FeedbackComponent implements OnInit {
   }
 
   submit() {
-    this.service.postAnswer(this.answer);
+    const res = this.service.postAnswer(this.answer);
+    console.log("Response: ");
+    console.log(res);
     this.didSubmit = true;
     console.log(this.answer);
     this.dialogRef.close(this.didSubmit);

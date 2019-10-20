@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SurveyAnswerSubmition } from '../models/mazemap.model';
-import { environment } from './../../environments/environment'
+import { environment } from './../../environments/environment';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MazemapService {
+export class SurveyService {
 
   backendBaseUrl: string;
   frontendBaseUrl: string;

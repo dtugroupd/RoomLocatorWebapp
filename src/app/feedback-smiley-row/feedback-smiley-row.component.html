@@ -2,20 +2,19 @@
     <!-- <fa-icon [icon]="['far', 'faMeh']"></fa-icon> -->
 
     
-    <fa-icon *ngIf="score === 0" [icon]="faMeh" [className]="'active'"></fa-icon>
-    <fa-icon *ngIf="score !== 0"[icon]="faMeh" (click)="updateScore(0)"></fa-icon>
+    <fa-icon *ngIf="score === 0" [icon]="faAngry" [className]="'angry'"></fa-icon>
+    <fa-icon *ngIf="score !== 0"[icon]="faAngryReg" (click)="updateScore(0)" [className]="'angry'"></fa-icon>
 
-    <fa-icon *ngIf="score === 25" [icon]="faMeh" [className]="'active'" ></fa-icon>
-    <fa-icon *ngIf="score !== 25" [icon]="faMeh" (click)="updateScore(25)"></fa-icon>
+    <fa-icon *ngIf="score === 25" [icon]="faFrown" [className]="'frown'" ></fa-icon>
+    <fa-icon *ngIf="score !== 25" [icon]="faFrownReg" (click)="updateScore(25)" [className]="'frown'"></fa-icon>
 
-    <fa-icon *ngIf="score === 50" [icon]="faMeh" [className]="'active'"></fa-icon>
-    <fa-icon *ngIf="score !== 50" [icon]="faMeh" (click)="updateScore(50)"></fa-icon>
+    <fa-icon *ngIf="score === 50" [icon]="faMeh" [className]="'meh'"></fa-icon>
+    <fa-icon *ngIf="score !== 50" [icon]="faMehReg" (click)="updateScore(50)" [className]="'meh'"></fa-icon>
 
-    <fa-icon *ngIf="score === 75" [icon]="faMeh" [className]="'active'"></fa-icon>
-    <fa-icon *ngIf="score !== 75" [icon]="faMeh" (click)="updateScore(75)"></fa-icon>
+    <fa-icon *ngIf="score === 75" [icon]="faSmile" [className]="'smile'"></fa-icon>
+    <fa-icon *ngIf="score !== 75" [icon]="faSmileReg" (click)="updateScore(75)" [className]="'smile'"></fa-icon>
 
-    <fa-icon *ngIf="score === 100" [icon]="faMeh" [className]="'active'"></fa-icon>
-    <fa-icon *ngIf="score !== 100" [icon]="faMeh" (click)="updateScore(100)"></fa-icon>
-
+    <fa-icon *ngIf="score === 100" [icon]="faGrin" [className]="'grin'"></fa-icon>
+    <fa-icon *ngIf="score !== 100" [icon]="faGrinReg" (click)="updateScore(100)" [className]="'grin'"></fa-icon>
 
 </div>
