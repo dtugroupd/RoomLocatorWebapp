@@ -1,0 +1,21 @@
+<div id="iconRow">
+    <!-- <fa-icon [icon]="['far', 'faMeh']"></fa-icon> -->
+
+    
+    <fa-icon *ngIf="score === 0" [icon]="faMeh" [className]="'active'"></fa-icon>
+    <fa-icon *ngIf="score !== 0"[icon]="faMeh" (click)="updateScore(0)"></fa-icon>
+
+    <fa-icon *ngIf="score === 25" [icon]="faMeh" [className]="'active'" ></fa-icon>
+    <fa-icon *ngIf="score !== 25" [icon]="faMeh" (click)="updateScore(25)"></fa-icon>
+
+    <fa-icon *ngIf="score === 50" [icon]="faMeh" [className]="'active'"></fa-icon>
+    <fa-icon *ngIf="score !== 50" [icon]="faMeh" (click)="updateScore(50)"></fa-icon>
+
+    <fa-icon *ngIf="score === 75" [icon]="faMeh" [className]="'active'"></fa-icon>
+    <fa-icon *ngIf="score !== 75" [icon]="faMeh" (click)="updateScore(75)"></fa-icon>
+
+    <fa-icon *ngIf="score === 100" [icon]="faMeh" [className]="'active'"></fa-icon>
+    <fa-icon *ngIf="score !== 100" [icon]="faMeh" (click)="updateScore(100)"></fa-icon>
+
+
+</div>

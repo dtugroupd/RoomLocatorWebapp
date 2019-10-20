@@ -1,0 +1,17 @@
+<nb-card>
+    <nb-card-header>
+        Survey {{ survey.id }}
+    </nb-card-header>
+        <nb-list *ngIf="survey">
+            <nb-list-item *ngFor="let question of answer.questionAnswers">
+                {{question.questionId}}: {{ question.text }}
+                <app-feedback-smiley-row [score]="question.score" (newScore)="this.question.score = $event"></app-feedback-smiley-row>
+            </nb-list-item>
+        </nb-list>
+    <nb-card-footer>
+        <div id="buttonFooter">
+            <button nbButton status="danger" (click)="close()">Close</button>
+            <button nbButton status="primary" (click)="submit()">Submit</button>
+        </div>
+    </nb-card-footer>
+</nb-card>

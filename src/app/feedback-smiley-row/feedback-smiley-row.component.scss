@@ -1,0 +1,11 @@
+#iconRow {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 32px;
+}
+
+.active {
+    color: green;
+}
