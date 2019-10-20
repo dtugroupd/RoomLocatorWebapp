@@ -17,14 +17,17 @@ export class MazemapService {
     this.frontendBaseUrl = environment.frontendUrl;
   }
 
-  postAnswer(answer: SurveyAnswerSubmition): Observable<SurveyAnswerSubmition> {
+  postAnswer(answer: SurveyAnswerSubmition) {
     const options = {
         headers: new HttpHeaders({
             'Content-Type':  'application/json',
         })
     };
     console.log("Trying to post..");
-    return this.http.post<SurveyAnswerSubmition>(`${this.backendBaseUrl}/api/v1/survey/submitanswer`, answer, options);
+    return this.http.post<SurveyAnswerSubmition>(`${this.backendBaseUrl}/api/v1/survey/submitanswer`, answer, options)
+        .subscribe(data => {
+            console.log(data);
+        });
   }
 
 //   fetchCoordinates() {
