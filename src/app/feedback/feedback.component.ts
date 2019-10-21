@@ -32,9 +32,7 @@ export class FeedbackComponent implements OnInit {
   }
 
   submit() {
-    const res = this.service.postAnswer(this.answer);
-    console.log("Response: ");
-    console.log(res);
+    this.service.postSurveyAnswer(this.answer);
     this.didSubmit = true;
     console.log(this.answer);
     this.dialogRef.close(this.didSubmit);

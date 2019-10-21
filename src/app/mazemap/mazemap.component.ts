@@ -110,9 +110,6 @@ export class MazemapComponent implements OnInit {
       this.map.layerEventHandler.on('click', layer.id, (e: any, features: any) => {
         const id = features[0].properties.id;
         const section = this.librarySections.find(x => x.id === id);
-        const questions = section.survey.questions.map((x: Question) => {
-          return `<li>${x.text}</li>`;
-        }).join('');
 
         const popupContent = this.dynamicComponentService.injectComponent(
           SurveyComponent,
@@ -125,21 +122,6 @@ export class MazemapComponent implements OnInit {
       .setDOMContent(popupContent)
       .addTo(this.map);
       });
-      //   new Mazemap.Popup({ closeOnClick: true, offset: [0, -6] })
-      //   .setLngLat(e.lngLat)
-      //   .setHTML(
-      //   `
-      //   <strong>Clicked on layer id ${id}</strong>
-      //   <br/>
-      //   Survey id ${section.survey.id}:
-      //   <br/>
-      //   <ul>
-      //     ${questions}
-      //   </ul>
-      //   <a nbButton>Hello</a>
-      //   `)
-      //   .addTo(this.map);
-      // });
 
       this.map.layerEventHandler.on('mousemove', layer.id, () => {
         this.setHoverState(layer.id);
@@ -150,6 +132,8 @@ export class MazemapComponent implements OnInit {
       this.setHoverState(null);
     });
 
+    console.log("Sections loaded: ");
+    console.log(this.librarySections);
     this.updateLayers();
   }
 

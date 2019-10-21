@@ -1,9 +1,9 @@
 #iconRow {
     margin-top: 12px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 100%;
-    font-size: 32px;
+    font-size: 46px;
 }
 
 .angry {
@@ -11,11 +11,11 @@
 }
 
 .frown {
-    color: orange;
+    color: #ce5a57
 }
 
 .meh {
-    color: yellow;
+    color: #FFDF45
 }
 
 .smile {
@@ -23,5 +23,5 @@
 }
 
 .grin {
-    color: green;
+    color: #A4D1A2
 }
