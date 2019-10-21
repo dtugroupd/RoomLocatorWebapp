@@ -70,7 +70,6 @@ export class MazemapComponent implements OnInit {
 
     this.map.on('click', (e: any) => {
       console.log(e.lngLat);
-      console.log(e.zoom);
     });
   }
 
@@ -100,7 +99,6 @@ export class MazemapComponent implements OnInit {
       }
     }
   }
-
 
   // Add all layers and eventhandlers once
   initLayers() {
@@ -132,8 +130,6 @@ export class MazemapComponent implements OnInit {
       this.setHoverState(null);
     });
 
-    console.log("Sections loaded: ");
-    console.log(this.librarySections);
     this.updateLayers();
   }
 

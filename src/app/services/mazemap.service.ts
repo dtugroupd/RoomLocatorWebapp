@@ -14,7 +14,7 @@ export class MazemapService extends BaseService {
 
   fetchCoordinates() {
     return this.http.get<Mazemap[]>(`${this.backendBaseUrl}/api/v1/mazemap`);
-}
+  }
 
   fetchLibrarySections() {
     return this.http.get<LibrarySection[]>(`${this.backendBaseUrl}/api/v1/mazemap/librarysections`);
