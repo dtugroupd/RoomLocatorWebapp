@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { SurveyAnswerSubmition } from '../models/mazemap.model';
+import { SurveyAnswerSubmition, SurveyToCreate } from '../models/mazemap.model';
 import { environment } from './../../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -28,6 +28,20 @@ export class SurveyService {
         .subscribe(data => {
             console.log(data);
         });
+  }
+
+  createSurvey(survey: SurveyToCreate) {
+    const options = {
+      headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+      })
+    };
+
+    return this.http.post<SurveyToCreate>(`${this.backendBaseUrl}/api/v1/survey/create`, survey, options)
+      .subscribe(data => {
+        console.log(data);
+      });
+
   }
 
 //   fetchCoordinates() {

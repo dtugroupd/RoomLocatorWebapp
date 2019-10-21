@@ -116,7 +116,10 @@ export class MazemapComponent implements OnInit {
 
         const popupContent = this.dynamicComponentService.injectComponent(
           SurveyComponent,
-          x => x.model = section.survey);
+          x => {
+            x.model = section.survey;
+            x.sectionId = section.id;
+          });
         new Mazemap.Popup({ closeOnClick: true, offset: [0, -6] })
       .setLngLat(e.lngLat)
       .setDOMContent(popupContent)

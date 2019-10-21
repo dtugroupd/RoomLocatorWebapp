@@ -21,6 +21,11 @@ export interface Survey {
     surveyAnswers: SurveyAnswer[];
 }
 
+export interface SurveyToCreate {
+    sectionId: number;
+    questions: QuestionToCreate[];
+}
+
 export interface Question {
     id: number;
     text: string;
@@ -48,4 +53,8 @@ export interface QuestionAnswerSubmition {
     questionId: number;
     text: string;
     score: number;
+}
+
+export interface QuestionToCreate {
+    text: string;
 }

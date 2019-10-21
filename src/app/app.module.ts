@@ -21,6 +21,7 @@ import { DynamicComponentService } from './services/DynamicComponentService';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { FeedbackSmileyRowComponent } from './feedback-smiley-row/feedback-smiley-row.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CreateSurveyComponent } from './create-survey/create-survey.component';
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: LoginButtonComponent },
@@ -35,11 +36,13 @@ const appRoutes: Routes = [
     SurveyComponent,
     FeedbackComponent,
     FeedbackSmileyRowComponent,
+    CreateSurveyComponent,
   ],
   entryComponents: [
     SurveyComponent,
     FeedbackComponent,
-    FeedbackSmileyRowComponent
+    FeedbackSmileyRowComponent,
+    CreateSurveyComponent
   ],
   imports: [
     RouterModule.forRoot(

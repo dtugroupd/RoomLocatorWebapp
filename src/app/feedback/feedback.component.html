@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card id="surveyCard">
     <nb-card-header>
         Survey {{ survey.id }}
     </nb-card-header>
@@ -10,8 +10,8 @@
         </nb-list>
     <nb-card-footer>
         <div id="buttonFooter">
-            <button nbButton status="danger" (click)="close()">Close</button>
-            <button nbButton status="primary" (click)="submit()">Submit</button>
+            <button nbButton outline status="warning" (click)="close()">Close</button>
+            <button nbButton outline (click)="submit()">Submit</button>
         </div>
     </nb-card-footer>
 </nb-card>

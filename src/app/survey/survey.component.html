@@ -1,11 +1,9 @@
 <div id="survey">
-    Survey id: {{ model.id }}
-    <!-- <div> -->
-        <!-- <ul>
-            <li *ngFor="let question of model.questions">
-                {{ question.text }}
-            </li>
-        </ul> -->
-        <!-- </div> -->
+    Section {{ sectionId }} | Survey {{ model.id }}
+    <br/>
+    <br/>
     <button nbButton fullWidth (click)="openDialog()">Give feedback</button>
+    <br/>
+    <br/>
+    <button nbButton fullWidth (click)="openCreateSurveyDialog()">Create survey</button>
 </div>
