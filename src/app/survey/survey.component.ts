@@ -22,9 +22,13 @@ export class SurveyComponent implements OnInit {
   openDialog() {
     const surveyContext = { survey: this.model };
     const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true, context: surveyContext };
-    this.dialogService.open(FeedbackComponent, settings).onClose.subscribe(submit => {
-     if (submit === true) {
+    this.dialogService.open(FeedbackComponent, settings).onClose.subscribe(res => {
+     if (res.submit === true) {
       this.showFeedbackToast('bottom-left', 'success');
+     }
+
+     if (res.error === true) {
+      this.showGeneralErrorToast('bottom-left', 'warning');
      }
     });
   }
@@ -36,6 +40,10 @@ export class SurveyComponent implements OnInit {
      if (res.submit === true) {
       this.showCreateSurveyToast('top-right', 'success', res.sectionId);
      }
+
+     if (res.error === true) {
+       this.showGeneralErrorToast('top-right', 'warning');
+     }
     });
   }
 
@@ -45,6 +53,14 @@ export class SurveyComponent implements OnInit {
       `Thanks for your feedback!`,
       { position, status });
   }
+
+  showGeneralErrorToast(position, status) {
+    this.toastrService.show(
+      status || 'Warning',
+      `Something went wrong.`,
+      { position, status });
+  }
+
 
   showCreateSurveyToast(position, status, sectionId) {
     this.toastrService.show(

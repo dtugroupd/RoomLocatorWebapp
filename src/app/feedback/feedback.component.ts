@@ -13,7 +13,7 @@ export class FeedbackComponent implements OnInit {
 
   survey: Survey;
   answer: SurveyAnswerSubmition;
-  didSubmit: boolean;
+
   constructor(protected dialogRef: NbDialogRef<any>, private service: SurveyService) { }
 
   ngOnInit() {
@@ -27,15 +27,17 @@ export class FeedbackComponent implements OnInit {
   }
 
   close() {
-    this.didSubmit = false;
-    this.dialogRef.close(this.didSubmit);
+    this.dialogRef.close({submit: false});
   }
 
   submit() {
-    this.service.postSurveyAnswer(this.answer);
-    this.didSubmit = true;
-    console.log(this.answer);
-    this.dialogRef.close(this.didSubmit);
+    this.service.postSurveyAnswer(this.answer).subscribe(res => {
+      if (res === null) {
+        this.dialogRef.close({submit: true});
+      } else {
+        this.dialogRef.close({submit: false, error: true});
+      }
+    });
   }
 
 }

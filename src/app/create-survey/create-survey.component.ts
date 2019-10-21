@@ -32,18 +32,25 @@ export class CreateSurveyComponent implements OnInit {
 
   submit() {
     const emptyQuestions = this.questions.filter(q => q.text === '');
-    if ( emptyQuestions.length !== this.questions.length) {
-      this.service.createSurvey({ sectionId: this.sectionId, questions: this.questions});
-      this.dialogRef.close({ submit: true, sectionId: this.sectionId });
+
+    if (emptyQuestions.length !== this.questions.length) {
+      this.service.createSurvey({ sectionId: this.sectionId, questions: this.questions}).subscribe(res => {
+        if (res === null) {
+          this.dialogRef.close({ submit: true, sectionId: this.sectionId });
+          } else {
+            this.dialogRef.close({ submit: false, error: true });
+          }
+      });
     } else {
-      this.showErrorToast('top-right', 'warning');
+      this.showEmptyErrorToast('top-right', 'warning');
     }
   }
 
-  showErrorToast(position, status) {
+  showEmptyErrorToast(position, status) {
     this.toastrService.show(
       status || 'Warning',
       `Can't submit an empty survey`,
       { position, status });
   }
+
 }

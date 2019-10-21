@@ -19,8 +19,7 @@ export class SurveyService extends BaseService {
             'Content-Type':  'application/json',
         })
     };
-    return this.http.post<SurveyAnswerSubmition>(`${this.backendBaseUrl}/api/v1/survey/submitanswer`, answer, options)
-      .subscribe();
+    return this.http.post<SurveyAnswerSubmition>(`${this.backendBaseUrl}/api/v1/survey/submitanswer`, answer, options);
   }
 
   createSurvey(survey: SurveyToCreate) {
@@ -30,8 +29,7 @@ export class SurveyService extends BaseService {
       })
     };
 
-    return this.http.post<SurveyToCreate>(`${this.backendBaseUrl}/api/v1/survey/create`, survey, options)
-      .subscribe();
+    return this.http.post<SurveyToCreate>(`${this.backendBaseUrl}/api/v1/survey/create`, survey, options);
 
   }
 }
