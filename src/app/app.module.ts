@@ -8,7 +8,7 @@ import { LoginButtonComponent } from './login-button/login-button.component';
 import { RouterModule, Routes, RouterState } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule, NbCardModule, NbDialogService, NbDialogModule, NbDialogRef, NbToastrModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -16,6 +16,12 @@ import { LoginState } from './states/login.state';
 import { NgxsModule } from '@ngxs/store';
 import { ValidateComponent } from './auth/validate/validate.component';
 import { MazemapState } from './states/mazemap.state';
+import { SurveyComponent } from './survey/survey.component';
+import { DynamicComponentService } from './services/DynamicComponentService';
+import { FeedbackComponent } from './feedback/feedback.component';
+import { FeedbackSmileyRowComponent } from './feedback-smiley-row/feedback-smiley-row.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CreateSurveyComponent } from './create-survey/create-survey.component';
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: LoginButtonComponent },
@@ -27,6 +33,16 @@ const appRoutes: Routes = [
     ValidateComponent,
     MazemapComponent,
     LoginButtonComponent,
+    SurveyComponent,
+    FeedbackComponent,
+    FeedbackSmileyRowComponent,
+    CreateSurveyComponent,
+  ],
+  entryComponents: [
+    SurveyComponent,
+    FeedbackComponent,
+    FeedbackSmileyRowComponent,
+    CreateSurveyComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -37,10 +53,15 @@ const appRoutes: Routes = [
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    FontAwesomeModule,
     NbThemeModule.forRoot({ name: 'default' }),
     NbLayoutModule,
     NbEvaIconsModule,
     NbButtonModule,
+    NbCardModule,
+    NbListModule,
+    NbDialogModule.forRoot(),
+    NbToastrModule.forRoot(),
     NgxsModule.forRoot([
       LoginState,
       MazemapState
@@ -48,10 +69,11 @@ const appRoutes: Routes = [
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
   ],
-  providers: [],
+  providers: [ DynamicComponentService ],
   bootstrap: [AppComponent],
   exports: [
-    LoginButtonComponent
+    LoginButtonComponent,
+    SurveyComponent
   ]
 })
 export class AppModule { }

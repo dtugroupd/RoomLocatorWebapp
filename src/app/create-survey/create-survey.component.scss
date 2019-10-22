@@ -1,0 +1,17 @@
+#questions {
+    margin-top: 15px;
+}
+
+#question:nth-child(n-1) {
+    margin-bottom: 15px;
+}
+
+#questions input {
+    min-height: 35px;
+    width: 100%;
+}
+
+#createSurveyFooter {
+    display: flex;
+    justify-content: space-between;
+}

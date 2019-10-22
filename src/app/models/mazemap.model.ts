@@ -21,6 +21,11 @@ export interface Survey {
     surveyAnswers: SurveyAnswer[];
 }
 
+export interface SurveyToCreate {
+    sectionId: number;
+    questions: QuestionToCreate[];
+}
+
 export interface Question {
     id: number;
     text: string;
@@ -28,6 +33,7 @@ export interface Question {
 
 export interface SurveyAnswer {
     id: number;
+    surveyId: number;
     questionAnswers: QuestionAnswer[];
 }
 
@@ -35,5 +41,20 @@ export interface QuestionAnswer {
     id: number;
     questionId: number;
     score: number;
+    text: string;
+}
+
+export interface SurveyAnswerSubmition {
+    surveyId: number;
+    questionAnswers: QuestionAnswerSubmition[];
+}
+
+export interface QuestionAnswerSubmition {
+    questionId: number;
+    text: string;
+    score: number;
+}
+
+export interface QuestionToCreate {
     text: string;
 }

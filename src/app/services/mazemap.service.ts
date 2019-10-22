@@ -1,24 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Mazemap, LibrarySection } from '../models/mazemap.model';
-import { environment } from './../../environments/environment'
+import { BaseService } from './base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MazemapService {
+export class MazemapService extends BaseService {
 
-  backendBaseUrl: string;
-  frontendBaseUrl: string;
-
-  constructor(private http: HttpClient) {
-    this.backendBaseUrl = environment.backendUrl;
-    this.frontendBaseUrl = environment.frontendUrl;
+  constructor(http: HttpClient) {
+    super(http);
   }
 
   fetchCoordinates() {
     return this.http.get<Mazemap[]>(`${this.backendBaseUrl}/api/v1/mazemap`);
-}
+  }
 
   fetchLibrarySections() {
     return this.http.get<LibrarySection[]>(`${this.backendBaseUrl}/api/v1/mazemap/librarysections`);

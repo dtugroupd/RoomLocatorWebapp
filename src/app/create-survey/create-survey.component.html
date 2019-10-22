@@ -1,0 +1,15 @@
+<nb-card>
+    <nb-card-header>
+        Create survey for section {{ sectionId }}
+    </nb-card-header>
+    <nb-card-body>
+    <button nbButton fullWidth (click)="addQuestion()">Add question</button>
+        <div id="questions" *ngFor="let question of questions; let i = index">
+            <input type="text" placeholder=" Question {{i+1}}" fieldSize="medium" nbInput [value]="question.text" (input)="question.text = $event.target.value" >
+        </div>
+    </nb-card-body>
+    <nb-card-footer id="createSurveyFooter">
+        <button nbButton outline (click)="close()"  status="warning">Close</button>
+        <button nbButton outline (click)="submit()">Submit</button>
+    </nb-card-footer>
+</nb-card>

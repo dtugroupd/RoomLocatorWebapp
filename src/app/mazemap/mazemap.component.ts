@@ -4,6 +4,9 @@ import { GetLibrarySections } from './../actions/mazemap.action';
 import { LibrarySection, Question } from './../models/mazemap.model';
 import { MazemapState } from './../states/mazemap.state';
 import { Observable } from 'rxjs';
+import { SurveyComponent } from './../survey/survey.component';
+import { DynamicComponentService } from './../services/DynamicComponentService';
+
 
 declare let Mazemap: any;
 
@@ -24,7 +27,7 @@ export class MazemapComponent implements OnInit {
   librarySectionLayers = [];
 
   @Select(MazemapState.getLibrarySections) librarySections$: Observable<LibrarySection[]>;
-  constructor(private store: Store ) { }
+  constructor(private store: Store, private dynamicComponentService: DynamicComponentService ) { }
 
   ngOnInit() {
 
@@ -35,36 +38,29 @@ export class MazemapComponent implements OnInit {
     });
 
     // Vertical view of the library
+    this.mapOptions = {
+       container: 'map',
+       campuses: 89,
+       center: { lng: 12.52331185978531, lat: 55.78689538233718 },
+       zoom: 18.75,
+       zLevel: 1,
+       bearing: -72.8
+     };
+
+    // Horizontal view of the library
     // this.mapOptions = {
     //   container: 'map',
     //   campuses: 89,
-    //   center: { lng: 12.5233, lat: 55.78685 },
-    //   zoom: 19.25,
+    //   center: { lng: 12.5233, lat: 55.78689 },
+    //   zoom: 20.1,
     //   zLevel: 1,
-    //   bearing: -72.8
+    //   bearing: 17.3,
     // };
-
-    // Horizontal view of the library
-    this.mapOptions = {
-      container: 'map',
-      campuses: 89,
-      center: { lng: 12.5233, lat: 55.78689 },
-      zoom: 20.1,
-      zLevel: 1,
-      bearing: 17.3,
-    };
 
     // Create map instance with these options
     this.map = new Mazemap.Map(this.mapOptions);
 
     this.map.on('load', () => {
-      this.map.highlighter = new Mazemap.Highlighter(this.map, {
-        showOutline: true,
-        showFill: true,
-        outlineColor: Mazemap.Util.Colors.MazeColors.MazeOrange,
-        fillColor: Mazemap.Util.Colors.MazeColors.MazeOrange,
-      });
-
       this.map.on('zlevel', () => {
         this.updateLayers();
       });
@@ -104,7 +100,6 @@ export class MazemapComponent implements OnInit {
     }
   }
 
-
   // Add all layers and eventhandlers once
   initLayers() {
     this.librarySectionLayers.forEach(layer => {
@@ -113,23 +108,17 @@ export class MazemapComponent implements OnInit {
       this.map.layerEventHandler.on('click', layer.id, (e: any, features: any) => {
         const id = features[0].properties.id;
         const section = this.librarySections.find(x => x.id === id);
-        const questions = section.survey.questions.map((x: Question) => {
-          return `<li>${x.text}</li>`;
-        }).join('');
 
+        const popupContent = this.dynamicComponentService.injectComponent(
+          SurveyComponent,
+          x => {
+            x.model = section.survey;
+            x.sectionId = section.id;
+          });
         new Mazemap.Popup({ closeOnClick: true, offset: [0, -6] })
-        .setLngLat(e.lngLat)
-        .setHTML(
-        `
-        <strong>Clicked on layer id ${id}</strong>
-        <br/>
-        Survey id ${section.survey.id}:
-        <br/>
-        <ul>
-          ${questions}
-        </ul>
-        `)
-        .addTo(this.map);
+      .setLngLat(e.lngLat)
+      .setDOMContent(popupContent)
+      .addTo(this.map);
       });
 
       this.map.layerEventHandler.on('mousemove', layer.id, () => {
