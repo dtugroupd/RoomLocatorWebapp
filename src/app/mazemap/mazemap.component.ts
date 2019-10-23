@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { GetLibrarySections, SetActiveSection } from './../actions/mazemap.action';
-import { LibrarySection, Question } from './../models/mazemap.model';
+import { LibrarySection } from './../models/mazemap.model';
 import { SurveyComponent } from './../survey/survey.component';
 import { DynamicComponentService } from './../services/DynamicComponentService';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -68,7 +68,8 @@ export class MazemapComponent implements OnInit {
        center: { lng: 12.5233335, lat: 55.7868826 },
        zoom: 19.1,
        zLevel: 1,
-       bearing: -72.8
+       bearing: -72.8,
+       interactive: false,
      };
 
     // Horizontal view of the library
@@ -93,9 +94,6 @@ export class MazemapComponent implements OnInit {
         this.closeFeedbackPrompt();
       });
 
-      this.map.scrollZoom.disable();
-      this.map.dragPan.disable();
-      this.map.doubleClickZoom.disable();
       this.initLayers();
     });
 
