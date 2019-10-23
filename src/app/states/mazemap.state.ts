@@ -1,19 +1,21 @@
 import {State, Action, StateContext, Selector, Select} from '@ngxs/store';
 import {Mazemap, LibrarySection} from '../models/mazemap.model';
-import {GetCoordinates, GetLibrarySections} from '../actions/mazemap.action';
+import {GetCoordinates, GetLibrarySections, SetActiveSection} from '../actions/mazemap.action';
 import { MazemapService } from '../services/mazemap.service';
 import {tap} from 'rxjs/operators';
 
 export class MazemapStateModel {
     coordinates: Mazemap[];
     librarySections: LibrarySection[];
+    activeSection: LibrarySection;
 }
 
 @State<MazemapStateModel>({
     name: 'MazeMap',
     defaults: {
         coordinates: null,
-        librarySections: null
+        librarySections: null,
+        activeSection: null
     }
 })
 
@@ -29,6 +31,11 @@ export class MazemapState {
     @Selector()
     static getLibrarySections(state: MazemapStateModel) {
         return state.librarySections;
+    }
+
+    @Selector()
+    static getActiveSection(state: MazemapStateModel) {
+        return state.activeSection;
     }
 
     @Action(GetCoordinates)
@@ -51,5 +58,12 @@ export class MazemapState {
                 librarySections: result,
             });
         }));
+    }
+
+    @Action(SetActiveSection)
+    setActiveSection({patchState}: StateContext<MazemapStateModel>, payload: SetActiveSection) {
+        patchState({
+            activeSection: payload.section
+        });
     }
 }

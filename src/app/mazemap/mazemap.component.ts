@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { GetLibrarySections } from './../actions/mazemap.action';
+import { GetLibrarySections, SetActiveSection } from './../actions/mazemap.action';
 import { LibrarySection, Question } from './../models/mazemap.model';
-import { MazemapState } from './../states/mazemap.state';
-import { Observable } from 'rxjs';
 import { SurveyComponent } from './../survey/survey.component';
 import { DynamicComponentService } from './../services/DynamicComponentService';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { MazemapState } from '../states/mazemap.state';
+import { Observable } from 'rxjs';
 
 
 declare let Mazemap: any;
@@ -13,7 +14,25 @@ declare let Mazemap: any;
 @Component({
   selector: 'app-mazemap',
   templateUrl: './mazemap.component.html',
-  styleUrls: ['./mazemap.component.scss']
+  styleUrls: ['./mazemap.component.scss'],
+  animations: [
+    trigger('openClose', [
+      state('open', style({
+        height: '50px',
+        opacity: 1,
+      })),
+      state('closed', style({
+        height: '0px',
+        opacity: 0.0,
+      })),
+      transition('open => closed', [
+        animate('0.25s')
+      ]),
+      transition('closed => open', [
+        animate('0.25s')
+      ]),
+    ])
+  ]
 })
 
 export class MazemapComponent implements OnInit {
@@ -21,12 +40,17 @@ export class MazemapComponent implements OnInit {
   map: any;
   mapOptions: object;
   lastHoveredLayer = null;
+  activeLayer = null;
+  promptFeedback = false;
+  popup = null;
   defaultColor = 'rgba(220, 150, 120, 0.075)';
-  hoverColor = 'rgba(220, 150, 120, 0.75)';
+  hoverColor = 'rgba(220, 150, 120, 0.25)';
+  activeColor = 'rgba(220, 150, 120, 0.75)';
   librarySections = [];
   librarySectionLayers = [];
 
   @Select(MazemapState.getLibrarySections) librarySections$: Observable<LibrarySection[]>;
+
   constructor(private store: Store, private dynamicComponentService: DynamicComponentService ) { }
 
   ngOnInit() {
@@ -41,8 +65,8 @@ export class MazemapComponent implements OnInit {
     this.mapOptions = {
        container: 'map',
        campuses: 89,
-       center: { lng: 12.52331185978531, lat: 55.78689538233718 },
-       zoom: 18.75,
+       center: { lng: 12.5233335, lat: 55.7868826 },
+       zoom: 19.1,
        zLevel: 1,
        bearing: -72.8
      };
@@ -63,8 +87,15 @@ export class MazemapComponent implements OnInit {
     this.map.on('load', () => {
       this.map.on('zlevel', () => {
         this.updateLayers();
+        this.popup.remove();
+        this.setActiveLayer(null);
+        this.setLayerHoverState(null);
+        this.closeFeedbackPrompt();
       });
 
+      this.map.scrollZoom.disable();
+      this.map.dragPan.disable();
+      this.map.doubleClickZoom.disable();
       this.initLayers();
     });
 
@@ -115,37 +146,85 @@ export class MazemapComponent implements OnInit {
             x.model = section.survey;
             x.sectionId = section.id;
           });
-        new Mazemap.Popup({ closeOnClick: true, offset: [0, -6] })
-      .setLngLat(e.lngLat)
-      .setDOMContent(popupContent)
-      .addTo(this.map);
+        this.popup = new Mazemap.Popup({ closeOnClick: true, offset: [0, -6] })
+        .setLngLat(e.lngLat)
+        .setDOMContent(popupContent)
+        .addTo(this.map);
+
+        this.setActiveLayer(layer);
+        this.openFeedbackPrompt();
       });
 
       this.map.layerEventHandler.on('mousemove', layer.id, () => {
-        this.setHoverState(layer.id);
+        this.setLayerHoverState(layer.id);
       });
     });
 
     this.map.layerEventHandler.on('mousemove', null, () => {
-      this.setHoverState(null);
+      this.setLayerHoverState(null);
+    });
+
+    this.map.layerEventHandler.on('click', null, () => {
+      this.setActiveLayer(null);
+      this.closeFeedbackPrompt();
+      this.store.dispatch(new SetActiveSection(null));
     });
 
     this.updateLayers();
   }
 
   // Change layer style properties. Runs on layer 'mouseover' event.
-  setHoverState(layerId: number) {
+  setLayerHoverState(layerId: number) {
     if (layerId === this.lastHoveredLayer) {
       return;
     }
+
     if (this.lastHoveredLayer) {
-      this.map.setPaintProperty(this.lastHoveredLayer, 'fill-color', this.defaultColor);
-    }
-    if (layerId) {
-      this.map.setPaintProperty(layerId, 'fill-color', this.hoverColor);
+      if (this.lastHoveredLayer !== this.activeLayer) {
+        this.map.setPaintProperty(this.lastHoveredLayer, 'fill-color', this.defaultColor);
+      }
     }
 
+    if (layerId && this.activeLayer !== layerId) {
+        this.map.setPaintProperty(layerId, 'fill-color', this.hoverColor);
+      }
+
     this.lastHoveredLayer = layerId;
+  }
+
+  setActiveLayer(layer: any)  {
+    if (!layer) {
+      if (this.activeLayer) {
+        this.map.setPaintProperty(this.activeLayer, 'fill-color', this.defaultColor);
+        this.activeLayer = null;
+        return;
+      }
+
+      return;
+    }
+
+    if (layer.id === this.activeLayer) {
+      return;
+    }
+
+    if (this.activeLayer) {
+      this.map.setPaintProperty(this.activeLayer, 'fill-color', this.defaultColor);
+    }
+
+    if (layer.id) {
+      this.map.setPaintProperty(layer.id, 'fill-color', this.activeColor);
+    }
+
+    this.store.dispatch(new SetActiveSection(this.librarySections.find(x => `${x.id}` === layer.id)));
+    this.activeLayer = layer.id;
+  }
+
+  closeFeedbackPrompt() {
+    this.promptFeedback = false;
+  }
+
+  openFeedbackPrompt() {
+    this.promptFeedback = true;
   }
 
   // Convert sections from backend to layers readable by MazeMap
@@ -156,7 +235,7 @@ export class MazemapComponent implements OnInit {
       });
 
       const lsLayer = {
-        id: `layer_${x.id}`,
+        id: `${x.id}`,
         type: 'fill',
         zLevel: x.zLevel,
         source: {
