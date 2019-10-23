@@ -67,9 +67,10 @@ export class MazemapComponent implements OnInit {
        campuses: 89,
        center: { lng: 12.5233335, lat: 55.7868826 },
        zoom: 19.1,
+       maxZoom: 19.5,
+       minZoom: 18.5,
        zLevel: 1,
        bearing: -72.8,
-       interactive: false,
      };
 
     // Horizontal view of the library
