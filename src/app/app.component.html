@@ -6,12 +6,12 @@
   </nb-layout-header>
 
   <nb-layout-column>
-      <div *ngIf="coordinates$ | async as coordinates">
+      <!-- <div *ngIf="coordinates$ | async as coordinates">
           Latitude: {{ coordinates.latitude }}
           <br/>
           Longitude: {{ coordinates.longitude }}
-      </div>
-  <router-outlet></router-outlet>
+      </div> -->
+    <router-outlet></router-outlet>
   </nb-layout-column>
   <nb-layout-footer fixed>
     <!-- Insert footer here -->

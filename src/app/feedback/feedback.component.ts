@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NbDialogRef } from '@nebular/theme';
+import { NbDialogRef, NbToastrService } from '@nebular/theme';
 import { Survey, SurveyAnswerSubmition, QuestionAnswerSubmition } from '../models/mazemap.model';
 import { SurveyService } from '../services/survey.service';
 
@@ -14,7 +14,7 @@ export class FeedbackComponent implements OnInit {
   survey: Survey;
   answer: SurveyAnswerSubmition;
 
-  constructor(protected dialogRef: NbDialogRef<any>, private service: SurveyService) { }
+  constructor(protected dialogRef: NbDialogRef<any>, private service: SurveyService, private toastrService: NbToastrService ) { }
 
   ngOnInit() {
     const qAnswers: QuestionAnswerSubmition[] = [];
@@ -31,6 +31,15 @@ export class FeedbackComponent implements OnInit {
   }
 
   submit() {
+    const empty = this.answer.questionAnswers.find(x => {
+      return x.score === -1;
+    });
+
+    if (empty) {
+      this.showWarningToast('top-right', 'warning');
+      return;
+    }
+
     this.service.postSurveyAnswer(this.answer).subscribe(res => {
       if (res === null) {
         this.dialogRef.close({submit: true});
@@ -40,4 +49,10 @@ export class FeedbackComponent implements OnInit {
     });
   }
 
+  showWarningToast(position, status) {
+    this.toastrService.show(
+      status || 'Warning',
+      `Please answer all questions before submitting.`,
+      { position, status });
+  }
 }
