@@ -20,8 +20,7 @@ export class SurveyComponent implements OnInit {
   ngOnInit() { }
 
   openCreateSurveyDialog() {
-    const sectionContext =  { sectionId: this.sectionId };
-    const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true, context: sectionContext };
+    const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true };
     this.dialogService.open(CreateSurveyComponent, settings).onClose.subscribe(res => {
      if (res.submit === true) {
       this.showCreateSurveyToast('top-right', 'success', res.sectionId);

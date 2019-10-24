@@ -1,7 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { QuestionToCreate } from '../models/mazemap.model';
+import { QuestionToCreate, LibrarySection } from '../models/mazemap.model';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
 import { SurveyService } from '../services/survey.service';
+import { MazemapState } from '../states/mazemap.state';
+import { Observable } from 'rxjs';
+import { Select } from '@ngxs/store';
 
 @Component({
   selector: 'app-create-survey',
@@ -11,15 +14,20 @@ import { SurveyService } from '../services/survey.service';
 
 export class CreateSurveyComponent implements OnInit {
 
-  @Input() sectionId: number;
+  // @Input() sectionId: number;
+  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>
 
   questions: QuestionToCreate[];
+  activeSection: LibrarySection;
 
   constructor(private dialogRef: NbDialogRef<any>, private service: SurveyService, private toastrService: NbToastrService) {
     this.questions = [{text: ''}, {text: ''}];
    }
 
   ngOnInit() {
+    this.activeSection$.subscribe(x => {
+      this.activeSection = x;
+    });
   }
 
   addQuestion() {
@@ -34,9 +42,9 @@ export class CreateSurveyComponent implements OnInit {
     const emptyQuestions = this.questions.filter(q => q.text === '');
 
     if (emptyQuestions.length !== this.questions.length) {
-      this.service.createSurvey({ sectionId: this.sectionId, questions: this.questions}).subscribe(res => {
+      this.service.createSurvey({ sectionId: this.activeSection.id, questions: this.questions}).subscribe(res => {
         if (res === null) {
-          this.dialogRef.close({ submit: true, sectionId: this.sectionId });
+          this.dialogRef.close({ submit: true, sectionId: this.activeSection.id });
           } else {
             this.dialogRef.close({ submit: false, error: true });
           }

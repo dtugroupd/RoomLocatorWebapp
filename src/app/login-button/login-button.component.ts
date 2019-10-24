@@ -11,12 +11,12 @@ import { environment } from 'src/environments/environment';
   template: `
   <div>
     <a nbButton href="https://auth.dtu.dk/dtu/?service={{serviceUrl}}" >Login</a>
-    <div>
+   <!-- <div>
       TicketValues:
         <span *ngFor="let token of tokens$ | async">
           {{ token.tokenValue }}
         </span>
-    </div>
+    </div> -->
   </div>
 `,
   styles: ['span { color: green;' ]
