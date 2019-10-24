@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { GetLibrarySections, SetActiveSection } from './../actions/mazemap.action';
+import { GetLibrarySections, SetActiveSection, SetFeedbackExpanded } from './../actions/mazemap.action';
 import { LibrarySection } from './../models/mazemap.model';
 import { SurveyComponent } from './../survey/survey.component';
 import { DynamicComponentService } from './../services/DynamicComponentService';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { faDesktop } from '@fortawesome/free-solid-svg-icons';
 import { MazemapState } from '../states/mazemap.state';
 import { Observable } from 'rxjs';
 
@@ -233,6 +232,7 @@ export class MazemapComponent implements OnInit {
 
   closeFeedbackPrompt() {
     this.promptFeedback = false;
+    this.store.dispatch(new SetFeedbackExpanded(false));
   }
 
   openFeedbackPrompt() {
