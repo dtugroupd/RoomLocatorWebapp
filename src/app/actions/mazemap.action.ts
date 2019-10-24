@@ -10,3 +10,8 @@ export class SetActiveSection {
     static readonly type = '[Any] Set';
     constructor(public section: any) {}
 }
+
+export class SetFeedbackExpanded {
+    static readonly type = '[Boolean] Set';
+    constructor(public toggle: boolean) {}
+}
