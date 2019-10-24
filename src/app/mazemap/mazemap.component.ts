@@ -83,7 +83,7 @@ export class MazemapComponent implements OnInit {
     //   zoom: 20.1,
     //   zLevel: 1,
     //   bearing: 17.3,
-    // };
+    // };  
 
     // Create map instance with these options
     this.map = new Mazemap.Map(this.mapOptions);
