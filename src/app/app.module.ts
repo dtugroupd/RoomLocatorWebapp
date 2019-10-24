@@ -8,7 +8,7 @@ import { LoginButtonComponent } from './login-button/login-button.component';
 import { RouterModule, Routes, RouterState } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule, NbCardModule, NbDialogService, NbDialogModule, NbDialogRef, NbToastrModule, NbAccordionModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule, NbCardModule, NbDialogService, NbDialogModule, NbDialogRef, NbToastrModule, NbAccordionModule, NbCardComponent, NbSearchModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -68,6 +68,7 @@ const appRoutes: Routes = [
     NbAccordionModule,
     NbCardModule,
     NbListModule,
+    NbSearchModule,
     NbDialogModule.forRoot(),
     NbToastrModule.forRoot(),
     NgxsModule.forRoot([

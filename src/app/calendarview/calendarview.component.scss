@@ -1,4 +1,32 @@
+#listWrapper {
+    vertical-align:center;
+    padding:30px 30px;
+}
+
 #listView {
-    max-width: 500px;
-    align-content: center;
-} 
+    max-width: 200px;
+}
+
+#iconRow {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    font-size: 46px;
+}
+
+.calendarContainer  {
+    
+}
+
+
+.calendarContainer h6 {
+    margin:0;
+    padding: 0;
+}
+
+.calendarColumnContainer div {
+    display:inline-block;
+    vertical-align: top;
+    min-width:10px;
+}
