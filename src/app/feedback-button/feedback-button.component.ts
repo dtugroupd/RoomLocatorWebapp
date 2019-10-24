@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
   templateUrl: './feedback-button.component.html',
   styleUrls: ['./feedback-button.component.scss']
 })
+
 export class FeedbackButtonComponent implements OnInit {
 
   activeSection: LibrarySection;

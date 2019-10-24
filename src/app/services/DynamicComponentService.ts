@@ -1,5 +1,21 @@
 import { Injectable, Injector, ApplicationRef, ComponentFactoryResolver, ComponentRef, Type } from '@angular/core'
 
+/* ### EXAMPLE OF USE
+
+        const popupContent = this.dynamicComponentService.injectComponent(
+          SurveyComponent,
+          x => {
+            x.model = section.survey;
+            x.sectionId = section.id;
+          });
+
+        this.popup = new Mazemap.Popup({ closeOnClick: true, offset: [0, -6] })
+            .setLngLat(e.lngLat)
+            .setDOMContent(popupContent)
+            .addTo(this.map);
+
+*/
+
 @Injectable()
 export class DynamicComponentService {
 
