@@ -48,7 +48,7 @@ export class MazemapComponent implements OnInit {
   defaultColor = 'rgba(220, 150, 120, 0.075)';
   hoverColor = 'rgba(220, 150, 120, 0.25)';
   activeColor = 'rgba(220, 150, 120, 0.75)';
-  librarySections = [];
+  librarySections: LibrarySection[] = [];
   librarySectionLayers = [];
 
   @Select(MazemapState.getLibrarySections) librarySections$: Observable<LibrarySection[]>;
@@ -69,8 +69,8 @@ export class MazemapComponent implements OnInit {
        campuses: 89,
        center: { lng: 12.5233335, lat: 55.7868826 },
        zoom: 19.1,
-       maxZoom: 19.5,
-       minZoom: 18.5,
+      //  maxZoom: 19.5,
+      //  minZoom: 18.5,
        zLevel: 1,
        bearing: -72.8,
      };
@@ -91,7 +91,6 @@ export class MazemapComponent implements OnInit {
     this.map.on('load', () => {
       this.map.on('zlevel', () => {
         this.updateLayers();
-        this.popup.remove();
         this.setActiveLayer(null);
         this.setLayerHoverState(null);
         this.closeFeedbackPrompt();
@@ -143,11 +142,16 @@ export class MazemapComponent implements OnInit {
 
         this.setActiveLayer(layer);
         this.openFeedbackPrompt();
+        console.log(section);
+        console.log("Type: " + section.type);
+
       });
 
       this.map.layerEventHandler.on('mousemove', layer.id, () => {
         this.setLayerHoverState(layer.id);
       });
+
+
     });
 
     this.map.layerEventHandler.on('mousemove', null, () => {
@@ -186,8 +190,8 @@ export class MazemapComponent implements OnInit {
     if (!layer) {
       if (this.activeLayer) {
         this.map.setPaintProperty(this.activeLayer, 'fill-color', this.defaultColor);
-        this.activeLayer = null;
         this.activeLayerMarker.remove();
+        this.activeLayer = null;
         return;
       }
 
@@ -217,9 +221,8 @@ export class MazemapComponent implements OnInit {
     const options = {
       color: 'MazeGreen',
       size: 50,
-      imgUrl: '📗',
-      glyphColor: 'MazeGreen',
-      glyphSize: 35,
+      imgUrl: this.getMarkerIconUrl(section),
+      imgScale: 0.5,
       innerCircle: true,
       innerCircleColor: 'white',
       innerCircleScale: 0.7,
@@ -311,6 +314,38 @@ export class MazemapComponent implements OnInit {
     });
 
     return latLng;
+  }
+
+  getMarkerIconUrl(section: LibrarySection) {
+    let iconUrl: string;
+
+    switch (section.type) {
+      case 0:
+        iconUrl = 'assets/databar.svg';
+        break;
+      case 1:
+        iconUrl = 'assets/study.svg';
+        break;
+      case 2:
+        iconUrl = 'assets/group-study.svg';
+        break;
+      case 3:
+        iconUrl = 'assets/lounge.svg';
+        break;
+      case 4:
+        iconUrl = 'assets/stage.svg';
+        break;
+      case 5:
+        iconUrl = 'assets/kitchen.svg';
+        break;
+      case 6:
+        iconUrl = 'assets/information.svg';
+        break;
+      default:
+        break;
+    }
+
+    return iconUrl;
   }
 }
 
