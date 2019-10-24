@@ -5,6 +5,7 @@ import { LibrarySection } from './../models/mazemap.model';
 import { SurveyComponent } from './../survey/survey.component';
 import { DynamicComponentService } from './../services/DynamicComponentService';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { faDesktop } from '@fortawesome/free-solid-svg-icons';
 import { MazemapState } from '../states/mazemap.state';
 import { Observable } from 'rxjs';
 
@@ -42,6 +43,7 @@ export class MazemapComponent implements OnInit {
   lastHoveredLayer = null;
   activeLayer = null;
   promptFeedback = false;
+  activeLayerMarker = null;
   popup = null;
   defaultColor = 'rgba(220, 150, 120, 0.075)';
   hoverColor = 'rgba(220, 150, 120, 0.25)';
@@ -133,22 +135,11 @@ export class MazemapComponent implements OnInit {
   // Add all layers and eventhandlers once
   initLayers() {
     this.librarySectionLayers.forEach(layer => {
-      this.map.addLayer(layer);
+      const mapLayer = this.map.addLayer(layer);
 
       this.map.layerEventHandler.on('click', layer.id, (e: any, features: any) => {
         const id = features[0].properties.id;
         const section = this.librarySections.find(x => x.id === id);
-
-        const popupContent = this.dynamicComponentService.injectComponent(
-          SurveyComponent,
-          x => {
-            x.model = section.survey;
-            x.sectionId = section.id;
-          });
-        this.popup = new Mazemap.Popup({ closeOnClick: true, offset: [0, -6] })
-        .setLngLat(e.lngLat)
-        .setDOMContent(popupContent)
-        .addTo(this.map);
 
         this.setActiveLayer(layer);
         this.openFeedbackPrompt();
@@ -196,11 +187,16 @@ export class MazemapComponent implements OnInit {
       if (this.activeLayer) {
         this.map.setPaintProperty(this.activeLayer, 'fill-color', this.defaultColor);
         this.activeLayer = null;
+        this.activeLayerMarker.remove();
         return;
       }
 
       return;
     }
+
+    const featureCoordinates = this.toLatLng(layer.source.data.geometry.coordinates[0]);
+    const center = this.getCenter(featureCoordinates);
+    const section = this.librarySections.find(x => `${x.id}` === layer.id);
 
     if (layer.id === this.activeLayer) {
       return;
@@ -208,6 +204,7 @@ export class MazemapComponent implements OnInit {
 
     if (this.activeLayer) {
       this.map.setPaintProperty(this.activeLayer, 'fill-color', this.defaultColor);
+      this.activeLayerMarker.remove();
     }
 
     if (layer.id) {
@@ -216,6 +213,21 @@ export class MazemapComponent implements OnInit {
 
     this.store.dispatch(new SetActiveSection(this.librarySections.find(x => `${x.id}` === layer.id)));
     this.activeLayer = layer.id;
+
+    const options = {
+      color: 'MazeGreen',
+      size: 50,
+      imgUrl: '📗',
+      glyphColor: 'MazeGreen',
+      glyphSize: 35,
+      innerCircle: true,
+      innerCircleColor: 'white',
+      innerCircleScale: 0.7,
+      // shape: 'circle',
+      zLevel: layer.source.data.properties.zLevel
+    };
+
+    this.activeLayerMarker = new Mazemap.MazeMarker(options).setLngLat(center).addTo(this.map);
   }
 
   closeFeedbackPrompt() {
@@ -264,4 +276,44 @@ export class MazemapComponent implements OnInit {
       this.librarySectionLayers.push(lsLayer);
     });
   }
+
+  getCenter(coordinates) {
+    const pts = coordinates;
+    const off = pts[0];
+    let twicearea = 0;
+    let x = 0;
+    let y = 0;
+    const nPts = pts.length;
+    let p1;
+    let p2;
+    let f;
+
+    for (let i = 0, j = nPts - 1; i < nPts; j = i++) {
+      p1 = pts[i];
+      p2 = pts[j];
+      f = (p1.lat - off.lat) * (p2.lng - off.lng) - (p2.lat - off.lat) * (p1.lng - off.lng);
+      twicearea += f;
+      x += (p1.lat + p2.lat - 2 * off.lat) * f;
+      y += (p1.lng + p2.lng - 2 * off.lng) * f;
+    }
+
+    f = twicearea * 3;
+
+    return {
+    lng: x / f + off.lat,
+    lat: y / f + off.lng
+    };
+  }
+
+  toLatLng(coordinates) {
+    const latLng = coordinates.map(c => {
+      return { lat: c[0], lng: c[1]};
+    });
+
+    return latLng;
+  }
 }
+
+
+
+
