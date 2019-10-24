@@ -19,20 +19,6 @@ export class SurveyComponent implements OnInit {
 
   ngOnInit() { }
 
-  openDialog() {
-    const surveyContext = { survey: this.model };
-    const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true, context: surveyContext };
-    this.dialogService.open(FeedbackComponent, settings).onClose.subscribe(res => {
-     if (res.submit === true) {
-      this.showFeedbackToast('bottom-left', 'success');
-     }
-
-     if (res.error === true) {
-      this.showGeneralErrorToast('bottom-left', 'warning');
-     }
-    });
-  }
-
   openCreateSurveyDialog() {
     const sectionContext =  { sectionId: this.sectionId };
     const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true, context: sectionContext };
@@ -45,13 +31,6 @@ export class SurveyComponent implements OnInit {
        this.showGeneralErrorToast('top-right', 'warning');
      }
     });
-  }
-
-  showFeedbackToast(position, status) {
-    this.toastrService.show(
-      status || 'Success',
-      `Thanks for your feedback!`,
-      { position, status });
   }
 
   showGeneralErrorToast(position, status) {
