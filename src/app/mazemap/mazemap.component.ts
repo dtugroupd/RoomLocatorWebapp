@@ -142,8 +142,6 @@ export class MazemapComponent implements OnInit {
 
         this.setActiveLayer(layer);
         this.openFeedbackPrompt();
-        console.log(section);
-        console.log("Type: " + section.type);
 
       });
 
