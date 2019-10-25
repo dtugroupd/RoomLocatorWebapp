@@ -24,6 +24,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CreateSurveyComponent } from './create-survey/create-survey.component';
 import { CalendarviewComponent } from './calendarview/calendarview.component';
 import { FeedbackButtonComponent } from './feedback-button/feedback-button.component';
+import { StatusButtonComponent } from './status-button/status-button.component';
 
 
 const appRoutes: Routes = [
@@ -42,6 +43,7 @@ const appRoutes: Routes = [
     CreateSurveyComponent,
     CalendarviewComponent,
     FeedbackButtonComponent,
+    StatusButtonComponent,
 
   ],
   entryComponents: [
