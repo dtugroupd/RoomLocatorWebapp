@@ -14,13 +14,19 @@ import { Observable } from 'rxjs';
 
 export class AppComponent implements OnInit {
   title = 'RoomLocatorWebapp';
+  activeSection: LibrarySection;
 
+  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
   @Select(MazemapState.getCoordinatesSet) coordinates$: Observable<Mazemap[]>;
 
   constructor(private store: Store) { }
 
   ngOnInit() {
     this.store.dispatch(new GetCoordinates());
+    this.activeSection$.subscribe(x => {
+      this.activeSection = x;
+    })
+
 
       /* In case we HAVE to subscribe/unsubsribe
 
