@@ -7,6 +7,7 @@ import { DynamicComponentService } from './../services/DynamicComponentService';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MazemapState } from '../states/mazemap.state';
 import { Observable } from 'rxjs';
+import { faMeh, faGrin, faFrown } from '@fortawesome/free-solid-svg-icons';
 
 
 declare let Mazemap: any;
@@ -36,6 +37,10 @@ declare let Mazemap: any;
 })
 
 export class MazemapComponent implements OnInit {
+
+  faMeh = faMeh;
+  faGrin = faGrin;
+  faFrown = faFrown;
 
   map: any;
   mapOptions: object;

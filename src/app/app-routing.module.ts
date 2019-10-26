@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ValidateComponent } from './auth/validate/validate.component';
 import { MazemapComponent } from './mazemap/mazemap.component';
+import { CalendarviewComponent } from './calendarview/calendarview.component';
 
 const routes: Routes = [
   {
@@ -11,6 +12,10 @@ const routes: Routes = [
   {
     path: 'mazemap',
     component: MazemapComponent
+  },
+  {
+    path: 'calendar',
+    component: CalendarviewComponent
   },
 ]
 
