@@ -7,8 +7,6 @@ import { DynamicComponentService } from './../services/DynamicComponentService';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MazemapState } from '../states/mazemap.state';
 import { Observable } from 'rxjs';
-import { faMeh, faGrin, faFrown } from '@fortawesome/free-solid-svg-icons';
-
 
 declare let Mazemap: any;
 
@@ -17,20 +15,36 @@ declare let Mazemap: any;
   templateUrl: './mazemap.component.html',
   styleUrls: ['./mazemap.component.scss'],
   animations: [
-    trigger('openClose', [
-      state('open', style({
+    trigger('showHideSurveyButton', [
+      state('show', style({
         height: '50px',
         opacity: 1,
       })),
-      state('closed', style({
+      state('hide', style({
         height: '0px',
         opacity: 0.0,
       })),
-      transition('open => closed', [
+      transition('show => hide', [
         animate('0.25s')
       ]),
-      transition('closed => open', [
+      transition('hide => show', [
         animate('0.25s')
+      ]),
+    ]),
+    trigger('showHideStatusMenu', [
+      state('show', style({
+        height: '200px',
+        opacity: 1,
+      })),
+      state('hide', style({
+        height: '0px',
+        opacity: 0.0,
+      })),
+      transition('show => hide', [
+        animate('0.15s ease-in-out')
+      ]),
+      transition('hide => show', [
+        animate('0.15s ease-in-out')
       ]),
     ])
   ]
@@ -38,15 +52,12 @@ declare let Mazemap: any;
 
 export class MazemapComponent implements OnInit {
 
-  faMeh = faMeh;
-  faGrin = faGrin;
-  faFrown = faFrown;
-
   map: any;
   mapOptions: object;
+  promptFeedback = false;
+  showStatusMenu = false;
   lastHoveredLayer = null;
   activeLayer = null;
-  promptFeedback = false;
   activeLayerMarker = null;
   popup = null;
   defaultColor = 'rgba(220, 150, 120, 0.075)';
@@ -106,6 +117,10 @@ export class MazemapComponent implements OnInit {
     this.map.on('click', (e: any) => {
       console.log(e.lngLat);
     });
+  }
+
+  toggleStatusMenu() {
+    this.showStatusMenu = !this.showStatusMenu;
   }
 
   // Runs every time map changes zLevel

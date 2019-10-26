@@ -1,3 +1,4 @@
 <div id='map'></div>
-<app-status-button id="statusSmiley"></app-status-button>
-<app-feedback-button id="surveyPrompt" [@openClose]="promptFeedback ? 'open' : 'closed'">Give feedback</app-feedback-button>
+<app-status-button-menu id="statusMenu" [@showHideStatusMenu]="showStatusMenu ? 'show' : 'hide'"></app-status-button-menu>
+<app-status-button id="statusButton" (click)="toggleStatusMenu()"></app-status-button>
+<app-feedback-button id="surveyPrompt" [@showHideSurveyButton]="promptFeedback ? 'show' : 'hide'">Give feedback</app-feedback-button>

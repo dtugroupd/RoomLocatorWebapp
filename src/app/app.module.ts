@@ -25,6 +25,7 @@ import { CreateSurveyComponent } from './create-survey/create-survey.component';
 import { CalendarviewComponent } from './calendarview/calendarview.component';
 import { FeedbackButtonComponent } from './feedback-button/feedback-button.component';
 import { StatusButtonComponent } from './status-button/status-button.component';
+import { StatusButtonMenuComponent } from './status-button-menu/status-button-menu.component';
 
 
 const appRoutes: Routes = [
@@ -44,6 +45,7 @@ const appRoutes: Routes = [
     CalendarviewComponent,
     FeedbackButtonComponent,
     StatusButtonComponent,
+    StatusButtonMenuComponent,
 
   ],
   entryComponents: [

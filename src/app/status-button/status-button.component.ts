@@ -6,11 +6,13 @@ import { faMeh, faGrin, faFrown } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './status-button.component.html',
   styleUrls: ['./status-button.component.scss']
 })
+
 export class StatusButtonComponent implements OnInit {
 
-faMeh = faMeh;
-faGrin = faGrin;
-faFrown = faFrown;
+  faMeh = faMeh;
+  faGrin = faGrin;
+  faFrown = faFrown;
+
 
   constructor() { }
 
