@@ -5,6 +5,7 @@ import { LibrarySection } from './../models/mazemap.model';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MazemapState } from '../states/mazemap.state';
 import { Observable } from 'rxjs';
+import { toLatLng, getCenter, convertLibrarySectionsToLayers, layerMarkerOptions } from './mazemap-helper';
 
 declare let Mazemap: any;
 
@@ -73,7 +74,7 @@ export class MazemapComponent implements OnInit {
     // Get library sections from store and convert to layers
     this.store.dispatch(GetLibrarySections).subscribe(x => {
       this.librarySections = x.MazeMap.librarySections;
-      this.convertLibrarySectionsToLayers(this.librarySections);
+      this.librarySectionLayers = convertLibrarySectionsToLayers(this.librarySections);
     });
 
     // Vertical view of the library
@@ -151,22 +152,24 @@ export class MazemapComponent implements OnInit {
   // Add all layers and eventhandlers once
   initLayers() {
     this.librarySectionLayers.forEach(layer => {
-      const mapLayer = this.map.addLayer(layer);
+      this.map.addLayer(layer);
 
       this.map.layerEventHandler.on('click', layer.id, (e: any, features: any) => {
-        const id = features[0].properties.id;
-        const section = this.librarySections.find(x => x.id === id);
-
         this.setActiveLayer(layer);
         this.openFeedbackPrompt();
-
       });
 
       this.map.layerEventHandler.on('mousemove', layer.id, () => {
         this.setLayerHoverState(layer.id);
       });
 
+      const featureCoordinates = toLatLng(layer.source.data.geometry.coordinates[0]);
+      const center = getCenter(featureCoordinates);
+      const marker = new Mazemap.MazeMarker(layerMarkerOptions(layer).default).setLngLat(center).addTo(this.map);
 
+      marker.on('click', () => {
+        this.setActiveLayer(layer);
+      });
     });
 
     this.map.layerEventHandler.on('mousemove', null, () => {
@@ -205,7 +208,6 @@ export class MazemapComponent implements OnInit {
     if (!layer) {
       if (this.activeLayer) {
         this.map.setPaintProperty(this.activeLayer, 'fill-color', this.defaultColor);
-        this.activeLayerMarker.remove();
         this.activeLayer = null;
         return;
       }
@@ -213,39 +215,24 @@ export class MazemapComponent implements OnInit {
       return;
     }
 
-    const featureCoordinates = this.toLatLng(layer.source.data.geometry.coordinates[0]);
-    const center = this.getCenter(featureCoordinates);
-    const section = this.librarySections.find(x => `${x.id}` === layer.id);
-
     if (layer.id === this.activeLayer) {
       return;
     }
 
     if (this.activeLayer) {
       this.map.setPaintProperty(this.activeLayer, 'fill-color', this.defaultColor);
-      this.activeLayerMarker.remove();
     }
 
     if (layer.id) {
       this.map.setPaintProperty(layer.id, 'fill-color', this.activeColor);
     }
 
-    this.store.dispatch(new SetActiveSection(this.librarySections.find(x => `${x.id}` === layer.id)));
     this.activeLayer = layer.id;
+    this.store.dispatch(new SetActiveSection(layer.section));
+  }
 
-    const options = {
-      color: 'MazeGreen',
-      size: 50,
-      imgUrl: this.getMarkerIconUrl(section),
-      imgScale: 0.5,
-      innerCircle: true,
-      innerCircleColor: 'white',
-      innerCircleScale: 0.7,
-      // shape: 'circle',
-      zLevel: layer.source.data.properties.zLevel
-    };
-
-    this.activeLayerMarker = new Mazemap.MazeMarker(options).setLngLat(center).addTo(this.map);
+  openFeedbackPrompt() {
+    this.promptFeedback = true;
   }
 
   closeFeedbackPrompt() {
@@ -253,116 +240,6 @@ export class MazemapComponent implements OnInit {
     this.store.dispatch(new SetFeedbackExpanded(false));
   }
 
-  openFeedbackPrompt() {
-    this.promptFeedback = true;
-  }
-
-  // Convert sections from backend to layers readable by MazeMap
-  convertLibrarySectionsToLayers(ls: Array<LibrarySection>) {
-    ls.forEach(x => {
-      const coordinates = x.coordinates.map(c => {
-        return [c.longitude, c.latitude];
-      });
-
-      const lsLayer = {
-        id: `${x.id}`,
-        type: 'fill',
-        zLevel: x.zLevel,
-        source: {
-          type: 'geojson',
-          data: {
-              type: 'Feature',
-              properties: {
-                  name: `${x.id}`,
-                  zLevel: x.zLevel,
-                  id: x.id
-              },
-              geometry: {
-                  type: 'Polygon',
-                  coordinates: [ coordinates ]
-              },
-          },
-        },
-        layout: {
-            visibility: 'visible'
-        },
-        paint:
-        {
-            'fill-color': 'rgba(220, 150, 120, 0.075)',
-        }
-      };
-
-      this.librarySectionLayers.push(lsLayer);
-    });
-  }
-
-  getCenter(coordinates) {
-    const pts = coordinates;
-    const off = pts[0];
-    let twicearea = 0;
-    let x = 0;
-    let y = 0;
-    const nPts = pts.length;
-    let p1;
-    let p2;
-    let f;
-
-    for (let i = 0, j = nPts - 1; i < nPts; j = i++) {
-      p1 = pts[i];
-      p2 = pts[j];
-      f = (p1.lat - off.lat) * (p2.lng - off.lng) - (p2.lat - off.lat) * (p1.lng - off.lng);
-      twicearea += f;
-      x += (p1.lat + p2.lat - 2 * off.lat) * f;
-      y += (p1.lng + p2.lng - 2 * off.lng) * f;
-    }
-
-    f = twicearea * 3;
-
-    return {
-    lng: x / f + off.lat,
-    lat: y / f + off.lng
-    };
-  }
-
-  toLatLng(coordinates) {
-    const latLng = coordinates.map(c => {
-      return { lat: c[0], lng: c[1]};
-    });
-
-    return latLng;
-  }
-
-  getMarkerIconUrl(section: LibrarySection) {
-    let iconUrl: string;
-
-    switch (section.type) {
-      case 0:
-        iconUrl = 'assets/databar.svg';
-        break;
-      case 1:
-        iconUrl = 'assets/study.svg';
-        break;
-      case 2:
-        iconUrl = 'assets/group-study.svg';
-        break;
-      case 3:
-        iconUrl = 'assets/lounge.svg';
-        break;
-      case 4:
-        iconUrl = 'assets/stage.svg';
-        break;
-      case 5:
-        iconUrl = 'assets/kitchen.svg';
-        break;
-      case 6:
-        iconUrl = 'assets/information.svg';
-        break;
-      default:
-        break;
-    }
-
-    return iconUrl;
-  }
 }
 
 
