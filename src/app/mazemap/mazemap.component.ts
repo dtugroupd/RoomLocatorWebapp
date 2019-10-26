@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { GetLibrarySections, SetActiveSection, SetFeedbackExpanded } from './../actions/mazemap.action';
 import { LibrarySection } from './../models/mazemap.model';
-import { SurveyComponent } from './../survey/survey.component';
-import { DynamicComponentService } from './../services/DynamicComponentService';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MazemapState } from '../states/mazemap.state';
 import { Observable } from 'rxjs';
@@ -17,7 +15,7 @@ declare let Mazemap: any;
   animations: [
     trigger('showHideSurveyButton', [
       state('show', style({
-        height: '50px',
+        height: '45px',
         opacity: 1,
       })),
       state('hide', style({
@@ -25,10 +23,10 @@ declare let Mazemap: any;
         opacity: 0.0,
       })),
       transition('show => hide', [
-        animate('0.25s')
+        animate('0.15s ease-in-out')
       ]),
       transition('hide => show', [
-        animate('0.25s')
+        animate('0.15s ease-in-out')
       ]),
     ]),
     trigger('showHideStatusMenu', [
@@ -68,7 +66,7 @@ export class MazemapComponent implements OnInit {
 
   @Select(MazemapState.getLibrarySections) librarySections$: Observable<LibrarySection[]>;
 
-  constructor(private store: Store, private dynamicComponentService: DynamicComponentService ) { }
+  constructor(private store: Store) { }
 
   ngOnInit() {
 
@@ -98,7 +96,7 @@ export class MazemapComponent implements OnInit {
     //   zoom: 20.1,
     //   zLevel: 1,
     //   bearing: 17.3,
-    // };  
+    // };
 
     // Create map instance with these options
     this.map = new Mazemap.Map(this.mapOptions);
