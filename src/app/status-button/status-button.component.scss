@@ -2,7 +2,7 @@
     background:none;
     outline: none;
     border:none;
-    font-size:50px;
+    font-size: 50px;
 }
 
 #statusSmileyButton:focus {
@@ -19,7 +19,7 @@
     }
 }
 
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 1024px) and (min-height: 1024px) {
     #statusSmileyButton {
         font-size: 100px;
     }
