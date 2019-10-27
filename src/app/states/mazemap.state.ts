@@ -8,7 +8,6 @@ export class MazemapStateModel {
     coordinates: Mazemap[];
     librarySections: LibrarySection[];
     activeSection: LibrarySection;
-    feedbackExpanded: boolean;
 }
 
 @State<MazemapStateModel>({
@@ -17,7 +16,6 @@ export class MazemapStateModel {
         coordinates: null,
         librarySections: null,
         activeSection: null,
-        feedbackExpanded: false
     }
 })
 
@@ -38,11 +36,6 @@ export class MazemapState {
     @Selector()
     static getActiveSection(state: MazemapStateModel) {
         return state.activeSection;
-    }
-
-    @Selector()
-    static isFeedbackExpanded(state: MazemapStateModel) {
-        return state.feedbackExpanded;
     }
 
     @Action(GetCoordinates)
@@ -72,13 +65,5 @@ export class MazemapState {
         patchState({
             activeSection: payload.section
         });
-    }
-
-    @Action(SetFeedbackExpanded)
-    setFeedbackExpanded({patchState}: StateContext<MazemapStateModel>, payload: SetFeedbackExpanded) {
-        patchState({
-            feedbackExpanded: payload.toggle
-        });
-        console.log(payload);
     }
 }
