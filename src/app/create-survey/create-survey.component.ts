@@ -15,7 +15,10 @@ import { Select } from '@ngxs/store';
 export class CreateSurveyComponent implements OnInit {
 
   // @Input() sectionId: number;
-  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>
+  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
+
+  title = '';
+  description = '';
 
   questions: QuestionToCreate[];
   activeSection: LibrarySection;
@@ -41,8 +44,21 @@ export class CreateSurveyComponent implements OnInit {
   submit() {
     const emptyQuestions = this.questions.filter(q => q.text === '');
 
+    if (!this.title || this.title.length < 4) {
+      this.showWarningToast('top-right', 'warning', `Please fill out the required fields.`);
+      return;
+    }
+
     if (emptyQuestions.length !== this.questions.length) {
-      this.service.createSurvey({ sectionId: this.activeSection.id, questions: this.questions}).subscribe(res => {
+
+      const survey = {
+        sectionId: this.activeSection.id,
+        title: this.title,
+        description: this.description,
+        questions: this.questions
+      };
+
+      this.service.createSurvey(survey).subscribe(res => {
         if (res === null) {
           this.dialogRef.close({ submit: true, sectionId: this.activeSection.id });
           } else {
@@ -50,14 +66,15 @@ export class CreateSurveyComponent implements OnInit {
           }
       });
     } else {
-      this.showEmptyErrorToast('top-right', 'warning');
+      this.showWarningToast('top-right', 'warning', `Can't submit an empty survey`);
+      return;
     }
   }
 
-  showEmptyErrorToast(position, status) {
+  showWarningToast(position, status, message) {
     this.toastrService.show(
       status || 'Warning',
-      `Can't submit an empty survey`,
+      message,
       { position, status });
   }
 
