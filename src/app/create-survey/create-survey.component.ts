@@ -15,7 +15,9 @@ import { Select } from '@ngxs/store';
 export class CreateSurveyComponent implements OnInit {
 
   // @Input() sectionId: number;
-  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>
+  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
+  
+  title: string;
 
   questions: QuestionToCreate[];
   activeSection: LibrarySection;
@@ -42,7 +44,7 @@ export class CreateSurveyComponent implements OnInit {
     const emptyQuestions = this.questions.filter(q => q.text === '');
 
     if (emptyQuestions.length !== this.questions.length) {
-      this.service.createSurvey({ sectionId: this.activeSection.id, questions: this.questions}).subscribe(res => {
+      this.service.createSurvey({ sectionId: this.activeSection.id, title: this.title, questions: this.questions}).subscribe(res => {
         if (res === null) {
           this.dialogRef.close({ submit: true, sectionId: this.activeSection.id });
           } else {

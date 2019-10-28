@@ -24,6 +24,7 @@ export interface Survey {
 
 export interface SurveyToCreate {
     sectionId: number;
+    title: string;
     questions: QuestionToCreate[];
 }
 

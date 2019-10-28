@@ -3,7 +3,8 @@
         Create survey for section {{ activeSection.id }}
     </nb-card-header>
     <nb-card-body>
-    <button nbButton fullWidth (click)="addQuestion()">Add question</button>
+            <input id="title" name="title" required>
+            <button nbButton fullWidth (click)="addQuestion()">Add question</button>
         <div id="questions" *ngFor="let question of questions; let i = index">
             <input type="text" placeholder=" Question {{i+1}}" fieldSize="medium" nbInput [value]="question.text" (input)="question.text = $event.target.value" >
         </div>
