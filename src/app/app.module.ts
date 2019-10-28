@@ -8,7 +8,7 @@ import { LoginButtonComponent } from './login-button/login-button.component';
 import { RouterModule, Routes, RouterState } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule, NbCardModule, NbDialogService, NbDialogModule, NbDialogRef, NbToastrModule, NbAccordionModule, NbCardComponent, NbSearchModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule, NbCardModule, NbDialogService, NbDialogModule, NbDialogRef, NbToastrModule, NbAccordionModule, NbCardComponent, NbSearchModule, NbInputModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -26,6 +26,7 @@ import { CalendarviewComponent } from './calendarview/calendarview.component';
 import { FeedbackButtonComponent } from './feedback-button/feedback-button.component';
 import { StatusButtonComponent } from './status-button/status-button.component';
 import { StatusButtonMenuComponent } from './status-button-menu/status-button-menu.component';
+import { FormsModule } from '@angular/forms';
 
 
 const appRoutes: Routes = [
@@ -65,12 +66,14 @@ const appRoutes: Routes = [
     HttpClientModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
+    FormsModule,
     NbThemeModule.forRoot({ name: 'default' }),
     NbLayoutModule,
     NbEvaIconsModule,
     NbButtonModule,
     NbAccordionModule,
     NbCardModule,
+    NbInputModule,
     NbListModule,
     NbSearchModule,
     NbDialogModule.forRoot(),

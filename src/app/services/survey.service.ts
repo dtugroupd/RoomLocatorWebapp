@@ -19,7 +19,7 @@ export class SurveyService extends BaseService {
             'Content-Type':  'application/json',
         })
     };
-    
+
     return this.http.post<SurveyAnswerSubmition>(`${this.backendBaseUrl}/api/v1/survey/submitanswer`, answer, options);
   }
 

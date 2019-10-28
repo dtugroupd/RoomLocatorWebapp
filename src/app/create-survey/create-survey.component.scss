@@ -1,17 +1,36 @@
-#questions {
-    margin-top: 15px;
+
+#createSurveyForm input {
+    min-height: 35px;
+    font-weight: 400;
 }
 
-#question:nth-child(n-1) {
+#createSurveyForm textarea {
+    min-height: 70px;
+    font-weight: 400;
+}
+
+#createSurveyForm .form-control:nth-child(n-1) {
     margin-bottom: 15px;
 }
 
-#questions input {
-    min-height: 35px;
-    width: 100%;
+#createSurveyForm input {
+    margin-bottom: 5px;
+}
+
+#addQuestionButton {
+    margin-top: 30px;
+    margin-bottom: 15px;
 }
 
 #createSurveyFooter {
     display: flex;
     justify-content: space-between;
+}
+
+.form-error-msg {
+    color: #ff708d;
+}
+
+.form-warning-msg {
+    color: #ffc94d;
 }
