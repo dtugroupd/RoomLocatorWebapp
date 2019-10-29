@@ -5,10 +5,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MazemapComponent } from './mazemap/mazemap.component';
 import { LoginButtonComponent } from './login-button/login-button.component';
-import { RouterModule, Routes, RouterState } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule, NbCardModule, NbDialogService, NbDialogModule, NbDialogRef, NbToastrModule, NbAccordionModule, NbCardComponent, NbSearchModule, NbInputModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
+         NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
+         NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -27,6 +29,9 @@ import { FeedbackButtonComponent } from './feedback-button/feedback-button.compo
 import { StatusButtonComponent } from './status-button/status-button.component';
 import { StatusButtonMenuComponent } from './status-button-menu/status-button-menu.component';
 import { FormsModule } from '@angular/forms';
+import { ManageSurveysComponent } from './manage-surveys/manage-surveys.component';
+import { SurveyState } from './states/survey.state';
+import { SurveyListItemComponent } from './survey-list-item/survey-list-item.component';
 
 
 const appRoutes: Routes = [
@@ -47,7 +52,8 @@ const appRoutes: Routes = [
     FeedbackButtonComponent,
     StatusButtonComponent,
     StatusButtonMenuComponent,
-
+    ManageSurveysComponent,
+    SurveyListItemComponent,
   ],
   entryComponents: [
     SurveyComponent,
@@ -59,7 +65,7 @@ const appRoutes: Routes = [
   imports: [
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
+      { onSameUrlNavigation: 'reload', enableTracing: true },
     ),
     BrowserModule,
     AppRoutingModule,
@@ -76,11 +82,14 @@ const appRoutes: Routes = [
     NbInputModule,
     NbListModule,
     NbSearchModule,
+    NbContextMenuModule,
+    NbMenuModule.forRoot(),
     NbDialogModule.forRoot(),
     NbToastrModule.forRoot(),
     NgxsModule.forRoot([
       LoginState,
-      MazemapState
+      MazemapState,
+      SurveyState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),

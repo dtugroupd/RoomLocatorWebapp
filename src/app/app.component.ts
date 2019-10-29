@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
     this.store.dispatch(new GetCoordinates());
     this.activeSection$.subscribe(x => {
       this.activeSection = x;
-    })
+    });
 
 
       /* In case we HAVE to subscribe/unsubsribe

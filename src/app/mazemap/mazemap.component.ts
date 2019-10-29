@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { GetLibrarySections, SetActiveSection, SetFeedbackExpanded } from './../actions/mazemap.action';
 import { LibrarySection } from './../models/mazemap.model';
@@ -49,7 +49,7 @@ declare let Mazemap: any;
   ]
 })
 
-export class MazemapComponent implements OnInit {
+export class MazemapComponent implements OnInit, OnDestroy {
 
   map: any;
   mapOptions: object;
@@ -70,6 +70,8 @@ export class MazemapComponent implements OnInit {
   constructor(private store: Store) { }
 
   ngOnInit() {
+
+    console.log(Mazemap.mapboxgl);
 
     // Get library sections from store and convert to layers
     this.store.dispatch(GetLibrarySections).subscribe(x => {
@@ -116,6 +118,12 @@ export class MazemapComponent implements OnInit {
     this.map.on('click', (e: any) => {
       console.log(e.lngLat);
     });
+  }
+
+  ngOnDestroy() {
+    if (this.map) {
+      this.map.remove();
+    }
   }
 
   toggleStatusMenu() {

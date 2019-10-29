@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { SurveyAnswerSubmition, SurveyToCreate } from '../models/mazemap.model';
+import { SurveyAnswerSubmition, SurveyToCreate, Survey } from '../models/mazemap.model';
 import { BaseService } from './base.service';
 
 @Injectable({
@@ -31,5 +31,9 @@ export class SurveyService extends BaseService {
     };
 
     return this.http.post<SurveyToCreate>(`${this.backendBaseUrl}/api/v1/survey/create`, survey, options);
+  }
+
+  getSurveys() {
+    return this.http.get<Survey[]>('${this.backendBaseUrl}/api/v1/survey');
   }
 }
