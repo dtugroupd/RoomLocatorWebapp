@@ -3,12 +3,17 @@
   <nb-layout-header fixed>
     <h2 style="margin-right:30px;">DTU WebApp </h2>
     <app-login-button></app-login-button>
+    <app-survey *ngIf="activeSection"></app-survey>
   </nb-layout-header>
 
   <nb-layout-column>
+      <!-- <div *ngIf="coordinates$ | async as coordinates">
+          Latitude: {{ coordinates.latitude }}
+          <br/>
+          Longitude: {{ coordinates.longitude }}
+      </div> -->
     <router-outlet></router-outlet>
   </nb-layout-column>
-
   <nb-layout-footer fixed>
     <!-- Insert footer here -->
   </nb-layout-footer>

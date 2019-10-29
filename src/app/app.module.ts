@@ -5,12 +5,29 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MazemapComponent } from './mazemap/mazemap.component';
 import { LoginButtonComponent } from './login-button/login-button.component';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, RouterState } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule, NbCardModule, NbDialogService, NbDialogModule, NbDialogRef, NbToastrModule, NbAccordionModule, NbCardComponent, NbSearchModule, NbInputModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
+import { LoginState } from './states/login.state';
+import { NgxsModule } from '@ngxs/store';
 import { ValidateComponent } from './auth/validate/validate.component';
+import { MazemapState } from './states/mazemap.state';
+import { SurveyComponent } from './survey/survey.component';
+import { DynamicComponentService } from './services/DynamicComponentService';
+import { FeedbackComponent } from './feedback/feedback.component';
+import { FeedbackSmileyRowComponent } from './feedback-smiley-row/feedback-smiley-row.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CreateSurveyComponent } from './create-survey/create-survey.component';
+import { CalendarviewComponent } from './calendarview/calendarview.component';
+import { FeedbackButtonComponent } from './feedback-button/feedback-button.component';
+import { StatusButtonComponent } from './status-button/status-button.component';
+import { StatusButtonMenuComponent } from './status-button-menu/status-button-menu.component';
+import { FormsModule } from '@angular/forms';
+
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: LoginButtonComponent },
@@ -21,7 +38,23 @@ const appRoutes: Routes = [
     AppComponent,
     ValidateComponent,
     MazemapComponent,
-    LoginButtonComponent
+    LoginButtonComponent,
+    SurveyComponent,
+    FeedbackComponent,
+    FeedbackSmileyRowComponent,
+    CreateSurveyComponent,
+    CalendarviewComponent,
+    FeedbackButtonComponent,
+    StatusButtonComponent,
+    StatusButtonMenuComponent,
+
+  ],
+  entryComponents: [
+    SurveyComponent,
+    FeedbackComponent,
+    FeedbackSmileyRowComponent,
+    FeedbackButtonComponent,
+    CreateSurveyComponent,
   ],
   imports: [
     RouterModule.forRoot(
@@ -32,15 +65,31 @@ const appRoutes: Routes = [
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    FontAwesomeModule,
+    FormsModule,
     NbThemeModule.forRoot({ name: 'default' }),
     NbLayoutModule,
     NbEvaIconsModule,
-    NbButtonModule
+    NbButtonModule,
+    NbAccordionModule,
+    NbCardModule,
+    NbInputModule,
+    NbListModule,
+    NbSearchModule,
+    NbDialogModule.forRoot(),
+    NbToastrModule.forRoot(),
+    NgxsModule.forRoot([
+      LoginState,
+      MazemapState
+    ]),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsLoggerPluginModule.forRoot(),
   ],
-  providers: [],
+  providers: [ DynamicComponentService ],
   bootstrap: [AppComponent],
   exports: [
-    LoginButtonComponent
+    LoginButtonComponent,
+    SurveyComponent
   ]
 })
 export class AppModule { }

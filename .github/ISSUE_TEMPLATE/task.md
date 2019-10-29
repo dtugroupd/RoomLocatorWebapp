@@ -2,7 +2,7 @@
 name: Task
 about: Tasks associated with a user story
 title: ''
-labels: feature frontend
+labels: feature, frontend
 assignees: ''
 
 ---

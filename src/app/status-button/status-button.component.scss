@@ -1,0 +1,26 @@
+#statusSmileyButton {
+    background:none;
+    outline: none;
+    border:none;
+    font-size: 50px;
+}
+
+#statusSmileyButton:focus {
+    box-shadow: none;
+}
+
+#statusSmileyButton fa-icon {
+    color:green;
+}
+
+@media only screen and (min-width: 720px) {
+    #statusSmileyButton {
+        font-size: 65px;
+    }
+}
+
+@media only screen and (min-width: 1024px) and (min-height: 1024px) {
+    #statusSmileyButton {
+        font-size: 100px;
+    }
+}
