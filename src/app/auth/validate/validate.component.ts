@@ -21,7 +21,7 @@ export class ValidateComponent implements OnInit, OnDestroy {
   ticket: string;
   token: string;
   studentId: string;
-  jwt: {};
+  jwt: any;
 
   subscriptions: Subscription;
 
