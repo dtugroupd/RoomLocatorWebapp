@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Route } from '@angular/compiler/src/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { AddToken } from 'src/app/actions/login.action';
 
 @Component({
   selector: 'app-validate',
@@ -25,7 +26,7 @@ export class ValidateComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private store: Store) {
     this.apiUrl = environment.backendUrl;
     this.subscriptions = new Subscription();
 
@@ -39,7 +40,8 @@ export class ValidateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.validateLogin().then(x => this.jwt = x);
+    this.store.dispatch(new AddToken({tokenValue: this.token}));
+    localStorage.setItem('token', this.token);
   }
 
   get register(): boolean {
