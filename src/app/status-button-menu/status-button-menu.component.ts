@@ -32,7 +32,7 @@ export class StatusButtonMenuComponent {
     }
 
     this.countThumbpsupChanged.emit(this.upVoted=true);
-    console.log(this.selectedThumbsup);
+    
   }
 
   onThumbsdownChanged(){
@@ -41,7 +41,7 @@ export class StatusButtonMenuComponent {
     }
 
     this.countThumbpsupChanged.emit(this.downVoted=true);
-    console.log(this.selectedThumbsdown);
+    
   }
 
 }
