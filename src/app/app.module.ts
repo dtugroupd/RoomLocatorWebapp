@@ -27,6 +27,8 @@ import { FeedbackButtonComponent } from './feedback-button/feedback-button.compo
 import { StatusButtonComponent } from './status-button/status-button.component';
 import { StatusButtonMenuComponent } from './status-button-menu/status-button-menu.component';
 import { FormsModule } from '@angular/forms';
+import { ThumbsUpComponent } from './thumbs-up/thumbs-up.component';
+import { ThumbsDownComponent } from './thumbs-down/thumbs-down.component';
 
 
 const appRoutes: Routes = [
@@ -46,7 +48,9 @@ const appRoutes: Routes = [
     CalendarviewComponent,
     FeedbackButtonComponent,
     StatusButtonComponent,
-    StatusButtonMenuComponent,
+   StatusButtonMenuComponent,
+   ThumbsUpComponent,
+   ThumbsDownComponent,
 
   ],
   entryComponents: [

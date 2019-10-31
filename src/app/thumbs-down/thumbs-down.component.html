@@ -1,0 +1,12 @@
+ <nb-card id="statusSmileyButtonMenu" style="z-index: 999">
+    <nb-card-body>
+        <p>
+            Been here recently? How did you like it?
+        </p>
+        <div ngClass="thumbs">
+            <fa-icon *ngIf="!downVoted" [icon]="thumbsDown" [className]="'thumb-inactive'" (click)="downVote()"></fa-icon>
+            <fa-icon *ngIf="downVoted" [icon]="thumbsDownPressed" [className]="'thumb-active'" (click)="downVote()"></fa-icon>
+        </div>
+    </nb-card-body>
+</nb-card>
+ 

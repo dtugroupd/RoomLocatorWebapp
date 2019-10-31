@@ -1,20 +1,20 @@
-
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { StatusButtonMenuComponent } from './status-button-menu.component';
 
-describe('StatusButtonMenuComponent', () => {
-  let component: StatusButtonMenuComponent;
-  let fixture: ComponentFixture<StatusButtonMenuComponent>;
+import { ThumbsDownComponent } from './thumbs-down.component';
+
+describe('ThumbsDownComponent', () => {
+  let component: ThumbsDownComponent;
+  let fixture: ComponentFixture<ThumbsDownComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StatusButtonMenuComponent ]
+      declarations: [ ThumbsDownComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StatusButtonMenuComponent);
+    fixture = TestBed.createComponent(ThumbsDownComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
