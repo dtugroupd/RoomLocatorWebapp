@@ -6,14 +6,10 @@
     <app-survey *ngIf="activeSection"></app-survey>
     <button nbButton routerLink="/">Home</button>
     <button nbButton routerLink="mazemap">Mazemap</button>
+    <button nbButton routerLink="/manage-surveys">Manage surveys</button>
   </nb-layout-header>
 
   <nb-layout-column>
-      <!-- <div *ngIf="coordinates$ | async as coordinates">
-          Latitude: {{ coordinates.latitude }}
-          <br/>
-          Longitude: {{ coordinates.longitude }}
-      </div> -->
     <router-outlet></router-outlet>
   </nb-layout-column>
   <nb-layout-footer fixed>

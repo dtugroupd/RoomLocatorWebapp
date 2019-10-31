@@ -18,6 +18,8 @@ export interface Coordinates {
 
 export interface Survey {
     id: number;
+    title: string;
+    description: string;
     questions: Question[];
     surveyAnswers: SurveyAnswer[];
 }

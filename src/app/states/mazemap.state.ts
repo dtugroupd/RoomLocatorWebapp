@@ -1,6 +1,6 @@
 import {State, Action, StateContext, Selector, Select} from '@ngxs/store';
 import {Mazemap, LibrarySection} from '../models/mazemap.model';
-import {GetCoordinates, GetLibrarySections, SetActiveSection, SetFeedbackExpanded} from '../actions/mazemap.action';
+import {GetCoordinates, GetLibrarySections, SetActiveSection, SetActivateFeedbackAndStatus} from '../actions/mazemap.action';
 import { MazemapService } from '../services/mazemap.service';
 import {tap} from 'rxjs/operators';
 
@@ -8,6 +8,7 @@ export class MazemapStateModel {
     coordinates: Mazemap[];
     librarySections: LibrarySection[];
     activeSection: LibrarySection;
+    activateFeedbackAndStatus: boolean;
 }
 
 @State<MazemapStateModel>({
@@ -16,6 +17,7 @@ export class MazemapStateModel {
         coordinates: null,
         librarySections: null,
         activeSection: null,
+        activateFeedbackAndStatus: false,
     }
 })
 
@@ -36,6 +38,11 @@ export class MazemapState {
     @Selector()
     static getActiveSection(state: MazemapStateModel) {
         return state.activeSection;
+    }
+
+    @Selector()
+    static getActivateFeedbackAndStatus(state: MazemapStateModel) {
+        return state.activateFeedbackAndStatus;
     }
 
     @Action(GetCoordinates)
@@ -64,6 +71,13 @@ export class MazemapState {
     setActiveSection({patchState}: StateContext<MazemapStateModel>, payload: SetActiveSection) {
         patchState({
             activeSection: payload.section
+        });
+    }
+
+    @Action(SetActivateFeedbackAndStatus)
+    setActivateFeedbackAndStatus({patchState}: StateContext<MazemapStateModel>, payload: SetActivateFeedbackAndStatus) {
+        patchState({
+            activateFeedbackAndStatus: payload.activate
         });
     }
 }

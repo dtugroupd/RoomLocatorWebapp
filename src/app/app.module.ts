@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
          NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
-         NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule } from '@nebular/theme';
+         NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -61,6 +61,8 @@ const appRoutes: Routes = [
     FeedbackSmileyRowComponent,
     FeedbackButtonComponent,
     CreateSurveyComponent,
+    MazemapComponent,
+    SurveyListItemComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -78,6 +80,7 @@ const appRoutes: Routes = [
     NbEvaIconsModule,
     NbButtonModule,
     NbAccordionModule,
+    NbActionsModule,
     NbCardModule,
     NbInputModule,
     NbListModule,

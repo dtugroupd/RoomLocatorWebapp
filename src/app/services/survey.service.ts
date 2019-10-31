@@ -34,6 +34,6 @@ export class SurveyService extends BaseService {
   }
 
   getSurveys() {
-    return this.http.get<Survey[]>('${this.backendBaseUrl}/api/v1/survey');
+    return this.http.get<Survey[]>(`${this.backendBaseUrl}/api/v1/survey`);
   }
 }

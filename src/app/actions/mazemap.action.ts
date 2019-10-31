@@ -11,7 +11,7 @@ export class SetActiveSection {
     constructor(public section: any) {}
 }
 
-export class SetFeedbackExpanded {
+export class SetActivateFeedbackAndStatus {
     static readonly type = '[Boolean] Set';
-    constructor(public toggle: boolean) {}
+    constructor(public activate: boolean) {}
 }

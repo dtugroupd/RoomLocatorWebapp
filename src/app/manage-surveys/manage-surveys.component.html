@@ -1,1 +1,27 @@
-<p>manage-surveys works!</p>
+<div id="flex">
+    <div style="width: 50%; padding: 20px;">
+        <app-mazemap></app-mazemap>
+    </div>
+    <div style="width: 50%; padding: 20px;">
+        <div>
+            <h4>All surveys</h4>
+            <nb-accordion id="accordion">
+                <nb-accordion-item info *ngFor="let survey of surveys, let i = index">
+                    <nb-accordion-item-header style="margin-bottom: 0px !important;">
+                        {{ survey.id }}. {{ survey.title }}
+                    </nb-accordion-item-header>
+                    <nb-accordion-item-body>
+                        <div style="width: 100%; margin-bottom: 20px;">
+                            <nb-actions style="float: right" size="medium">
+                                    <nb-action title="Add to selected section" (click)="test()"><fa-icon [icon]="faCoffee"></fa-icon></nb-action>
+                                    <nb-action title="Edit"><fa-icon [icon]="faCoffee"></fa-icon></nb-action>
+                                    <nb-action title="Delete"><fa-icon [icon]="faCoffee"></fa-icon></nb-action>
+                            </nb-actions>
+                        </div>
+                        {{ survey.description }}
+                    </nb-accordion-item-body>
+                </nb-accordion-item>
+            </nb-accordion>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+// nb-layout-column {
+//     padding: 0 !important;
+//     height: 100% !important;
+// }
+
+#flex {
+    display: flex !important;
+    flex-flow: row nowrap !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+nb-action fa-icon {
+    cursor: pointer;
+    color: #ddd;
+}
+
+nb-action fa-icon:hover {
+    color: black;
+}
+
+nb-actions {
+    margin-bottom: 20px;
+}
+
+nb-accordion-item {
+    margin-top: 10px;
+}
+
+.active {
+    background-color: #ddd;
+}
