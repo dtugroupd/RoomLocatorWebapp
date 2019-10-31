@@ -71,8 +71,6 @@ export class MazemapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    console.log(Mazemap.mapboxgl);
-
     // Get library sections from store and convert to layers
     this.store.dispatch(GetLibrarySections).subscribe(x => {
       this.librarySections = x.MazeMap.librarySections;
@@ -89,6 +87,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
        minZoom: 18.5,
        zLevel: 1,
        bearing: -72.8,
+       autoSetRTLTextPlugin: false,
      };
 
     // Horizontal view of the library
@@ -121,9 +120,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.map) {
-      this.map.remove();
-    }
+    this.map.remove();
   }
 
   toggleStatusMenu() {
