@@ -3,6 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { faThumbsUp as thumbsUpPressed, faThumbsDown as thumbsDownPressed } from '@fortawesome/free-solid-svg-icons';
 import { faThumbsUp as thumbsUp, faThumbsDown as thumbsDown } from '@fortawesome/free-regular-svg-icons';
 
+
 @Component({
   selector: 'app-status-button-menu',
   templateUrl: './status-button-menu.component.html',

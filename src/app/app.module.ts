@@ -35,6 +35,7 @@ const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: LoginButtonComponent },
 ];
 
+
 @NgModule({
   declarations: [
     AppComponent,
