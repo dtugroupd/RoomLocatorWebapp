@@ -4,7 +4,10 @@ import { Survey, LibrarySection } from '../models/mazemap.model';
 import { SurveyState } from '../states/survey.state';
 import { Observable } from 'rxjs';
 import { MazemapState } from '../states/mazemap.state';
-import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faComments } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-manage-surveys',
@@ -18,7 +21,10 @@ export class ManageSurveysComponent implements OnInit {
   surveys: Survey[];
   unsortedSurveys: Survey[];
   activeSection: LibrarySection;
-  faCoffee = faCoffee;
+  faPlusSquare = faPlusSquare;
+  faDownload = faDownload;
+  faComments = faComments;
+  faTrashAlt = faTrashAlt;
 
   activeStyle = {'background-color': '#ddd'};
 
@@ -50,16 +56,17 @@ export class ManageSurveysComponent implements OnInit {
     });
   }
 
-  test() {
-    console.log('lol');
+  isActive(index: number) {
+    if (this.activeSection) {
+      return this.surveys[index].id === this.activeSection.survey.id;
+    }
+
+    return false;
   }
 
-  // isActive(index: number) {
-  //   if (this.activeSection) {
-  //     return this.surveys[index].id = this.activeSection.survey.id;
-  //   }
-
-  //   return false;
-  // }
+  surveyResponseNum(survey: Survey) {
+    const surveyAnswersCount = survey.surveyAnswers.length;
+    return surveyAnswersCount > 99 ? '99+' : `${surveyAnswersCount}`;
+  }
 
 }
