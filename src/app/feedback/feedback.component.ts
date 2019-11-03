@@ -1,3 +1,7 @@
+/**
+ * @author Thomas Lien Christensen, s165242
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
 import { Survey, SurveyAnswerSubmition, QuestionAnswerSubmition } from '../models/mazemap.model';
@@ -13,6 +17,7 @@ export class FeedbackComponent implements OnInit {
 
   survey: Survey;
   answer: SurveyAnswerSubmition;
+  comment: string;
 
   constructor(protected dialogRef: NbDialogRef<any>, private service: SurveyService, private toastrService: NbToastrService ) { }
 
@@ -23,7 +28,7 @@ export class FeedbackComponent implements OnInit {
       qAnswers.push(qa);
     });
 
-    this.answer = { surveyId: this.survey.id, questionAnswers: qAnswers };
+    this.answer = { surveyId: this.survey.id, comment: this.comment, questionAnswers: qAnswers };
   }
 
   close() {

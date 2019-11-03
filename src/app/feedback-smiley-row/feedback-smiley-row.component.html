@@ -1,3 +1,7 @@
+<!--
+    author: Thomas Lien Christensen, s165242
+-->
+
 <div id="iconRow">
     <fa-icon *ngIf="score === 0" [icon]="faFrown" [className]="'frown'" ></fa-icon>
     <fa-icon *ngIf="score !== 0" [icon]="faFrownReg" (click)="updateScore(0)" [className]="'frown'"></fa-icon>

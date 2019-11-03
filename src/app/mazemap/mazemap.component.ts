@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+/**
+ * @author Thomas Lien Christensen, s165242
+ */
+
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { GetLibrarySections, SetActiveSection, SetFeedbackExpanded } from './../actions/mazemap.action';
+import { GetLibrarySections, SetActiveSection, SetActivateFeedbackAndStatus } from './../actions/mazemap.action';
 import { LibrarySection } from './../models/mazemap.model';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { MazemapState } from '../states/mazemap.state';
+import { MazemapState, MazemapStateModel } from '../states/mazemap.state';
 import { Observable } from 'rxjs';
 import { toLatLng, getCenter, convertLibrarySectionsToLayers, layerMarkerOptions } from './mazemap-helper';
 
@@ -49,12 +53,13 @@ declare let Mazemap: any;
   ]
 })
 
-export class MazemapComponent implements OnInit {
+export class MazemapComponent implements OnInit, OnDestroy {
 
   map: any;
   mapOptions: object;
   promptFeedback = false;
   showStatusMenu = false;
+  activateFeedbackAndStatus = false;
   lastHoveredLayer = null;
   activeLayer = null;
   activeLayerMarker = null;
@@ -66,16 +71,21 @@ export class MazemapComponent implements OnInit {
   librarySectionLayers = [];
 
   @Select(MazemapState.getLibrarySections) librarySections$: Observable<LibrarySection[]>;
+  @Select(MazemapState.getActivateFeedbackAndStatus) activateFeedbackAndStatus$: Observable<boolean>;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {
+      this.activateFeedbackAndStatus$.subscribe(x => {
+        this.activateFeedbackAndStatus = x;
+      });
+
+      // Get library sections from store and convert to layers
+      this.store.dispatch(GetLibrarySections).subscribe(x => {
+        this.librarySections = x.MazeMap.librarySections;
+        this.librarySectionLayers = convertLibrarySectionsToLayers(this.librarySections);
+      });
+   }
 
   ngOnInit() {
-
-    // Get library sections from store and convert to layers
-    this.store.dispatch(GetLibrarySections).subscribe(x => {
-      this.librarySections = x.MazeMap.librarySections;
-      this.librarySectionLayers = convertLibrarySectionsToLayers(this.librarySections);
-    });
 
     // Vertical view of the library
     this.mapOptions = {
@@ -87,6 +97,7 @@ export class MazemapComponent implements OnInit {
        minZoom: 18.5,
        zLevel: 1,
        bearing: -72.8,
+       autoSetRTLTextPlugin: false,
      };
 
     // Horizontal view of the library
@@ -116,6 +127,12 @@ export class MazemapComponent implements OnInit {
     this.map.on('click', (e: any) => {
       console.log(e.lngLat);
     });
+  }
+
+  ngOnDestroy() {
+    this.store.dispatch(new SetActivateFeedbackAndStatus(false));
+    this.store.dispatch(new SetActiveSection(null));
+    this.map.remove();
   }
 
   toggleStatusMenu() {
@@ -237,7 +254,6 @@ export class MazemapComponent implements OnInit {
 
   closeFeedbackPrompt() {
     this.promptFeedback = false;
-    this.store.dispatch(new SetFeedbackExpanded(false));
   }
 
 }

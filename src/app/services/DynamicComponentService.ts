@@ -1,3 +1,7 @@
+/**
+ * Code taken from stackoverflow
+ */
+
 import { Injectable, Injector, ApplicationRef, ComponentFactoryResolver, ComponentRef, Type } from '@angular/core';
 
 /* ### EXAMPLE OF USE

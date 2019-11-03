@@ -1,10 +1,15 @@
+/**
+ * @author Thomas Lien Christensen, s165242
+ */
+
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { Store, Select } from '@ngxs/store';
-import { GetCoordinates, GetLibrarySections } from './actions/mazemap.action';
+import { GetCoordinates, GetLibrarySections, SetActivateFeedbackAndStatus } from './actions/mazemap.action';
 import { Mazemap, LibrarySection } from './models/mazemap.model';
 import { MazemapState } from './states/mazemap.state';
 import { Observable } from 'rxjs';
+import { GetSurveys } from './actions/survey.actions';
 
 @Component({
   selector: 'app-root',
@@ -19,13 +24,27 @@ export class AppComponent implements OnInit {
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
   @Select(MazemapState.getCoordinatesSet) coordinates$: Observable<Mazemap[]>;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store, private router: Router) { }
 
   ngOnInit() {
     this.store.dispatch(new GetCoordinates());
     this.activeSection$.subscribe(x => {
       this.activeSection = x;
-    })
+    });
+
+    this.store.dispatch(new GetSurveys());
+
+    this.router.events.subscribe(x => {
+      if (x instanceof NavigationEnd) {
+        switch (x.urlAfterRedirects) {
+          case '/mazemap':
+            this.store.dispatch(new SetActivateFeedbackAndStatus(true));
+            break;
+          default:
+            break;
+        }
+      }
+    });
 
 
       /* In case we HAVE to subscribe/unsubsribe
