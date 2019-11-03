@@ -1,3 +1,7 @@
+/**
+ * @author Thomas Lien Christensen, s165242
+ */
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { GetLibrarySections, SetActiveSection, SetActivateFeedbackAndStatus } from './../actions/mazemap.action';

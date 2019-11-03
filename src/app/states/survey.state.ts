@@ -1,4 +1,8 @@
-import {State, Action, StateContext, Selector, Select} from '@ngxs/store';
+/**
+ * @author Thomas Lien Christensen, s165242
+ */
+
+import { State, Action, StateContext, Selector, Select } from '@ngxs/store';
 import {Mazemap, LibrarySection, Survey} from '../models/mazemap.model';
 import {tap} from 'rxjs/operators';
 import { SurveyService } from '../services/survey.service';

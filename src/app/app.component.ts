@@ -1,3 +1,7 @@
+/**
+ * @author Thomas Lien Christensen, s165242
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Store, Select } from '@ngxs/store';

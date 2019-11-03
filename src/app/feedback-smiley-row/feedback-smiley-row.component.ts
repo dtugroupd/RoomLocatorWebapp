@@ -1,3 +1,7 @@
+/**
+ * @author Thomas Lien Christensen, s165242
+ */
+
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { faMeh, faGrin, faFrown } from '@fortawesome/free-solid-svg-icons';
 import { faMeh as faMehReg,

@@ -1,4 +1,8 @@
-import {State, Action, StateContext, Selector, Select} from '@ngxs/store';
+/**
+ * @author Thomas Lien Christensen, s165242
+ */
+
+import { State, Action, StateContext, Selector, Select } from '@ngxs/store';
 import {Mazemap, LibrarySection} from '../models/mazemap.model';
 import {GetCoordinates, GetLibrarySections, SetActiveSection, SetActivateFeedbackAndStatus} from '../actions/mazemap.action';
 import { MazemapService } from '../services/mazemap.service';

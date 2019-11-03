@@ -13,7 +13,6 @@ export class StatusButtonComponent implements OnInit {
   faGrin = faGrin;
   faFrown = faFrown;
 
-
   constructor() { }
 
   ngOnInit() {

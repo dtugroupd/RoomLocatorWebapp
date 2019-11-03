@@ -1,3 +1,7 @@
+/**
+ * @author Thomas Lien Christensen, s165242
+ */
+
 import { Component, OnInit, Input } from '@angular/core';
 import { QuestionToCreate, LibrarySection } from '../models/mazemap.model';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
