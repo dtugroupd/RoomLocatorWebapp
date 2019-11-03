@@ -4,7 +4,7 @@
 
 <nb-card id="surveyCard">
     <nb-card-header>
-        Survey {{ survey.id }}
+        {{ survey.title }}
     </nb-card-header>
     <nb-list *ngIf="survey">
         <nb-list-item *ngFor="let question of answer.questionAnswers">
