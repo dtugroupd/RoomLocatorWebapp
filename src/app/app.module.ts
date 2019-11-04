@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MazemapComponent } from './mazemap/mazemap.component';
-import { LoginButtonComponent } from './login-button/login-button.component';
+import { MazemapComponent } from './components/mazemap/mazemap.component';
+import { LoginButtonComponent } from './components/login-button/login-button.component';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,25 +14,23 @@ import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
-import { LoginState } from './states/login.state';
+import { LoginState } from './_states/login.state';
 import { NgxsModule } from '@ngxs/store';
 import { ValidateComponent } from './auth/validate/validate.component';
-import { MazemapState } from './states/mazemap.state';
-import { SurveyComponent } from './survey/survey.component';
-import { DynamicComponentService } from './services/DynamicComponentService';
-import { FeedbackComponent } from './feedback/feedback.component';
-import { FeedbackSmileyRowComponent } from './feedback-smiley-row/feedback-smiley-row.component';
+import { MazemapState } from './_states/mazemap.state';
+import { SurveyCreateActionComponent } from './components/survey-create-action/survey-create-action.component';
+import { DynamicComponentService } from './_services/DynamicComponentService';
+import { SurveyFeedbackComponent } from './components/survey-feedback/survey-feedback.component';
+import { SurveyFeedbackSmileyRowComponent } from './components/survey-feedback-smiley-row/survey-feedback-smiley-row.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { CreateSurveyComponent } from './create-survey/create-survey.component';
-import { CalendarviewComponent } from './calendarview/calendarview.component';
-import { FeedbackButtonComponent } from './feedback-button/feedback-button.component';
-import { StatusButtonComponent } from './status-button/status-button.component';
-import { StatusButtonMenuComponent } from './status-button-menu/status-button-menu.component';
+import { SurveyCreateComponent } from './components/survey-create/survey-create.component';
+import { EventCalendarComponent } from './components/event-calendar/event-calendar.component';
+import { SurveyFeedbackButtonComponent } from './components/survey-feedback-button/survey-feedback-button.component';
+import { StatusButtonComponent } from './components/status-button/status-button.component';
+import { StatusButtonMenuComponent } from './components/status-button-menu/status-button-menu.component';
 import { FormsModule } from '@angular/forms';
-import { ManageSurveysComponent } from './manage-surveys/manage-surveys.component';
-import { SurveyState } from './states/survey.state';
-import { SurveyListItemComponent } from './survey-list-item/survey-list-item.component';
-
+import { SurveyManagementComponent } from './components/survey-management/survey-management.component';
+import { SurveyState } from './_states/survey.state';
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: LoginButtonComponent },
@@ -44,25 +42,23 @@ const appRoutes: Routes = [
     ValidateComponent,
     MazemapComponent,
     LoginButtonComponent,
-    SurveyComponent,
-    FeedbackComponent,
-    FeedbackSmileyRowComponent,
-    CreateSurveyComponent,
-    CalendarviewComponent,
-    FeedbackButtonComponent,
+    SurveyCreateActionComponent,
+    SurveyFeedbackComponent,
+    SurveyFeedbackSmileyRowComponent,
+    SurveyCreateComponent,
+    EventCalendarComponent,
+    SurveyFeedbackButtonComponent,
     StatusButtonComponent,
     StatusButtonMenuComponent,
-    ManageSurveysComponent,
-    SurveyListItemComponent,
+    SurveyManagementComponent,
   ],
   entryComponents: [
-    SurveyComponent,
-    FeedbackComponent,
-    FeedbackSmileyRowComponent,
-    FeedbackButtonComponent,
-    CreateSurveyComponent,
+    SurveyCreateActionComponent,
+    SurveyFeedbackComponent,
+    SurveyFeedbackSmileyRowComponent,
+    SurveyFeedbackButtonComponent,
+    SurveyCreateComponent,
     MazemapComponent,
-    SurveyListItemComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -101,7 +97,7 @@ const appRoutes: Routes = [
   bootstrap: [AppComponent],
   exports: [
     LoginButtonComponent,
-    SurveyComponent
+    SurveyCreateActionComponent
   ]
 })
 export class AppModule { }
