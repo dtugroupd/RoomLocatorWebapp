@@ -1,3 +1,7 @@
+/**
+ * @author Hadi Horani, s165242
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { LoginToken } from './../models/login.model';

@@ -1,3 +1,7 @@
+/**
+ * @author Hadi Horani, s165242
+ */
+
 import { State, Action, Selector, StateContext } from '@ngxs/store';
 import { LoginToken } from '../models/login.model';
 import { AddToken } from '../actions/login.action';

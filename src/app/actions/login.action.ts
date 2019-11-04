@@ -1,3 +1,7 @@
+/**
+ * @author Hadi Horani, s165242
+ */
+
 import { LoginToken } from '../models/login.model';
 
 export class AddToken {
