@@ -6,11 +6,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Store, Select } from '@ngxs/store';
-import { GetCoordinates, GetLibrarySections, SetActivateFeedbackAndStatus } from './actions/mazemap.action';
-import { Mazemap, LibrarySection } from './models/mazemap.model';
-import { MazemapState } from './states/mazemap.state';
+import { SetActivateFeedbackAndStatus } from './_actions/mazemap.actions';
+import { MazemapState } from './_states/mazemap.state';
 import { Observable } from 'rxjs';
-import { GetSurveys } from './actions/survey.actions';
+import { GetSurveys } from './_actions/survey.actions';
+import { LibrarySection } from './models/mazemap/library-section.model';
 
 @Component({
   selector: 'app-root',
@@ -23,12 +23,10 @@ export class AppComponent implements OnInit {
   activeSection: LibrarySection;
 
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
-  @Select(MazemapState.getCoordinatesSet) coordinates$: Observable<Mazemap[]>;
 
   constructor(private store: Store, private router: Router) { }
 
   ngOnInit() {
-    this.store.dispatch(new GetCoordinates());
     this.activeSection$.subscribe(x => {
       this.activeSection = x;
     });
@@ -46,18 +44,5 @@ export class AppComponent implements OnInit {
         }
       }
     });
-
-
-      /* In case we HAVE to subscribe/unsubsribe
-
-    .subscribe(yo => {
-      this.coordinates$.subscribe(yoo => {
-        console.log('Look at me now ', yoo);
-        this.coordinates = yoo;
-      });
-
-     this.coordinates$ = yo;
-    });
-      */
   }
 }
