@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MazemapComponent } from './mazemap/mazemap.component';
@@ -12,7 +11,6 @@ import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule, NbCardModu
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
-import { LoginState } from './states/login.state';
 import { NgxsModule } from '@ngxs/store';
 import { ValidateComponent } from './auth/validate/validate.component';
 import { MazemapState } from './states/mazemap.state';
@@ -28,6 +26,8 @@ import { StatusButtonComponent } from './status-button/status-button.component';
 import { StatusButtonMenuComponent } from './status-button-menu/status-button-menu.component';
 import { FormsModule } from '@angular/forms';
 
+import { RolesViewComponent } from './components/roles-view/roles-view.component';
+import { UserState } from './states/user.state';
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: LoginButtonComponent },
@@ -47,7 +47,7 @@ const appRoutes: Routes = [
     FeedbackButtonComponent,
     StatusButtonComponent,
     StatusButtonMenuComponent,
-
+    RolesViewComponent,
   ],
   entryComponents: [
     SurveyComponent,
@@ -79,7 +79,7 @@ const appRoutes: Routes = [
     NbDialogModule.forRoot(),
     NbToastrModule.forRoot(),
     NgxsModule.forRoot([
-      LoginState,
+      UserState,
       MazemapState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),

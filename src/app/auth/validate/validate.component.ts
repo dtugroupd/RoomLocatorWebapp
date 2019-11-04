@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
-import { AddToken } from 'src/app/actions/login.action';
+import { SetUser } from 'src/app/actions/login.action';
 
 @Component({
   selector: 'app-validate',
@@ -20,7 +20,6 @@ export class ValidateComponent implements OnInit, OnDestroy {
   prod: boolean;
 
   token: any;
-  studentId: string;
   jwt: any;
 
   subscriptions: Subscription;
@@ -32,15 +31,15 @@ export class ValidateComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.route.queryParams.subscribe(params => {
       this.token = JSON.parse(atob(params['token']));
-      console.log(this.token)
+     // console.log(this.token)
 
       this.jwt = JSON.parse(atob(this.token.Token.split('.')[1]));
     }));
   }
 
   ngOnInit() {
-    this.store.dispatch(new AddToken({tokenValue: this.token}));
-    localStorage.setItem('token', this.token);
+    // this.validateLogin().then(x => this.jwt = x);
+    this.store.dispatch(new SetUser({tokenValue: this.token}));
   }
 
   get register(): boolean {

@@ -7,11 +7,7 @@
   </nb-layout-header>
 
   <nb-layout-column>
-      <!-- <div *ngIf="coordinates$ | async as coordinates">
-          Latitude: {{ coordinates.latitude }}
-          <br/>
-          Longitude: {{ coordinates.longitude }}
-      </div> -->
+    <app-roles-view></app-roles-view>
     <router-outlet></router-outlet>
   </nb-layout-column>
   <nb-layout-footer fixed>

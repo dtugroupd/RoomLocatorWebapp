@@ -1,7 +1,16 @@
-import { LoginToken } from '../models/login.model';
+import { User } from '../models/login/user.model';
 
-export class AddToken {
-    static readonly type = '[Login] Add';
+/**
+ * @author Hadi Horani, s165242
+ */
 
-    constructor(public payload: LoginToken) {}
+export class GetUser {
+    static readonly type = '[User] Get';
 }
+
+export class SetUser {
+    static readonly type = '[User] Set';
+
+    constructor(public payload: any) {}
+}
+
