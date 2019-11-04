@@ -31,8 +31,6 @@ import { StatusButtonMenuComponent } from './status-button-menu/status-button-me
 import { FormsModule } from '@angular/forms';
 import { ManageSurveysComponent } from './manage-surveys/manage-surveys.component';
 import { SurveyState } from './states/survey.state';
-import { SurveyListItemComponent } from './survey-list-item/survey-list-item.component';
-
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: LoginButtonComponent },
@@ -53,7 +51,6 @@ const appRoutes: Routes = [
     StatusButtonComponent,
     StatusButtonMenuComponent,
     ManageSurveysComponent,
-    SurveyListItemComponent,
   ],
   entryComponents: [
     SurveyComponent,
@@ -62,7 +59,6 @@ const appRoutes: Routes = [
     FeedbackButtonComponent,
     CreateSurveyComponent,
     MazemapComponent,
-    SurveyListItemComponent
   ],
   imports: [
     RouterModule.forRoot(
