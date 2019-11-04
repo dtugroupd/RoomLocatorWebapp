@@ -11,7 +11,7 @@ import { AddToken } from 'src/app/actions/login.action';
     <p>Logged in as {{jwt.sub}} {{register}} {{jwt.exp}}</p>
     <p>Is Expired: {{expired}} (expires: {{expiration | date:"short"}}) </p>
     <pre>{{jwt | json}}</pre>
-    <pre>{{token}}</pre>
+    <pre>{{token | json}}</pre>
   `,
   styles: []
 })
@@ -19,8 +19,7 @@ export class ValidateComponent implements OnInit, OnDestroy {
   apiUrl: string;
   prod: boolean;
 
-  ticket: string;
-  token: string;
+  token: any;
   studentId: string;
   jwt: any;
 
@@ -32,10 +31,10 @@ export class ValidateComponent implements OnInit, OnDestroy {
 
     this.subscriptions.add(
       this.route.queryParams.subscribe(params => {
-      this.ticket = params['ticket'];
-      this.token = params['token'];
+      this.token = JSON.parse(atob(params['token']));
+      console.log(this.token)
 
-      this.jwt = JSON.parse(atob(this.token.split('.')[1]));
+      this.jwt = JSON.parse(atob(this.token.Token.split('.')[1]));
     }));
   }
 
@@ -58,20 +57,4 @@ export class ValidateComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.unsubscribe;
   }
-
-  async validateLogin()
-  {
-    const response = await fetch(`${environment.backendUrl}/api/v1/auth/validate`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ ticket: this.ticket })
-    });
-
-    const content = await response.json();
-    return content;
-  }
-
 }
