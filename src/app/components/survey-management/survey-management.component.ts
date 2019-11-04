@@ -13,6 +13,7 @@ import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { SurveyService } from 'src/app/_services/survey.service';
 
 @Component({
   selector: 'app-survey-management',
@@ -21,7 +22,7 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 })
 
 export class SurveyManagementComponent implements OnInit {
-  constructor(private store: Store) { }
+  constructor(private store: Store, private service: SurveyService) { }
 
   surveys: Survey[];
   unsortedSurveys: Survey[];
@@ -72,6 +73,10 @@ export class SurveyManagementComponent implements OnInit {
   surveyResponseNum(survey: Survey) {
     const surveyAnswersCount = survey.surveyAnswers.length;
     return surveyAnswersCount > 99 ? '99+' : `${surveyAnswersCount}`;
+  }
+
+  downloadFile(id: number) {
+    this.service.downloadSurveyAnswers(id);
   }
 
 }
