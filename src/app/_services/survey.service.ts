@@ -45,7 +45,8 @@ export class SurveyService extends BaseService {
     return this.http.get(`${this.backendBaseUrl}/api/v1/survey/downloadsurveyanswers/${id}`, { responseType: 'blob', observe: 'response' })
       .subscribe(res => {
         const filename = res.headers.get('Content-Disposition').split(/[;'=]/).pop();
-        saveAs(res.body, filename);
+        const blob = new Blob(['\ufeff', res.body]);
+        saveAs(blob, filename);
       });
   }
 
