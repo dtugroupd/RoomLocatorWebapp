@@ -4,6 +4,10 @@
 
 export interface User {
     studentId: string;
-    token: string;
-    roles: [];
+    roles: string[];
 }
+
+export interface Token {
+    user: User;
+    token: string;
+} 

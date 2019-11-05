@@ -4,7 +4,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { User } from 'src/app/models/login/user.model';
+import { User, Token } from 'src/app/models/login/user.model';
 import { Observable } from 'rxjs';
 import { UserState } from 'src/app/_states/user.state';
 
@@ -17,7 +17,7 @@ import { UserState } from 'src/app/_states/user.state';
       </div>
     <div>
         Granted User Roles:
-        <span *ngFor = "let roles of user.user.roles">
+        <span *ngFor = "let roles of token.user.roles">
        {{ roles }}
        </span>
     </div>
@@ -27,15 +27,15 @@ import { UserState } from 'src/app/_states/user.state';
 
 export class RolesViewComponent implements OnInit {
 
-  @Select(UserState.getUser) user$: Observable<User>;
-  user: User;
+  @Select(UserState.getToken) token$: Observable<Token>;
+  token: Token;
 
   constructor(private store: Store) {
    }
 
   ngOnInit() {
-    this.user$.subscribe(result => {
-      this.user = result;
+    this.token$.subscribe(result => {
+      this.token = result;
     });
   }
 

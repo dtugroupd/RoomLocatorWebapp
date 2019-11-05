@@ -8,42 +8,41 @@ import { environment } from 'src/environments/environment';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
-import { SetUser } from 'src/app/_actions/user.actions';
-import { User } from 'src/app/models/login/user.model';
+import { Token } from 'src/app/models/login/user.model';
+import { SetToken } from 'src/app/_actions/user.actions';
+import {Router} from "@angular/router"
+
 
 @Component({
   selector: 'app-validate',
-  template: `
-    <p>Logged in as {{jwt.sub}} {{register}} {{jwt.exp}}</p>
-    <p>Is Expired: {{expired}} (expires: {{expiration | date:"short"}}) </p>
-    <pre>{{jwt | json}}</pre>
-    <pre>{{token | json}}</pre>
-  `,
+  template: '',
   styles: []
 })
 export class ValidateComponent implements OnInit, OnDestroy {
   apiUrl: string;
   prod: boolean;
 
-  user: User;
+  token: Token;
   jwt: any;
 
   subscriptions: Subscription;
 
-  constructor(private route: ActivatedRoute, private store: Store) {
+  constructor(private route: ActivatedRoute, private store: Store, private router: Router) {
     this.apiUrl = environment.backendUrl;
     this.subscriptions = new Subscription();
 
     this.subscriptions.add(
       this.route.queryParams.subscribe(params => {
-      this.user = JSON.parse(atob(params['token']));
+        this.token = JSON.parse(atob(params['token']));
 
-      this.jwt = JSON.parse(atob(this.user.token.split('.')[1]));
-    }));
+        this.jwt = JSON.parse(atob(this.token.token.split('.')[1]));
+      }));
   }
 
   ngOnInit() {
-    this.store.dispatch(new SetUser(this.user));
+    this.store.dispatch(new SetToken(this.token));
+    localStorage.setItem("token", this.token.token);
+    this.router.navigate(["/"]);
   }
 
   get register(): boolean {

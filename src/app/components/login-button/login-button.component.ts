@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { User } from 'src/app/models/login/user.model';
+import { User, Token } from 'src/app/models/login/user.model';
 import { UserState } from 'src/app/_states/user.state';
 
 @Component({
@@ -15,7 +15,7 @@ import { UserState } from 'src/app/_states/user.state';
   <div>
     <a nbButton href="https://auth.dtu.dk/dtu/?service={{serviceUrl}}" >Login</a>
     <div>
-    User signed in: {{ user.user.studentId }}
+    User signed in: {{ token.user.studentId }}
 
   </div>
 `,
@@ -23,9 +23,9 @@ import { UserState } from 'src/app/_states/user.state';
 })
 export class LoginButtonComponent implements OnInit {
   serviceUrl: string;
-   user: User;
+   token: Token;
 
-  @Select(UserState.getUser) user$: Observable<User>;
+  @Select(UserState.getToken) token$: Observable<Token>;
 
 
   constructor(private store: Store) {
@@ -33,8 +33,8 @@ export class LoginButtonComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.user$.subscribe(result => {
-      this.user = result;
+    this.token$.subscribe(result => {
+      this.token = result;
     });
   }
 }

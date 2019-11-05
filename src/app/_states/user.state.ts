@@ -3,31 +3,31 @@
  */
 
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import { SetUser } from '../_actions/user.actions';
-import { User } from '../models/login/user.model';
+import { SetToken } from '../_actions/user.actions';
+import { Token } from '../models/login/user.model';
 
 export class UserStateModel {
-    user: User;
+    token: Token;
 }
 
 @State<UserStateModel>({
-    name: 'user',
+    name: 'token',
     defaults: {
-        user: null
+        token: null
     }
 })
 
 export class UserState {
 
     @Selector()
-    static getUser(state: UserStateModel) {
-        return state.user;
+    static getToken(state: UserStateModel) {
+        return state.token;
     }
 
-    @Action(SetUser)
-    set( {getState, patchState}: StateContext<UserStateModel>, { payload }: SetUser) {
+    @Action(SetToken)
+    set( {getState, patchState}: StateContext<UserStateModel>, { payload }: SetToken) {
         patchState({
-            user: payload
+            token: payload
         });
     }
 }
