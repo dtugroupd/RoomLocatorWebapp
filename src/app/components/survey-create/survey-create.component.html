@@ -1,0 +1,41 @@
+<!--
+    author: Thomas Lien Christensen, s165242
+-->
+
+<form name="form" (ngSubmit)="f.form.valid && submit()" #f="ngForm" novalidate>
+    <nb-card>
+        <nb-card-header>
+            Create survey for section {{ activeSection.id }}
+        </nb-card-header>
+        <nb-card-body id="createSurveyForm">
+            <div class="form-control">
+                <input nbInput fullWidth placeholder="Title" name="title" type="text" [(ngModel)]="title" [ngClass]="f.submitted && titleModel.invalid ? 'status-danger' : ''" #titleModel="ngModel" minlength="4" required>
+                <div *ngIf="titleModel.invalid && f.submitted" class="form-error-msg">
+                    <small *ngIf="titleModel.errors['required']">
+                        Title is required.
+                    </small>
+                    <small *ngIf="titleModel.errors['minlength']">
+                        Title must be at least 4 characters long.
+                    </small>
+                </div>
+            </div>
+            <div class="form-control">
+                <textarea nbInput fullWidth placeholder="Description" name="description" type="text" [value]="this.description" (input)="this.description = $event.target.value"></textarea>
+                <small>(Optional)</small>
+            </div>
+            <button id="addQuestionButton" nbButton fullWidth (click)="addQuestion(); $event.preventDefault()">Add question</button>
+            <div *ngFor="let question of questions; let i = index">
+                <div class="form-control">
+                    <input nbInput fullWidth type="text" placeholder=" Question {{i+1}}" name="q i" fieldSize="medium" [ngClass]="f.submitted && !question.text ? 'status-warning' : ''" [(ngModel)]="question.text" #questionModel="ngModel">
+                    <div *ngIf="!question.text && f.submitted" class="form-warning-msg">
+                        <small>Empty questions are not submitted.</small>
+                    </div>
+                </div>
+            </div>
+        </nb-card-body>
+        <nb-card-footer id="createSurveyFooter">
+            <button nbButton outline (click)="close()"  status="warning">Close</button>
+            <button nbButton outline (click)="submit()">Submit</button>
+        </nb-card-footer>
+    </nb-card>
+</form>

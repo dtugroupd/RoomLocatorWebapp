@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
-import { SetUser } from 'src/app/actions/login.action';
+import { SetUser } from 'src/app/_actions/login.actions';
 
 @Component({
   selector: 'app-validate',

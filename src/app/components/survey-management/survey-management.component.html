@@ -1,0 +1,35 @@
+<!--
+    author: Thomas Lien Christensen, s165242
+-->
+
+<div class="flex fullscreen">
+    <div style="width: 50%; padding: 20px;">
+        <app-mazemap></app-mazemap>
+    </div>
+    <div style="width: 50%; padding: 20px;">
+        <div class="flex flex-align-vertical">
+            <h4>All surveys</h4>
+            <app-survey-create-action *ngIf="activeSection"></app-survey-create-action>
+        </div>
+        <div style="max-height: 70vh; overflow: auto;">
+            <nb-accordion id="accordion">
+                <nb-accordion-item info *ngFor="let survey of surveys, let i = index" [ngClass]="{'active': isActive(i)}" [expanded]="isActive(i)">
+                    <nb-accordion-item-header style="margin-bottom: 0px !important;">
+                            {{ survey.id }}. {{ survey.title }}
+                        </nb-accordion-item-header>
+                        <nb-accordion-item-body>
+                            <div style="width: 100%; margin-bottom: 20px;">
+                                <nb-actions style="float: right" size="large">
+                                    <nb-action *ngIf="!isActive(i)" title="Add to selected section"><fa-icon [icon]="faPlusSquare"></fa-icon></nb-action>
+                                    <nb-action title="Answers" [badgeText]="surveyResponseNum(survey)" badgeStatus="info" badgePosition="top right"><fa-icon [icon]="faComments"></fa-icon></nb-action>
+                                    <nb-action title="Download answers as .csv" (click)="downloadFile(survey.id)"><fa-icon [icon]="faDownload"></fa-icon></nb-action>
+                                    <nb-action title="Delete"><fa-icon [icon]="faTrashAlt"></fa-icon></nb-action>
+                                </nb-actions>
+                            </div>
+                            {{ survey.description }}
+                    </nb-accordion-item-body>
+                </nb-accordion-item>
+            </nb-accordion>
+        </div>
+    </div>
+</div>
