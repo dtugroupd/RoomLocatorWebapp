@@ -1,3 +1,8 @@
+/**
+ * @author Anders Wiberg Olsen, s165241
+ * @author Hadi Horani, s144885
+ */
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute } from '@angular/router';
@@ -32,14 +37,12 @@ export class ValidateComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.route.queryParams.subscribe(params => {
       this.user = JSON.parse(atob(params['token']));
-     // console.log(this.token)
 
       this.jwt = JSON.parse(atob(this.user.token.split('.')[1]));
     }));
   }
 
   ngOnInit() {
-    // this.validateLogin().then(x => this.jwt = x);
     this.store.dispatch(new SetUser(this.user));
   }
 

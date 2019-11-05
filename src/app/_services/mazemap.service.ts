@@ -1,6 +1,6 @@
 /**
  * @author Thomas Lien Christensen, s165242
- * @author Hadi Horani, s165242
+ * @author Hadi Horani, s144885
  */
 
 import { Injectable } from '@angular/core';

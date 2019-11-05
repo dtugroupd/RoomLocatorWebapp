@@ -1,7 +1,7 @@
 import { User } from '../models/login/user.model';
 
 /**
- * @author Hadi Horani, s165242
+ * @author Hadi Horani, s144885
  */
 
 export class GetUser {

@@ -1,5 +1,5 @@
 /**
- * @author Hadi Horani, s165242
+ * @author Hadi Horani, s144885
  */
 
 import { Component, OnInit } from '@angular/core';
@@ -36,21 +36,5 @@ export class LoginButtonComponent implements OnInit {
     this.user$.subscribe(result => {
       this.user = result;
     });
-
-/*    const ticket = this.getToken();
-
-    if (ticket) {
-      this.store.dispatch(new AddToken({tokenValue: ticket}));
-    }
-*/
-  }
-
-  getToken() {
-    let ticketVal: string = null;
-    if (location.search) {
-      ticketVal = location.href.split('=').pop();
-    }
-
-    return ticketVal;
   }
 }
