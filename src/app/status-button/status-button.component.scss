@@ -10,17 +10,17 @@
 }
 
 #statusSmileyButton fa-icon {
-    color:green;
+    color:#5EED6D;
 }
 
 @media only screen and (min-width: 720px) {
     #statusSmileyButton {
-        font-size: 65px;
+        font-size: 2em;;
     }
 }
 
 @media only screen and (min-width: 1024px) and (min-height: 1024px) {
     #statusSmileyButton {
-        font-size: 100px;
+        font-size: 3.5em;
     }
 }

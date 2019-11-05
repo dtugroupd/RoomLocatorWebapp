@@ -6,6 +6,7 @@ import { Mazemap, LibrarySection } from './models/mazemap.model';
 import { MazemapState } from './states/mazemap.state';
 import { Observable } from 'rxjs';
 import { GetSurveys } from './actions/survey.actions';
+import { faPoll, faMap, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,9 @@ import { GetSurveys } from './actions/survey.actions';
 export class AppComponent implements OnInit {
   title = 'RoomLocatorWebapp';
   activeSection: LibrarySection;
+  faMap = faMap;
+  faPoll = faPoll;
+  faCalendarAlt = faCalendarAlt;
 
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
   @Select(MazemapState.getCoordinatesSet) coordinates$: Observable<Mazemap[]>;

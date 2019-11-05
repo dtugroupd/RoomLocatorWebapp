@@ -1,18 +1,23 @@
 <nb-layout>
 
   <nb-layout-header fixed>
-    <h2 style="margin-right:30px;">DTU WebApp </h2>
+    
     <app-login-button></app-login-button>
-    <button nbButton routerLink="/">Home</button>
-    <button nbButton routerLink="mazemap">Mazemap</button>
-    <button nbButton routerLink="/manage-surveys">Manage surveys</button>
+
+    <a nbButton routerLink="/mazemap" style="background:none;border:none;font-size:2em;">
+      <fa-icon [icon]="faMap" style="color:#0B8BED;"></fa-icon>
+    </a>
+    <a nbButton routerLink="/manage-surveys" style="background:none;border:none;font-size:2em;">
+      <fa-icon [icon]="faPoll" style="color:#0B8BED;"></fa-icon>
+    </a>
+    <a nbButton routerLink="/calendar" style="background:none;border:none;font-size:2em;">
+      <fa-icon [icon]="faCalendarAlt" style="color:#0B8BED;"></fa-icon>
+    </a>
   </nb-layout-header>
 
   <nb-layout-column>
     <router-outlet></router-outlet>
   </nb-layout-column>
-  <nb-layout-footer fixed>
-    <!-- Insert footer here -->
-  </nb-layout-footer>
+ 
 
 </nb-layout>
