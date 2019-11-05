@@ -1,3 +1,5 @@
+import { User } from '../models/login/user.model';
+
 /**
  * @author Hadi Horani, s165242
  */
@@ -9,6 +11,6 @@ export class GetUser {
 export class SetUser {
     static readonly type = '[User] Set';
 
-    constructor(public payload: any) {}
+    constructor(public payload: User) {}
 }
 

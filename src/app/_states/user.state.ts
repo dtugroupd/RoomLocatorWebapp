@@ -3,7 +3,7 @@
  */
 
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import { SetUser } from '../_actions/login.actions';
+import { SetUser } from '../_actions/user.actions';
 import { User } from '../models/login/user.model';
 
 export class UserStateModel {

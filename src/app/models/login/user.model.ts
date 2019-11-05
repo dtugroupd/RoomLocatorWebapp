@@ -1,5 +1,5 @@
 export interface User {
     studentId: string;
-    tokenValue: string;
+    token: string;
     roles: [];
 }

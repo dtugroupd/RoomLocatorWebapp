@@ -13,7 +13,7 @@ import { UserState } from 'src/app/_states/user.state';
       </div>
     <div>
         Granted User Roles:
-        <span *ngFor = "let roles of roles.tokenValue.User.Roles">
+        <span *ngFor = "let roles of user.user.roles">
        {{ roles }}
        </span>
     </div>
@@ -24,14 +24,14 @@ import { UserState } from 'src/app/_states/user.state';
 export class RolesViewComponent implements OnInit {
 
   @Select(UserState.getUser) user$: Observable<User>;
-  roles: any;
+  user: User;
 
   constructor(private store: Store) {
    }
 
   ngOnInit() {
     this.user$.subscribe(result => {
-      this.roles = result;
+      this.user = result;
     });
   }
 

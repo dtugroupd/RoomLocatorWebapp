@@ -15,7 +15,7 @@ import { UserState } from 'src/app/_states/user.state';
   <div>
     <a nbButton href="https://auth.dtu.dk/dtu/?service={{serviceUrl}}" >Login</a>
     <div>
-    User signed in: {{ studentId.tokenValue.User.StudentId }}
+    User signed in: {{ user.user.studentId }}
 
   </div>
 `,
@@ -23,7 +23,7 @@ import { UserState } from 'src/app/_states/user.state';
 })
 export class LoginButtonComponent implements OnInit {
   serviceUrl: string;
-   studentId: any;
+   user: User;
 
   @Select(UserState.getUser) user$: Observable<User>;
 
@@ -34,7 +34,7 @@ export class LoginButtonComponent implements OnInit {
 
   ngOnInit() {
     this.user$.subscribe(result => {
-      this.studentId = result;
+      this.user = result;
     });
 
 /*    const ticket = this.getToken();
