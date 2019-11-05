@@ -125,7 +125,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
     });
 
     this.map.on('click', (e: any) => {
-      console.log(e.lngLat);
+     // console.log(e.lngLat);
     });
   }
 

@@ -1,6 +1,5 @@
 /**
  * @author Thomas Lien Christensen, s165242
- * @author Hadi Horani, s165242
  */
 
 import { Component, OnInit } from '@angular/core';
