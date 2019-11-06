@@ -1,0 +1,27 @@
+<!--
+    author: Thomas Lien Christensen, s165242
+-->
+
+<nb-card id="surveyCard">
+    <nb-card-header>
+        {{ survey.title }}
+    </nb-card-header>
+    <nb-list *ngIf="survey">
+        <nb-list-item *ngFor="let question of answer.questionAnswers">
+            <div [ngClass]="'questionText'">
+                {{ question.text }}
+            </div>
+            <app-survey-feedback-smiley-row [score]="question.score" (newScore)="this.question.score = $event"></app-survey-feedback-smiley-row>
+        </nb-list-item>
+    </nb-list>
+    <div id="commentContainer">
+        <textarea nbInput fullWidth placeholder="Comment" name="comment" type="text" [(ngModel)]="this.answer.comment"></textarea>
+        <small>(Optional)</small>
+    </div>
+        <nb-card-footer>
+        <div id="buttonFooter">
+            <button nbButton outline status="warning" (click)="close()">Close</button>
+            <button nbButton outline (click)="submit()">Submit</button>
+        </div>
+    </nb-card-footer>
+</nb-card>

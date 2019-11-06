@@ -1,0 +1,19 @@
+<!--
+    author: Thomas Lien Christensen, s165242
+    author: Hamed Kadkhodaie, s083485
+
+-->
+
+<nb-card id="statusSmileyButtonMenu" style="z-index: 999">
+    <nb-card-body>
+        <p>
+            Been here recently? How did you like it?
+        </p>
+        <div ngClass="thumbs">
+            <fa-icon *ngIf="!downVoted" [icon]="thumbsDown" [className]="'thumb-inactive'" (click)="onThumbsdownChanged()"></fa-icon>
+            <fa-icon *ngIf="downVoted" [icon]="thumbsDownPressed" [className]="'thumb-active'" (click)="onThumbsdownChanged()"></fa-icon>
+            <fa-icon *ngIf="!upVoted" [icon]="thumbsUp" [className]="'thumb-inactive'" (click)=onThumbsupChanged()></fa-icon>
+            <fa-icon *ngIf="upVoted" [icon]="thumbsUpPressed" [className]="'thumb-active'" (click)=onThumbsupChanged()></fa-icon>
+        </div>
+    </nb-card-body>
+</nb-card>

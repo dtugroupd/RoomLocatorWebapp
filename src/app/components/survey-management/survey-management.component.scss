@@ -1,0 +1,37 @@
+/**
+ * author: Thomas Lien Christensen, s165242
+ */
+
+.flex {
+    display: flex !important;
+    flex-flow: row nowrap !important;
+    justify-content: space-between !important;
+}
+
+.flex-align-vertical {
+    align-items: center !important;
+}
+
+.fullscreen {
+    width: 100% !important;
+    height: 85vh !important;
+}
+
+nb-action fa-icon {
+    cursor: pointer;
+    color: #404040
+}
+
+nb-action fa-icon:hover {
+    color: black;
+}
+
+nb-actions {
+    margin-bottom: 20px;
+}
+
+.active {
+    background-color: #F8F8F8;
+    border: 1px solid #ddd;
+    margin-bottom: 40px;
+}

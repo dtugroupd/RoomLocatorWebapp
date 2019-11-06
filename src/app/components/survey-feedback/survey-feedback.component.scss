@@ -1,0 +1,24 @@
+/**
+ * author: Thomas Lien Christensen, s165242
+ */
+
+#buttonFooter {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 10 0 10;
+}
+
+#surveyCard {
+    min-width: 240px;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+#commentContainer {
+    padding: 20px;
+}
+
+.questionText {
+    font-size: 16px;
+}

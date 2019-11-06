@@ -1,0 +1,14 @@
+<!--
+    author: Thomas Lien Christensen, s165242
+-->
+
+<div id="iconRow">
+    <fa-icon *ngIf="score === 0" [icon]="faFrown" [className]="'frown'" ></fa-icon>
+    <fa-icon *ngIf="score !== 0" [icon]="faFrownReg" (click)="updateScore(0)" [className]="'frown'"></fa-icon>
+
+    <fa-icon *ngIf="score === 50" [icon]="faMeh" [className]="'meh'"></fa-icon>
+    <fa-icon *ngIf="score !== 50" [icon]="faMehReg" (click)="updateScore(50)" [className]="'meh'"></fa-icon>
+
+    <fa-icon *ngIf="score === 100" [icon]="faGrin" [className]="'grin'"></fa-icon>
+    <fa-icon *ngIf="score !== 100" [icon]="faGrinReg" (click)="updateScore(100)" [className]="'grin'"></fa-icon>
+</div>
