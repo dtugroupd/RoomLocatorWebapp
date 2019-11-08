@@ -5,7 +5,7 @@ import { Feedback } from '../models/feedback/feedback.model';
 
 
 export class SetFeedback {
-    static readonly type = '[Feedback] Set';
+    static readonly type = '[Feedback] Add';
     
     constructor(public payload: Feedback){}
 }

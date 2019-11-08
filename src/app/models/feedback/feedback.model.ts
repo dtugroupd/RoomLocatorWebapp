@@ -1,5 +1,5 @@
 
 export interface Feedback {
-    upVoted: boolean;
-    downVoted:boolean;   
+    upVotedFeedback: boolean;
+    downVotedFeedback:boolean;   
 }
