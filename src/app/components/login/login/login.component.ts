@@ -1,7 +1,3 @@
-/**
- * @author Hadi Horani, s144885
- */
-
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -10,12 +6,12 @@ import { User, Token } from 'src/app/models/login/user.model';
 import { UserState } from 'src/app/_states/user.state';
 
 @Component({
-  selector: 'app-login-button',
-  template: `    User signed in: {{ token.user.studentId }}
-  `,
+  selector: 'app-login',
+  template: ``,
   styles: ['span { color: green;' ]
 })
-export class LoginButtonComponent implements OnInit {
+
+export class LoginComponent implements OnInit {
   serviceUrl: string;
    token: Token;
 
@@ -24,11 +20,10 @@ export class LoginButtonComponent implements OnInit {
 
   constructor(private store: Store) {
    this.serviceUrl = `${environment.backendUrl}/api/v1/auth/validate`;
+   //serviceUrl doesn't work
+   window.location.href = 'https://auth.dtu.dk/dtu/?service=https://localhost:5001/api/v1/auth/validate';
   }
 
   ngOnInit() {
-    this.token$.subscribe(result => {
-      this.token = result;
-    });
   }
 }

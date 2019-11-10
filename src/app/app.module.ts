@@ -27,11 +27,13 @@ import { SurveyFeedbackButtonComponent } from './components/survey-feedback-butt
 import { StatusButtonComponent } from './components/status-button/status-button.component';
 import { StatusButtonMenuComponent } from './components/status-button-menu/status-button-menu.component';
 import { FormsModule } from '@angular/forms';
-
 import { RolesViewComponent } from './components/roles-view/roles-view.component';
 import { SurveyManagementComponent } from './components/survey-management/survey-management.component';
 import { SurveyState } from './_states/survey.state';
 import { UserState } from './_states/user.state';
+import { AuthService } from './_services/auth.service';
+import { CanActivateRouteGuard } from './_services/auth-guard.service';
+import { LoginComponent } from './components/login/login/login.component';
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: LoginButtonComponent },
@@ -53,6 +55,7 @@ const appRoutes: Routes = [
     StatusButtonMenuComponent,
     RolesViewComponent,
     SurveyManagementComponent,
+    LoginComponent,
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -95,7 +98,7 @@ const appRoutes: Routes = [
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
   ],
-  providers: [ DynamicComponentService ],
+  providers: [ DynamicComponentService, AuthService, CanActivateRouteGuard],
   bootstrap: [AppComponent],
   exports: [
     LoginButtonComponent,
