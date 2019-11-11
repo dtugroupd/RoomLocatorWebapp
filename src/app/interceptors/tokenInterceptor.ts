@@ -17,10 +17,9 @@ export class TokenInterceptor implements HttpInterceptor {
 
    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    return next.handle(request).pipe(tap(
+    return next.handle(request).pipe(tap( () => {},
         (err: any) => {
           if (err instanceof HttpErrorResponse) {
-              console.log('HTTP ERROR');
               if (err.status === 401) {
                 this.router.navigate(['/login']);
                }
