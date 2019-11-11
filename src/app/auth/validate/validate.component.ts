@@ -41,7 +41,7 @@ export class ValidateComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(new SetToken(this.token));
-    localStorage.setItem("token", this.token.token);
+    localStorage.setItem("tokenValue", this.token.token);
     this.router.navigate(["/"]);
   }
 

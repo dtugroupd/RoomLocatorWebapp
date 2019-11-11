@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { MazemapComponent } from './components/mazemap/mazemap.component';
 import { LoginButtonComponent } from './components/login-button/login-button.component';
 import { RouterModule, Routes } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
          NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
@@ -34,6 +34,7 @@ import { UserState } from './_states/user.state';
 import { AuthService } from './_services/auth.service';
 import { CanActivateRouteGuard } from './_services/auth-guard.service';
 import { LoginComponent } from './components/login/login/login.component';
+import { TokenInterceptor } from './interceptors/tokenInterceptor';
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: LoginButtonComponent },
@@ -98,7 +99,11 @@ const appRoutes: Routes = [
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
   ],
-  providers: [ DynamicComponentService, AuthService, CanActivateRouteGuard],
+  providers: [  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
+    multi: true
+  }, DynamicComponentService, AuthService, CanActivateRouteGuard],
   bootstrap: [AppComponent],
   exports: [
     LoginButtonComponent,
