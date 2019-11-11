@@ -18,8 +18,10 @@ import { UserState } from 'src/app/_states/user.state';
 export class LoginButtonComponent implements OnInit {
   serviceUrl: string;
    token: Token;
+   user: User;
 
   @Select(UserState.getToken) token$: Observable<Token>;
+  @Select(UserState.getUser) user$: Observable<User>;
 
 
   constructor(private store: Store) {
@@ -30,5 +32,9 @@ export class LoginButtonComponent implements OnInit {
     this.token$.subscribe(result => {
       this.token = result;
     });
+
+    this.user$.subscribe(result => {
+      this.user = result;
+    })
   }
 }

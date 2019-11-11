@@ -10,4 +10,4 @@ export interface User {
 export interface Token {
     user: User;
     token: string;
-} 
+}
