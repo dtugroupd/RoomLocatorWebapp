@@ -23,5 +23,9 @@ export class ScadadataService extends BaseService {
     return this.http.get<number>(`${this.backendBaseUrl}/api/v1/scadadata/getweightedscore`);
   }
 
+  getListOfScores() {
+    return this.http.get<ScadadataScores[]>(`${this.backendBaseUrl}/api/v1/scadadata/getlistofscores`);
+  }
+
  
 }

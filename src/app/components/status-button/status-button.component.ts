@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { faMeh, faGrin, faFrown } from '@fortawesome/free-solid-svg-icons';
 import { ScadadataService } from  '../../_services/scadadata.service';;
-import { ScadadataScores } from '../../models/sensors/scadadata-scores.model';
+
 
 @Component({
   selector: 'app-status-button',
@@ -15,6 +15,7 @@ export class StatusButtonComponent implements OnInit {
   faGrin = faGrin;
   faFrown = faFrown;
   smiley = faGrin;
+  class = "";
   state = 1;
   score = 1;
 
@@ -27,10 +28,13 @@ export class StatusButtonComponent implements OnInit {
         this.score = res;
         if(this.score > 0.55) {
           this.smiley = this.faGrin;
+          this.class = "good";
         } else if(this.score > 0.35){
           this.smiley = this.faMeh;
+          this.class = "okay";
         } else {
           this.smiley = this.faFrown;
+          this.class = "bad";
         } 
       }
     );
