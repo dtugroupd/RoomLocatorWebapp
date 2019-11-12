@@ -29,10 +29,10 @@ export class StatusButtonMenuComponent implements OnInit{
   upVoted = false;  // setting initial value for object like/dislike
   downVoted = false;
 
-   @Output()
+   //@Output()
    countThumbpsupChanged: EventEmitter<boolean> = new EventEmitter<boolean>(); //register event with a value of boolean
    
-   @Output()
+   //@Output()
    countThumbpsdownChanged: EventEmitter<boolean> = new EventEmitter<boolean>(); 
   
   onThumbsupChanged(upVoted,downVoted){ 
@@ -40,9 +40,10 @@ export class StatusButtonMenuComponent implements OnInit{
       this.downVoted = false;
     }
 
+    this.upVoted = upVoted;
     this.countThumbpsupChanged.emit(this.upVoted=true); // metoden sætter ændringens værdi
     this.store.dispatch(new SetFeedback({upVotedFeedback: upVoted, downVotedFeedback:downVoted})) // Store-service til at påkalde 
-                                                                                                  //dispatch med en action eller array af action som man vil udløse(trigger)
+    //dispatch med en action eller array af action som man vil udløse(trigger)
    
   }
  
@@ -50,7 +51,8 @@ export class StatusButtonMenuComponent implements OnInit{
     if (this.upVoted === true) {
       this.upVoted = false;
     }
-
+    
+    this.downVoted = downVoted;
     this.countThumbpsdownChanged.emit(this.downVoted=true);   
     this.store.dispatch(new SetFeedback({upVotedFeedback: upVoted, downVotedFeedback:downVoted}))
     
