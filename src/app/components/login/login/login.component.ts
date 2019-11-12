@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User, Token } from 'src/app/models/login/user.model';
 import { UserState } from 'src/app/_states/user.state';
@@ -13,7 +13,7 @@ import { UserState } from 'src/app/_states/user.state';
 })
 
 export class LoginComponent implements OnInit {
-
+  
   token: Token;
 
   @Select(UserState.getToken) token$: Observable<Token>;

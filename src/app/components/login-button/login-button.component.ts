@@ -21,8 +21,6 @@ export class LoginButtonComponent implements OnInit {
    user: User;
 
   @Select(UserState.getToken) token$: Observable<Token>;
-  @Select(UserState.getUser) user$: Observable<User>;
-
 
   constructor(private store: Store) {
    this.serviceUrl = `${environment.backendUrl}/api/v1/auth/validate`;
@@ -32,9 +30,5 @@ export class LoginButtonComponent implements OnInit {
     this.token$.subscribe(result => {
       this.token = result;
     });
-
-    this.user$.subscribe(result => {
-      this.user = result;
-    })
   }
 }

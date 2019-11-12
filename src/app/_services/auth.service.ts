@@ -8,7 +8,7 @@ import { Store, Select } from '@ngxs/store';
 import { GetUser } from '../_actions/user.actions';
 import { Subscription, Observable } from 'rxjs';
 import { UserState } from '../_states/user.state';
-import { User } from '../models/login/user.model';
+import { User, Token } from '../models/login/user.model';
 
 const jwtHelper = new JwtHelperService();
 
@@ -18,7 +18,7 @@ export class AuthService {
 
     token: any;
     subscription: Subscription;
-    @Select(UserState.getUser) user$: Observable<User>;
+    @Select(UserState.getToken) token$: Observable<Token>;
 
 
   constructor(private store: Store) {}
@@ -32,8 +32,9 @@ export class AuthService {
     } else if (jwtHelper.isTokenExpired(this.token)) {
       alert('Your token has expired, and therefore you have to log in again');
       return false;
-    } else {
+    } else if (this.token$ === null) {
       this.store.dispatch(new GetUser());
+    } else {
       return true;
     }
   }
