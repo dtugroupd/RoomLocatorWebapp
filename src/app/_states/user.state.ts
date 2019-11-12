@@ -7,10 +7,12 @@ import { SetToken, GetUser } from '../_actions/user.actions';
 import { Token, User } from '../models/login/user.model';
 import { UserService } from '../_services/login.service';
 import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 
 export class UserStateModel {
-    token: Token;
+    token?: Token;
     user: User;
 }
 
@@ -47,11 +49,12 @@ export class UserState {
     @Action(GetUser)
     getUser({getState, setState}: StateContext<UserStateModel>) {
         return this.userService.fetchUser().pipe(tap((result) => {
+            alert('USER '+ result)
             setState({
-                user: result,
-                token: null
-            });
-        }));
+                user: result
+          });
+        }
+        ));
     }
 }
 

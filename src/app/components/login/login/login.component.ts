@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   @Select(UserState.getToken) token$: Observable<Token>;
   
   constructor() {
-   window.location.href = 'https://auth.dtu.dk/dtu/?service=https://localhost:5001/api/v1/auth/validate';
+ //  window.location.href = 'https://auth.dtu.dk/dtu/?service=https://localhost:5001/api/v1/auth/validate';
   }
 
   ngOnInit() {

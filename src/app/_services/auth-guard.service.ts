@@ -13,11 +13,13 @@ export class CanActivateRouteGuard implements CanActivate {
   }
 
   canActivate(): boolean {
-      if (!this.auth.isAuthenticated()) {
-          this.router.navigate(['/login']);
-          return false;
-      } else {
-        return true;
-      }
+    if (!this.auth.isAuthenticated()) {
+      alert('not logged in')
+      this.auth.authenticate();
+      return false;
+    } else {
+      alert('is logged in')
+      return true;
+    }
   }
 }

@@ -2,9 +2,9 @@
  * @author Hadi Horani, s144885
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { Select } from '@ngxs/store';
@@ -14,30 +14,49 @@ import { Token } from '../models/login/user.model';
 
 
 @Injectable()
-export class TokenInterceptor implements HttpInterceptor {
+export class TokenInterceptor implements HttpInterceptor, OnDestroy {
+  
+    subscriptions: Subscription;
 
-   constructor(public router: Router) {}
+   constructor(public router: Router) {
+     this.subscriptions = new Subscription();
+   }
 
    @Select(UserState.getToken) token$: Observable<Token>;
 
    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    if (this.token$) {
-      request = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ` + this.token$
-        }
-    });
-  }
+    // if (this.token$) {
+    //   const token = 
+    //   request = request.clone({
+    //     setHeaders: {
+    //       Authorization: `Bearer ${this.token$}`
+    //     }
+    // });
+    this.subscriptions.add(
+      this.token$.subscribe(token => {
+          if (token) {
+          alert('TOKEN IS NOT EMTPTY: ' + token.token)
+        request = request.clone({
+          setHeaders: {
+            Authorization: `Bearer ${token.token}`
+          }
+        });
+      }
+      })
+    );
 
     return next.handle(request).pipe(tap( () => {},
         (err: any) => {
           if (err instanceof HttpErrorResponse) {
               if (err.status === 401) {
-                this.router.navigate(['/login']);
-               }
+                window.location.href = 'https://auth.dtu.dk/dtu/?service=https://localhost:5001/api/v1/auth/validate';               }
           }
         }
       ));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 }
