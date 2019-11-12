@@ -25,10 +25,10 @@ export class TokenInterceptor implements HttpInterceptor {
     if (this.token$) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${this.token$}`
+          Authorization: `Bearer ` + this.token$
         }
     });
-    }
+  }
 
     return next.handle(request).pipe(tap( () => {},
         (err: any) => {
