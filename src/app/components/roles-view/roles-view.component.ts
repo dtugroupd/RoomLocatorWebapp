@@ -6,7 +6,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { User, Token } from 'src/app/models/login/user.model';
 import { Observable, Subscription } from 'rxjs';
-import { UserState } from 'src/app/_states/user.state';
 import { TokenState } from 'src/app/_states/token.state';
 
 @Component({

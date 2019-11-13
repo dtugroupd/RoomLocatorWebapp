@@ -28,7 +28,6 @@ import { FormsModule } from '@angular/forms';
 import { RolesViewComponent } from './components/roles-view/roles-view.component';
 import { SurveyManagementComponent } from './components/survey-management/survey-management.component';
 import { SurveyState } from './_states/survey.state';
-import { UserState } from './_states/user.state';
 import { AuthService } from './_services/auth.service';
 import { CanActivateRouteGuard } from './_services/auth-guard.service';
 import { TokenInterceptor } from './interceptors/tokenInterceptor';
@@ -88,7 +87,6 @@ const appRoutes: Routes = [
     NbDialogModule.forRoot(),
     NbToastrModule.forRoot(),
     NgxsModule.forRoot([
-      UserState,
       MazemapState,
       SurveyState,
       TokenState,
