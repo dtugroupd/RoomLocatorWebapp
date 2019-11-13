@@ -1,15 +1,13 @@
 /**
  * @author Hadi Horani, s144885
+ * @author Anders Wiberg Olsen, s165241
  */
 
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import { SetToken, GetUser } from '../_actions/user.actions';
+import { GetUser } from '../_actions/user.actions';
 import { Token, User } from '../models/login/user.model';
 import { UserService } from '../_services/login.service';
 import { tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-
 
 export class UserStateModel {
     token?: Token;
@@ -17,45 +15,28 @@ export class UserStateModel {
 }
 
 @State<UserStateModel>({
-    name: 'token',
+    name: 'user',
     defaults: {
         token: null,
         user: null
     }
 })
 
+
 export class UserState {
-
-    constructor(private userService: UserService) {}
-
-
-    @Selector()
-    static getToken(state: UserStateModel) {
-        return state.token;
-    }
+    constructor(private userService: UserService) { }
 
     @Selector()
     static getUser(state: UserStateModel) {
         return state.user;
     }
 
-    @Action(SetToken)
-    set( {getState, patchState}: StateContext<UserStateModel>, { payload }: SetToken) {
-        patchState({
-            token: payload
-        });
-    }
-
     @Action(GetUser)
-    getUser({getState, setState}: StateContext<UserStateModel>) {
+    getUser({ setState }: StateContext<UserStateModel>) {
         return this.userService.fetchUser().pipe(tap((result) => {
-            alert('USER '+ result)
             setState({
                 user: result
-          });
-        }
-        ));
+            });
+        }));
     }
 }
-
-

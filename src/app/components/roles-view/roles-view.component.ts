@@ -7,19 +7,19 @@ import { Store, Select } from '@ngxs/store';
 import { User, Token } from 'src/app/models/login/user.model';
 import { Observable } from 'rxjs';
 import { UserState } from 'src/app/_states/user.state';
+import { TokenState } from 'src/app/_states/token.state';
 
 @Component({
   selector: 'app-roles-view',
   template: `
   <div>
-  <div>
-  Available User Roles: Admin, Researcher, Student
-      </div>
+    Granted User Roles:
+    <span *ngFor = "let role of user$.roles | async">
+      {{ role }}
+    </span>
     <div>
-        Granted User Roles:
-        <span *ngFor = "let roles of token.user.roles">
-       {{ roles }}
-       </span>
+      <p>token:</p>
+      <pre>{{ token$ | async }}</pre>
     </div>
   </div>
   `
@@ -27,16 +27,16 @@ import { UserState } from 'src/app/_states/user.state';
 
 export class RolesViewComponent implements OnInit {
 
-  @Select(UserState.getToken) token$: Observable<Token>;
-  token: Token;
+  @Select(UserState.getUser) user$: Observable<User>;
+  @Select(TokenState.getToken) token$: Observable<string>;
 
   constructor(private store: Store) {
    }
 
   ngOnInit() {
-    this.token$.subscribe(result => {
-      this.token = result;
-    });
+    // this.token$.subscribe(result => {
+    //   this.token = result;
+    // });
   }
 
 }

@@ -35,6 +35,7 @@ import { AuthService } from './_services/auth.service';
 import { CanActivateRouteGuard } from './_services/auth-guard.service';
 import { LoginComponent } from './components/login/login/login.component';
 import { TokenInterceptor } from './interceptors/tokenInterceptor';
+import { TokenState } from './_states/token.state';
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: LoginButtonComponent },
@@ -94,7 +95,8 @@ const appRoutes: Routes = [
     NgxsModule.forRoot([
       UserState,
       MazemapState,
-      SurveyState
+      SurveyState,
+      TokenState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),

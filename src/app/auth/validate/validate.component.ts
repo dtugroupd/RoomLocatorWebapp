@@ -9,7 +9,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { Token } from 'src/app/models/login/user.model';
-import { SetToken } from 'src/app/_actions/user.actions';
 import { Router} from "@angular/router"
 
 
@@ -40,8 +39,7 @@ export class ValidateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(new SetToken(this.token));
-    localStorage.setItem("tokenValue", this.token.token);
+    localStorage.setItem("token", this.token.token);
     this.router.navigate(["/"]);
   }
 

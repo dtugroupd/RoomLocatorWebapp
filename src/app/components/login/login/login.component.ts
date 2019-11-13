@@ -1,30 +1,19 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { Observable, Subscription } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { Component } from '@angular/core';
+import { Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { User, Token } from 'src/app/models/login/user.model';
-import { UserState } from 'src/app/_states/user.state';
+import { TokenState } from 'src/app/_states/token.state';
 
 @Component({
   selector: 'app-login',
-  template: `User signed in: {{ token.user.studentId }}
-  `,
+  template: `User signed in: {{ user$ | async | json }}`,
   styles: ['span { color: green;' ]
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   
-  token: Token;
+  @Select(TokenState.getToken) token$: Observable<string>;
+  @Select(TokenState.getUser) user$: Observable<User>;
 
-  @Select(UserState.getToken) token$: Observable<Token>;
-  
-  constructor() {
- //  window.location.href = 'https://auth.dtu.dk/dtu/?service=https://localhost:5001/api/v1/auth/validate';
-  }
-
-  ngOnInit() {
-    this.token$.subscribe(result => {
-      this.token = result;
-    });
-  }
+  constructor() { }
 }

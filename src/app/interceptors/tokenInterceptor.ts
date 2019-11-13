@@ -1,59 +1,50 @@
 /**
  * @author Hadi Horani, s144885
+ * @author Anders Wiberg Olsen, s165241
  */
 
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Observable, throwError, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { Select } from '@ngxs/store';
-import { UserState } from '../_states/user.state';
-import { Token } from '../models/login/user.model';
-
-
+import { TokenState } from '../_states/token.state';
+import { UserService } from '../_services/login.service';
+import { AuthService } from '../_services/auth.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor, OnDestroy {
-  
-    subscriptions: Subscription;
+  subscriptions: Subscription;
 
-   constructor(public router: Router) {
-     this.subscriptions = new Subscription();
-   }
+  constructor(public router: Router, private authService: AuthService) {
+    this.subscriptions = new Subscription();
+  }
 
-   @Select(UserState.getToken) token$: Observable<Token>;
+  @Select(TokenState.getToken) token$: Observable<string>;
 
-   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
-    // if (this.token$) {
-    //   const token = 
-    //   request = request.clone({
-    //     setHeaders: {
-    //       Authorization: `Bearer ${this.token$}`
-    //     }
-    // });
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.subscriptions.add(
       this.token$.subscribe(token => {
-          if (token) {
-          alert('TOKEN IS NOT EMTPTY: ' + token.token)
-        request = request.clone({
-          setHeaders: {
-            Authorization: `Bearer ${token.token}`
-          }
-        });
-      }
+        if (token) {
+          request = request.clone({
+            setHeaders: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+        }
       })
     );
 
-    return next.handle(request).pipe(tap( () => {},
-        (err: any) => {
-          if (err instanceof HttpErrorResponse) {
-              if (err.status === 401) {
-                window.location.href = 'https://auth.dtu.dk/dtu/?service=https://localhost:5001/api/v1/auth/validate';               }
+    return next.handle(request).pipe(tap(() => { },
+      (err: any) => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 401) {
+            this.authService.loginWithSso();
           }
         }
-      ));
+      }
+    ));
   }
 
   ngOnDestroy() {
