@@ -18,7 +18,6 @@ const jwtHelper = new JwtHelperService();
 export class AuthService {
   @Select(TokenState.getToken) token$: Observable<string>;
 
-
   constructor(private store: Store) { }
 
   public isAuthenticated(): boolean {
@@ -27,8 +26,8 @@ export class AuthService {
     this.token$.pipe(tap(t => {
       token = t;
     }));
-
-    return token !== null && !jwtHelper.isTokenExpired(token.token);
+    
+    return token !== null && !jwtHelper.isTokenExpired(token);
   }
 
   public authenticate() {

@@ -15,9 +15,7 @@ export class CanActivateRouteGuard implements CanActivate {
   canActivate(): boolean {
     if (!this.auth.isAuthenticated()) {
       this.auth.authenticate();
-      return false;
-    } else {
-      return true;
     }
+    return true;
   }
 }
