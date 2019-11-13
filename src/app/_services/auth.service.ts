@@ -5,11 +5,13 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Store, Select } from '@ngxs/store';
-import { GetUser, SetToken } from '../_actions/user.actions';
+import { SetToken } from '../_actions/token.actions';
 import { Subscription, Observable } from 'rxjs';
-import { UserState, UserStateModel } from '../_states/user.state';
+import { TokenState, } from '../_states/token.state';
 import { User, Token } from '../models/login/user.model';
 import { environment } from 'src/environments/environment';
+import { UserState } from '../_states/user.state';
+import { GetUser } from '../_actions/user.actions';
 
 const jwtHelper = new JwtHelperService();
 
@@ -17,13 +19,15 @@ const jwtHelper = new JwtHelperService();
 @Injectable()
 export class AuthService {
 
-    token: any;
+
     subscription: Subscription;
-    @Select(UserState.getToken) token$: Observable<Token>;
+    @Select(TokenState.getToken) token$: Observable<Token>;
     @Select(UserState.getUser) user$: Observable<User>;
 
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+    
+  }
 
   public isAuthenticated(): boolean {
     // this.token = localStorage.getItem('tokenValue');
@@ -47,23 +51,20 @@ export class AuthService {
   }
 
   public authenticate() {
-    let localJwtToken = localStorage.getItem('tokenValue');
-    if (localJwtToken !== null)
-    {
-      alert('HIT ME HERE')
+    const localJwtToken = localStorage.getItem('tokenValue');
+    if (localJwtToken !== null) {
       this.setToken(localJwtToken);
       return;
     }
-
-    alert('HIT ME HERE 222')
     const apiUrl = environment.backendUrl;
-    alert('authenticating')
     window.location.href = `https://auth.dtu.dk/dtu?service=${apiUrl}/api/v1/auth/validate`;
   }
 
   private setToken(jwtToken) {
-    this.store.dispatch(new GetUser());
     let token: Token;
+
+    this.store.dispatch(new GetUser());
+    
     this.user$.subscribe(user => {
       alert('uSer ' + user);
       token.user = user;

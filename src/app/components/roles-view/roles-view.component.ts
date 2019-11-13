@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { User, Token } from 'src/app/models/login/user.model';
 import { Observable } from 'rxjs';
-import { UserState } from 'src/app/_states/user.state';
+import { TokenState } from 'src/app/_states/token.state';
 
 @Component({
   selector: 'app-roles-view',
@@ -27,7 +27,7 @@ import { UserState } from 'src/app/_states/user.state';
 
 export class RolesViewComponent implements OnInit {
 
-  @Select(UserState.getToken) token$: Observable<Token>;
+  @Select(TokenState.getToken) token$: Observable<Token>;
   token: Token;
 
   constructor(private store: Store) {

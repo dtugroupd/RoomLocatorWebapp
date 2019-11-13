@@ -3,56 +3,38 @@
  */
 
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import { SetToken, GetUser } from '../_actions/user.actions';
-import { Token, User } from '../models/login/user.model';
-import { UserService } from '../_services/login.service';
+import { User } from '../models/login/user.model';
+import { UserService } from '../_services/user.service';
 import { tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-
+import { GetUser } from '../_actions/user.actions';
 
 export class UserStateModel {
-    token?: Token;
     user: User;
 }
 
 @State<UserStateModel>({
-    name: 'token',
+    name: 'user',
     defaults: {
-        token: null,
-        user: null
+        user: null,
     }
 })
 
 export class UserState {
 
-    constructor(private userService: UserService) {}
-
-
-    @Selector()
-    static getToken(state: UserStateModel) {
-        return state.token;
-    }
+    constructor(private userService: UserService) { }
 
     @Selector()
     static getUser(state: UserStateModel) {
         return state.user;
     }
 
-    @Action(SetToken)
-    set( {getState, patchState}: StateContext<UserStateModel>, { payload }: SetToken) {
-        patchState({
-            token: payload
-        });
-    }
-
     @Action(GetUser)
-    getUser({getState, setState}: StateContext<UserStateModel>) {
+    get({ setState }: StateContext<UserStateModel>) {
         return this.userService.fetchUser().pipe(tap((result) => {
-            alert('USER '+ result)
+            console.log(result)
             setState({
                 user: result
-          });
+            });
         }
         ));
     }

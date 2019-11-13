@@ -7,7 +7,7 @@ import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User, Token } from 'src/app/models/login/user.model';
-import { UserState } from 'src/app/_states/user.state';
+import { TokenState } from 'src/app/_states/token.state';
 
 @Component({
   selector: 'app-login-button',
@@ -20,7 +20,7 @@ export class LoginButtonComponent implements OnInit {
    token: Token;
    user: User;
 
-  @Select(UserState.getToken) token$: Observable<Token>;
+  @Select(TokenState.getToken) token$: Observable<Token>;
 
   constructor(private store: Store) {
    this.serviceUrl = `${environment.backendUrl}/api/v1/auth/validate`;

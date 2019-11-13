@@ -1,9 +1,12 @@
+/**
+ * @author Hadi Horani, s144885
+ */
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { Observable, Subscription } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { User, Token } from 'src/app/models/login/user.model';
-import { UserState } from 'src/app/_states/user.state';
+import { Observable } from 'rxjs';
+import { Token } from 'src/app/models/login/user.model';
+import { TokenState } from 'src/app/_states/token.state';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +19,7 @@ export class LoginComponent implements OnInit {
   
   token: Token;
 
-  @Select(UserState.getToken) token$: Observable<Token>;
+  @Select(TokenState.getToken) token$: Observable<Token>;
   
   constructor() {
  //  window.location.href = 'https://auth.dtu.dk/dtu/?service=https://localhost:5001/api/v1/auth/validate';

@@ -9,8 +9,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { Token } from 'src/app/models/login/user.model';
-import { SetToken } from 'src/app/_actions/user.actions';
-import { Router} from "@angular/router"
+import { SetToken } from 'src/app/_actions/token.actions';
+import { Router } from "@angular/router"
 
 
 @Component({

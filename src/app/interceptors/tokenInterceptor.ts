@@ -4,27 +4,27 @@
 
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Observable, throwError, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { Select } from '@ngxs/store';
-import { UserState } from '../_states/user.state';
+import { TokenState } from '../_states/token.state';
 import { Token } from '../models/login/user.model';
 
 
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor, OnDestroy {
-  
-    subscriptions: Subscription;
 
-   constructor(public router: Router) {
-     this.subscriptions = new Subscription();
-   }
+  subscriptions: Subscription;
 
-   @Select(UserState.getToken) token$: Observable<Token>;
+  constructor(public router: Router) {
+    this.subscriptions = new Subscription();
+  }
 
-   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  @Select(TokenState.getToken) token$: Observable<Token>;
+
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     // if (this.token$) {
     //   const token = 
@@ -35,25 +35,25 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
     // });
     this.subscriptions.add(
       this.token$.subscribe(token => {
-          if (token) {
-          alert('TOKEN IS NOT EMTPTY: ' + token.token)
-        request = request.clone({
-          setHeaders: {
-            Authorization: `Bearer ${token.token}`
-          }
-        });
-      }
+        if (token) {
+          request = request.clone({
+            setHeaders: {
+              Authorization: `Bearer ${token.token}`
+            }
+          });
+        }
       })
     );
 
-    return next.handle(request).pipe(tap( () => {},
-        (err: any) => {
-          if (err instanceof HttpErrorResponse) {
-              if (err.status === 401) {
-                window.location.href = 'https://auth.dtu.dk/dtu/?service=https://localhost:5001/api/v1/auth/validate';               }
+    return next.handle(request).pipe(tap(() => { },
+      (err: any) => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 401) {
+            window.location.href = 'https://auth.dtu.dk/dtu/?service=https://localhost:5001/api/v1/auth/validate';
           }
         }
-      ));
+      }
+    ));
   }
 
   ngOnDestroy() {
