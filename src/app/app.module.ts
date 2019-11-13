@@ -3,13 +3,11 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MazemapComponent } from './components/mazemap/mazemap.component';
-import { LoginButtonComponent } from './components/login-button/login-button.component';
-import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
          NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
-         NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule } from '@nebular/theme';
+         NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule, NbUserModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -33,20 +31,17 @@ import { SurveyState } from './_states/survey.state';
 import { UserState } from './_states/user.state';
 import { AuthService } from './_services/auth.service';
 import { CanActivateRouteGuard } from './_services/auth-guard.service';
-import { LoginComponent } from './components/login/login/login.component';
 import { TokenInterceptor } from './interceptors/tokenInterceptor';
 import { TokenState } from './_states/token.state';
-
+import { RouterModule, Routes } from '@angular/router';
 const appRoutes: Routes = [
-  { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: LoginButtonComponent },
+  { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
 ];
-
 @NgModule({
   declarations: [
     AppComponent,
     ValidateComponent,
     MazemapComponent,
-    LoginButtonComponent,
     SurveyCreateActionComponent,
     SurveyFeedbackComponent,
     SurveyFeedbackSmileyRowComponent,
@@ -57,7 +52,6 @@ const appRoutes: Routes = [
     StatusButtonMenuComponent,
     RolesViewComponent,
     SurveyManagementComponent,
-    LoginComponent,
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -69,8 +63,7 @@ const appRoutes: Routes = [
   ],
   imports: [
     RouterModule.forRoot(
-      appRoutes,
-      { onSameUrlNavigation: 'reload', enableTracing: true },
+      appRoutes, { onSameUrlNavigation: 'reload', enableTracing: true },
     ),
     BrowserModule,
     AppRoutingModule,
@@ -88,7 +81,9 @@ const appRoutes: Routes = [
     NbInputModule,
     NbListModule,
     NbSearchModule,
+    NbUserModule,
     NbContextMenuModule,
+    NbMenuModule,
     NbMenuModule.forRoot(),
     NbDialogModule.forRoot(),
     NbToastrModule.forRoot(),
@@ -96,7 +91,7 @@ const appRoutes: Routes = [
       UserState,
       MazemapState,
       SurveyState,
-      TokenState
+      TokenState,
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
@@ -104,12 +99,11 @@ const appRoutes: Routes = [
   providers: [  {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
-    multi: true
+    multi: true,
   }, DynamicComponentService, AuthService, CanActivateRouteGuard],
   bootstrap: [AppComponent],
   exports: [
-    LoginButtonComponent,
-    SurveyCreateActionComponent
+    SurveyCreateActionComponent,
   ]
 })
 export class AppModule { }

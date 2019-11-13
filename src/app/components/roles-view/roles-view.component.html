@@ -1,0 +1,6 @@
+<div *ngIf="user$ | async">
+    <strong>User:</strong>{{ (user$ | async).studentId }}
+    <ul>
+        <li *ngFor="let role of (user$ | async).roles">{{ role }}</li>
+    </ul>
+</div>

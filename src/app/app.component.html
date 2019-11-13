@@ -1,19 +1,29 @@
 <nb-layout>
+    <nb-layout-header>
+        <!-- <h2 style="margin-right:30px;">DTU WebApp </h2> -->
+        <nb-layout-column class="title">Library Status</nb-layout-column>
+        <nb-layout-column class="menu">
+            <!-- <button nbButton routerLink="/">Home</button>
+            <button nbButton routerLink="mazemap">Mazemap</button>
+            <button nbButton routerLink="survey-management">Manage surveys</button> -->
+            <!-- <a routerLink="/">Home</a>
+            <a routerLink="mazemap">Mazemap</a>
+            <a routerLink="survey-management">Manage Surveys</a> -->
 
-  <nb-layout-header fixed>
-    <h2 style="margin-right:30px;">DTU WebApp </h2>
-    <app-login></app-login>
-    <button nbButton routerLink="/">Home</button>
-    <button nbButton routerLink="mazemap">Mazemap</button>
-    <button nbButton routerLink="survey-management">Manage surveys</button>
-  </nb-layout-header>
+            <!-- <nb-menu [items]="menuItems"></nb-menu> -->
+            <div class="links">
+                <a *ngFor="let item of menuItems" routerLink="{{ item.link }}">{{ item.title }}</a>
+            </div>
+        </nb-layout-column>
+        <nb-user *ngIf="user$ | async" name="{{ (user$ | async).studentId }}" style="justify-content: flex-end;"></nb-user>
+    </nb-layout-header>
 
-  <nb-layout-column>
-    <app-roles-view></app-roles-view>
-    <router-outlet></router-outlet>
-  </nb-layout-column>
-  <nb-layout-footer fixed>
-    <!-- Insert footer here -->
-  </nb-layout-footer>
+    <nb-layout-column>
+        <app-roles-view></app-roles-view>
+        <router-outlet></router-outlet>
+    </nb-layout-column>
+    <nb-layout-footer fixed>
+        <!-- Insert footer here -->
+    </nb-layout-footer>
 
 </nb-layout>

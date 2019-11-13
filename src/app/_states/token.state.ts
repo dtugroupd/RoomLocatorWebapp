@@ -22,12 +22,12 @@ export class TokenState {
     constructor(private userService: UserService, private authService: AuthService) {}
     
     @Selector()
-    static getToken(state: TokenStateModel) {
+    static getToken(state: TokenStateModel): string {
         return state.token;
     }
 
     @Selector()
-    static getUser(state: TokenStateModel) {
+    static getUser(state: TokenStateModel): User {
         return state.user;
     }
 

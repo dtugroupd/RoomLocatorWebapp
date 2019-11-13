@@ -10,6 +10,9 @@ import { MazemapState } from './_states/mazemap.state';
 import { Observable } from 'rxjs';
 import { GetSurveys } from './_actions/survey.actions';
 import { LibrarySection } from './models/mazemap/library-section.model';
+import { NbMenuItem, NbThemeService } from '@nebular/theme';
+import { TokenState } from './_states/token.state';
+import { User } from './models/login/user.model';
 
 @Component({
   selector: 'app-root',
@@ -22,8 +25,30 @@ export class AppComponent implements OnInit {
   activeSection: LibrarySection;
 
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
+  @Select(TokenState.getUser) user$: Observable<User>;
 
-  constructor(private store: Store, private router: Router) { }
+  constructor(private store: Store, private router: Router, private themeService: NbThemeService) {
+    // this.themeService.changeTheme('cosmic')
+  }
+
+  menuItems: NbMenuItem[] = [
+    {
+      'title': 'Home',
+      'link': '/'
+    },
+    {
+      'title': 'Mazemap',
+      'link': '/mazemap'
+    },
+    {
+      'title': 'Calendar',
+      'link': '/calendar',
+    },
+    {
+      'title': 'Manage Surveys',
+      'link': '/survey-management'
+    }
+  ];
 
   ngOnInit() {
     this.activeSection$.subscribe(x => {
