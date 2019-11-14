@@ -3,13 +3,11 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MazemapComponent } from './components/mazemap/mazemap.component';
-import { LoginButtonComponent } from './components/login-button/login-button.component';
-import { RouterModule, Routes } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
          NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
-         NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule } from '@nebular/theme';
+         NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule, NbUserModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -27,22 +25,22 @@ import { SurveyFeedbackButtonComponent } from './components/survey-feedback-butt
 import { StatusButtonComponent } from './components/status-button/status-button.component';
 import { StatusButtonMenuComponent } from './components/status-button-menu/status-button-menu.component';
 import { FormsModule } from '@angular/forms';
-
 import { RolesViewComponent } from './components/roles-view/roles-view.component';
 import { SurveyManagementComponent } from './components/survey-management/survey-management.component';
 import { SurveyState } from './_states/survey.state';
-import { UserState } from './_states/user.state';
-
+import { AuthService } from './_services/auth.service';
+import { CanActivateRouteGuard } from './_services/auth-guard.service';
+import { TokenInterceptor } from './interceptors/tokenInterceptor';
+import { TokenState } from './_states/token.state';
+import { RouterModule, Routes } from '@angular/router';
 const appRoutes: Routes = [
-  { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: LoginButtonComponent },
+  { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
 ];
-
 @NgModule({
   declarations: [
     AppComponent,
     ValidateComponent,
     MazemapComponent,
-    LoginButtonComponent,
     SurveyCreateActionComponent,
     SurveyFeedbackComponent,
     SurveyFeedbackSmileyRowComponent,
@@ -64,8 +62,7 @@ const appRoutes: Routes = [
   ],
   imports: [
     RouterModule.forRoot(
-      appRoutes,
-      { onSameUrlNavigation: 'reload', enableTracing: true },
+      appRoutes, { onSameUrlNavigation: 'reload', enableTracing: true },
     ),
     BrowserModule,
     AppRoutingModule,
@@ -83,23 +80,28 @@ const appRoutes: Routes = [
     NbInputModule,
     NbListModule,
     NbSearchModule,
+    NbUserModule,
     NbContextMenuModule,
+    NbMenuModule,
     NbMenuModule.forRoot(),
     NbDialogModule.forRoot(),
     NbToastrModule.forRoot(),
     NgxsModule.forRoot([
-      UserState,
       MazemapState,
-      SurveyState
+      SurveyState,
+      TokenState,
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
   ],
-  providers: [ DynamicComponentService ],
+  providers: [  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
+    multi: true,
+  }, DynamicComponentService, AuthService, CanActivateRouteGuard],
   bootstrap: [AppComponent],
   exports: [
-    LoginButtonComponent,
-    SurveyCreateActionComponent
+    SurveyCreateActionComponent,
   ]
 })
 export class AppModule { }

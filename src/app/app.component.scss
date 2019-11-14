@@ -1,3 +1,36 @@
 nb-layout-column {
     padding: 0 !important;
 }
+
+// .nb-theme-default nb-menu ul.menu-items {
+//     display: flex !important;
+//     flex-flow: row;
+// }
+.title {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.menu {
+    flex-grow: 1;
+    margin-right: 48px;
+}
+
+.menu .links {
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+}
+
+.menu .links a {
+    padding: 24px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+@import '~@nebular/theme/styles/theming';
+@import '~@nebular/theme/styles/themes/default';
+$nb-enable-css-custom-properties: true; // <-- enable css custom properties
+.menu .links a:hover {
+    color: var(--color-primary-500)
+}
