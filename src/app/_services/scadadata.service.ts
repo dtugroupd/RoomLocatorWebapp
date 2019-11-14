@@ -3,10 +3,9 @@
  */
 
 import { Injectable } from '@angular/core';
-import { ScadadataScores } from '../models/sensors/scadadata-scores.model';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BaseService } from './base.service';
-import { saveAs } from 'file-saver';
+import { ScadadataInfo } from '../models/sensors/scadadata-info.model';
 
 
 @Injectable({
@@ -19,12 +18,8 @@ export class ScadadataService extends BaseService {
     super(http);
   }
 
-  getWeightedScore() {
-    return this.http.get<number>(`${this.backendBaseUrl}/api/v1/scadadata/getweightedscore`);
-  }
-
-  getListOfScores() {
-    return this.http.get<ScadadataScores[]>(`${this.backendBaseUrl}/api/v1/scadadata/getlistofscores`);
+  getStatus() {
+    return this.http.get<ScadadataInfo>(`${this.backendBaseUrl}/api/v1/scadadata/getstatus`);
   }
 
  

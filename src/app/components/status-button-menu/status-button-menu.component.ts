@@ -1,4 +1,5 @@
 /**
+ * @author Andreas Gøricke, s153804
  * @author Thomas Lien Christensen, s165242
  */
 
@@ -36,30 +37,24 @@ export class StatusButtonMenuComponent implements OnInit {
 
   ngOnInit() {
 
-    const Svo = {
-      next: x => console.log('Observer got a next value: ' + x),
-      error: err => console.error('Observer got an error: ' + err),
-      complete: () => console.log('Observer got a complete notification'),
-    };
+    this.service.getStatus().subscribe( res => {
 
-    this.service.getListOfScores().subscribe( res => {
-
-      res.forEach(element => {
+      res.details.forEach(element => {
         switch(element.type){
           case "Temperature": {
-            this.temperature = this.evaluateScore(element.value,0.9,0.8,0.6,0.4);
+            this.temperature = element.value;
             break;
           }
           case "Sound": {
-            this.sound = this.evaluateScore(element.value,0.8,0.7,0.5,0.3); 
+            this.sound = element.value; 
             break;
           }
           case "Light": {
-            this.light = this.evaluateScore(element.value,0.7,0.5,0.3,0.1); 
+            this.light = element.value; 
             break;
           }
           case "Seats Available": {
-            this.availableSeats = this.evaluateScore(element.value,0.85,0.7,0.55,0.4); 
+            this.availableSeats = element.value; 
             break;
           }
         }
@@ -88,20 +83,6 @@ export class StatusButtonMenuComponent implements OnInit {
     }
 
     this.downVoted = !this.downVoted;
-  }
-
-  evaluateScore(score,q1,q2,q3,q4){
-    if(score > q1){
-      return "very good";
-    } else if(score > q2){
-      return "good";
-    } else if(score > q3){
-      return "okay";
-    } else if(score > q4){
-      return "bad";
-    } else {
-      return "really bad";
-    }
   }
 
 }
