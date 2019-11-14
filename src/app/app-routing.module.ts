@@ -4,7 +4,7 @@ import { ValidateComponent } from './auth/validate/validate.component';
 import { MazemapComponent } from './components/mazemap/mazemap.component';
 import { EventCalendarComponent } from './components/event-calendar/event-calendar.component';
 import { SurveyManagementComponent } from './components/survey-management/survey-management.component';
-import { CanActivateRouteGuard as AuthGuardService } from './_services/auth-guard.service';
+import { AuthRouteGuard } from './_services/_guards/auth-guard.service';
 
 
 const routes: Routes = [
@@ -15,17 +15,20 @@ const routes: Routes = [
   {
     path: 'mazemap',
     component: MazemapComponent,
-    canActivate: [AuthGuardService]
+    canActivate: [AuthRouteGuard]
   },
   {
     path: 'calendar',
     component: EventCalendarComponent,
-    canActivate: [AuthGuardService]
+    canActivate: [AuthRouteGuard]
   },
   {
     path: 'survey-management',
     component: SurveyManagementComponent,
-    canActivate: [AuthGuardService]
+    canActivate: [AuthRouteGuard],
+    data: {
+      expectedRole: 'researcher'
+    }
   },
 ]
 

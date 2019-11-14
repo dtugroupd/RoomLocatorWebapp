@@ -29,7 +29,7 @@ import { RolesViewComponent } from './components/roles-view/roles-view.component
 import { SurveyManagementComponent } from './components/survey-management/survey-management.component';
 import { SurveyState } from './_states/survey.state';
 import { AuthService } from './_services/auth.service';
-import { CanActivateRouteGuard } from './_services/auth-guard.service';
+import { AuthRouteGuard as authRouteGuard } from './_services/_guards/auth-guard.service';
 import { TokenInterceptor } from './interceptors/tokenInterceptor';
 import { TokenState } from './_states/token.state';
 import { RouterModule, Routes } from '@angular/router';
@@ -98,7 +98,7 @@ const appRoutes: Routes = [
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true,
-  }, DynamicComponentService, AuthService, CanActivateRouteGuard],
+  }, DynamicComponentService, AuthService, authRouteGuard],
   bootstrap: [AppComponent],
   exports: [
     SurveyCreateActionComponent,
