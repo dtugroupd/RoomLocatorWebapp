@@ -23,10 +23,13 @@
                 <textarea nbInput fullWidth placeholder="Description" name="description" type="text" [value]="this.description" (input)="this.description = $event.target.value"></textarea>
                 <small>(Optional)</small>
             </div>
-            <button id="addQuestionButton" nbButton fullWidth (click)="addQuestion(); $event.preventDefault()">Add question</button>
+            <button id="addQuestionButton" nbButton fullWidth (click)="addQuestion()" type="button">Add question</button>
             <div *ngFor="let question of questions; let i = index">
                 <div class="form-control">
-                    <input nbInput fullWidth type="text" placeholder=" Question {{i+1}}" name="q i" fieldSize="medium" [ngClass]="f.submitted && !question.text ? 'status-warning' : ''" [(ngModel)]="question.text" #questionModel="ngModel">
+                    <div>
+                        <input nbInput type="text" placeholder=" Question {{i+1}}" name="q {{i}}" fieldSize="medium" [ngClass]="f.submitted && !question.text ? 'status-warning' : ''" [(ngModel)]="question.text" #questionModel="ngModel">
+                        <button nbButton status="warning" type="button" (click)="removeQuestion(i)">&#10005;</button>
+                    </div>
                     <div *ngIf="!question.text && f.submitted" class="form-warning-msg">
                         <small>Empty questions are not submitted.</small>
                     </div>
@@ -34,8 +37,8 @@
             </div>
         </nb-card-body>
         <nb-card-footer id="createSurveyFooter">
-            <button nbButton outline (click)="close()"  status="warning">Close</button>
-            <button nbButton outline (click)="submit()">Submit</button>
+            <button nbButton outline (click)="close()" status="warning" type="button">Close</button>
+            <button nbButton outline>Submit</button>
         </nb-card-footer>
     </nb-card>
 </form>
