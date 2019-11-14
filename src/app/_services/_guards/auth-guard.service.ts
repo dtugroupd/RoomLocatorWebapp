@@ -34,7 +34,14 @@ export class AuthRouteGuard implements CanActivate
   userIsInRole ( route: ActivatedRouteSnapshot ): Observable<boolean> | boolean
   {
 
-    const expectedRoles = route.data.expectedRoles.split( /[ ,]+/ );
+
+    const expectedRolesString = route.data.expectedRoles;
+    
+    if (!expectedRolesString) {
+    return true;
+    }
+
+    const expectedRoles = expectedRolesString.split( /[ ,]+/ );
 
     if (expectedRoles.length === 0) {
       return true;
