@@ -42,7 +42,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
           if (err.status === 401) {
             this.authService.loginWithSso();
           } else if (err.status === 403) {
-            alert('ERROR ' + err.statusText);
+            this.router.navigate(["/access-denied"]);
           }
         }
       }

@@ -22,7 +22,7 @@ export class AuthRouteGuard implements CanActivate
   {
   }
 
-  canActivate ( route: ActivatedRouteSnapshot ): Observable<boolean>
+  canActivate ( route: ActivatedRouteSnapshot ): Observable<boolean> | boolean
   {
     if ( !this.auth.isAuthenticated() )
     {
@@ -31,21 +31,24 @@ export class AuthRouteGuard implements CanActivate
     return this.userIsInRole( route );
   }
 
-  userIsInRole ( route: ActivatedRouteSnapshot ): Observable<boolean>
+  userIsInRole ( route: ActivatedRouteSnapshot ): Observable<boolean> | boolean
   {
 
-    const expectedRole = route.data.expectedRole.split( /[ ,]+/ );
+    const expectedRoles = route.data.expectedRoles.split( /[ ,]+/ );
+
+    if (expectedRoles.length === 0) {
+      return true;
+    }
 
     return this.user$.pipe( map( user =>
     {
 
-      if ( expectedRole.filter( e => user.roles.includes( e ) ).length === 0 )
+      if ( expectedRoles.filter( e => user.roles.includes( e ) ).length === 0 )
       {
-        alert( 'Not allowed' );
+        this.router.navigate(["/access-denied"]);
         return false;
       } else
       {
-        alert( 'allow' )
         return true;
       }
     }

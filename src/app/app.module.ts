@@ -33,6 +33,7 @@ import { AuthRouteGuard as authRouteGuard } from './_services/_guards/auth-guard
 import { TokenInterceptor } from './interceptors/tokenInterceptor';
 import { TokenState } from './_states/token.state';
 import { RouterModule, Routes } from '@angular/router';
+import { AccessDeniedComponent } from './components/access_denied/access-denied/access-denied.component';
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
 ];
@@ -51,6 +52,7 @@ const appRoutes: Routes = [
     StatusButtonMenuComponent,
     RolesViewComponent,
     SurveyManagementComponent,
+    AccessDeniedComponent,
   ],
   entryComponents: [
     SurveyCreateActionComponent,

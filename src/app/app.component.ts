@@ -13,6 +13,7 @@ import { LibrarySection } from './models/mazemap/library-section.model';
 import { NbMenuItem, NbThemeService } from '@nebular/theme';
 import { TokenState } from './_states/token.state';
 import { User } from './models/login/user.model';
+import { AuthService } from './_services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit {
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
   @Select(TokenState.getUser) user$: Observable<User>;
 
-  constructor(private store: Store, private router: Router, private themeService: NbThemeService) {
+  constructor(private store: Store, private router: Router, private themeService: NbThemeService, private authService: AuthService) {
     // this.themeService.changeTheme('cosmic')
   }
 
@@ -51,6 +52,7 @@ export class AppComponent implements OnInit {
   ];
 
   ngOnInit() {
+    this.authService.authenticate();
     this.activeSection$.subscribe(x => {
       this.activeSection = x;
     });
