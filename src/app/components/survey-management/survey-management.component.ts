@@ -2,7 +2,7 @@
  * @author Thomas Lien Christensen, s165242
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Survey } from 'src/app/models/survey/survey.model';
 import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
 import { Store, Select } from '@ngxs/store';
@@ -20,9 +20,8 @@ import { SurveyService } from 'src/app/_services/survey.service';
   templateUrl: './survey-management.component.html',
   styleUrls: ['./survey-management.component.scss']
 })
-
 export class SurveyManagementComponent implements OnInit {
-  constructor(private store: Store, private service: SurveyService) { }
+  constructor(private service: SurveyService) {}
 
   surveys: Survey[];
   unsortedSurveys: Survey[];
@@ -46,8 +45,6 @@ export class SurveyManagementComponent implements OnInit {
     this.activeSection$.subscribe(x => {
       this.activeSection = x;
       this.surveys = Object.create(this.unsortedSurveys);
-      console.log(this.surveys);
-      console.log(this.unsortedSurveys);
 
       if (x) {
         const indexOfSurvey = this.surveys.map(s => s.id).indexOf(x.survey.id);
@@ -78,5 +75,4 @@ export class SurveyManagementComponent implements OnInit {
   downloadFile(id: number) {
     this.service.downloadSurveyAnswers(id);
   }
-
 }
