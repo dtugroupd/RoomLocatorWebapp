@@ -9,6 +9,8 @@ import { SurveyToCreate } from '../models/survey/survey-to-create.model';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { saveAs } from 'file-saver';
+import { SurveyAnswer } from '../models/survey/survey-answer.model';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -21,14 +23,14 @@ export class SurveyService extends BaseService {
     super(http);
   }
 
-  postSurveyAnswer(answer: SurveyAnswerSubmition) {
+  postSurveyAnswer(answer: SurveyAnswerSubmition): Observable<SurveyAnswer> {
     const options = {
         headers: new HttpHeaders({
             'Content-Type':  'application/json',
         })
     };
 
-    return this.http.post<SurveyAnswerSubmition>(`${this.backendBaseUrl}/api/v1/survey/submitanswer`, answer, options);
+    return this.http.post<SurveyAnswer>(`${this.backendBaseUrl}/api/v1/survey/submitanswer`, answer, options);
   }
 
   createSurvey(survey: SurveyToCreate) {
