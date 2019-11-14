@@ -19,7 +19,6 @@ import { Select } from '@ngxs/store';
 
 export class SurveyCreateComponent implements OnInit {
 
-  // @Input() sectionId: number;
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
 
   title = '';
@@ -40,6 +39,10 @@ export class SurveyCreateComponent implements OnInit {
 
   addQuestion() {
     this.questions.push({ text: '' });
+  }
+
+  removeQuestion(index: number) {
+    this.questions.splice(index, 1);
   }
 
   close() {
@@ -63,13 +66,10 @@ export class SurveyCreateComponent implements OnInit {
         questions: this.questions
       };
 
-      this.service.createSurvey(survey).subscribe(res => {
-        if (res === null) {
-          this.dialogRef.close({ submit: true, sectionId: this.activeSection.id });
-          } else {
-            this.dialogRef.close({ submit: false, error: true });
-          }
-      });
+      this.service.createSurvey(survey).subscribe(
+        res => this.dialogRef.close({ submit: true, sectionId: this.activeSection.id }),
+        error => this.dialogRef.close({ submit: false, error: true })
+      );
     } else {
       this.showWarningToast('top-right', 'warning', `Can't submit an empty survey`);
       return;
