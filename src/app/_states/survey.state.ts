@@ -3,9 +3,10 @@
  */
 
 import { State, Action, StateContext, Selector, Select } from '@ngxs/store';
-import {tap} from 'rxjs/operators';
+import { patch, updateItem, append } from '@ngxs/store/operators';
+import { tap } from 'rxjs/operators';
 import { SurveyService } from '../_services/survey.service';
-import { GetSurveys } from '../_actions/survey.actions';
+import { GetSurveys, AddSurveyAnswer } from '../_actions/survey.actions';
 import { Survey } from '../models/survey/survey.model';
 
 export class SurveyStateModel {
@@ -30,7 +31,7 @@ export class SurveyState {
 
 
     @Action(GetSurveys)
-    getSurveys({setState}: StateContext<SurveyStateModel>) {
+    getSurveys({ setState }: StateContext<SurveyStateModel>) {
         return this.surveyService.getSurveys().pipe(tap((result) => {
             setState({
                 surveys: result
@@ -38,10 +39,16 @@ export class SurveyState {
         }));
     }
 
-    // @Action(SetActiveSection)
-    // setActiveSection({patchState}: StateContext<SurveyStateModel>, payload: SetActiveSection) {
-    //     patchState({
-    //         activeSection: payload.section
-    //     });
-    // }
+    @Action(AddSurveyAnswer)
+    addSurveyAnswer({ setState }: StateContext<SurveyStateModel>, { payload }: AddSurveyAnswer) {
+        setState(
+            patch({
+                surveys: updateItem(
+                    x => x.id === payload.surveyId,
+                    patch({
+                        surveyAnswers: append([ payload ])
+                    }))
+            })
+        );
+    }
 }
