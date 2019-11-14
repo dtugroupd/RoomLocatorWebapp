@@ -35,6 +35,6 @@ export class AuthService {
   }
 
   public loginWithSso() {
-    window.location.href = `https://auth.dtu.dk/dtu?service=${environment.backendUrl}/api/v1/auth/validate`;
+    window.location.href = `https://auth.dtu.dk/dtu/?service=${environment.backendUrl}/api/v1/auth/validate`;
   }
 }
