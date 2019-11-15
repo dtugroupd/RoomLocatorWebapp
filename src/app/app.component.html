@@ -12,13 +12,24 @@
 
             <!-- <nb-menu [items]="menuItems"></nb-menu> -->
             <div class="links">
-                <a *ngFor="let item of menuItems" routerLink="{{ item.link }}">{{ item.title }}</a>
+                <a *ngFor="let item of menuItems" routerLink="{{ item.link }}" [ngClass]="(userHasAccess(item.link) | async) ? '' : 'hide'">{{ item.title }}</a>
             </div>
         </nb-layout-column>
-        <nb-user *ngIf="user$ | async" name="{{ (user$ | async).studentId }}" style="justify-content: flex-end;"></nb-user>
+        <fa-icon class="burger-menu-button" [icon]="faBars" (click)="toggleMobileMenu()"></fa-icon>
+        <nb-user class="user" *ngIf="user$ | async" name="{{ (user$ | async).studentId }}" style="justify-content: flex-end;"></nb-user>
     </nb-layout-header>
 
-    <nb-layout-column>
+    <nb-layout-column (click)="hideMobileMenu()">
+        <div class="mobile-menu" [@toggleMobileMenu]="mobileMenuToggled ? 'show' : 'hide'">
+            <div class="mobile-user-container">
+                <nb-user class="mobile-user" size="large"  color="#cccccc" *ngIf="user$ | async" name="{{ (user$ | async).studentId }}"></nb-user>
+            </div>
+            <div class="links">
+                <div class="mobile-link" *ngFor="let item of menuItems" routerLink="{{ item.link }}" [ngClass]="(userHasAccess(item.link) | async) ? '' : 'hide'">
+                    {{ item.title }}
+                </div>
+            </div>
+        </div>
         <router-outlet></router-outlet>
     </nb-layout-column>
     <nb-layout-footer fixed>
