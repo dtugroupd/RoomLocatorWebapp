@@ -14,6 +14,7 @@ import { NbMenuItem, NbThemeService } from '@nebular/theme';
 import { TokenState } from './_states/token.state';
 import { User } from './models/login/user.model';
 import { AuthService } from './_services/auth.service';
+import { map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -70,5 +71,30 @@ export class AppComponent implements OnInit {
         }
       }
     });
+  }
+
+  userHasAccess(link: string): Observable<boolean> {
+    switch (link) {
+      case '/':
+        return new Observable((observer: any) => observer.next(true));
+      case '/mazemap':
+        return new Observable((observer: any) => observer.next(true));
+      case '/calendar':
+        return new Observable((observer: any) => observer.next(true));
+      case '/survey-management':
+        return this.userHasRole(['library', 'researcher']).pipe(tap(val => val));
+      default:
+        return new Observable((observer: any) => observer.next(false));
+    }
+  }
+
+  userHasRole(roles: string[]): Observable<boolean> {
+    return this.user$.pipe(map(user => {
+      if (user && user.roles) {
+        return roles.filter(role => user.roles.includes(role)).length !== 0;
+      }
+
+      return false;
+    }));
   }
 }

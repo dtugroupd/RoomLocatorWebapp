@@ -12,7 +12,7 @@
 
             <!-- <nb-menu [items]="menuItems"></nb-menu> -->
             <div class="links">
-                <a *ngFor="let item of menuItems" routerLink="{{ item.link }}">{{ item.title }}</a>
+                <a *ngFor="let item of menuItems" routerLink="{{ item.link }}" [ngClass]="(userHasAccess(item.link) | async) ? '' : 'hide'">{{ item.title }}</a>
             </div>
         </nb-layout-column>
         <nb-user *ngIf="user$ | async" name="{{ (user$ | async).studentId }}" style="justify-content: flex-end;"></nb-user>
