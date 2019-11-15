@@ -19,7 +19,7 @@
         <nb-user class="user" *ngIf="user$ | async" name="{{ (user$ | async).studentId }}" style="justify-content: flex-end;"></nb-user>
     </nb-layout-header>
 
-    <nb-layout-column>
+    <nb-layout-column (click)="hideMobileMenu()">
         <div class="mobile-menu" [@toggleMobileMenu]="mobileMenuToggled ? 'show' : 'hide'">
             <div class="mobile-user-container">
                 <nb-user class="mobile-user" size="large"  color="#cccccc" *ngIf="user$ | async" name="{{ (user$ | async).studentId }}"></nb-user>

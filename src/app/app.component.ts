@@ -124,4 +124,8 @@ export class AppComponent implements OnInit {
     this.mobileMenuToggled = !this.mobileMenuToggled;
     console.log(this.mobileMenuToggled);
   }
+
+  hideMobileMenu() {
+    this.mobileMenuToggled = false;
+  }
 }
