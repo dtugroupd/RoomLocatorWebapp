@@ -1,25 +1,39 @@
 <nb-layout>
+    <nb-layout-header>
+        <!-- <h2 style="margin-right:30px;">DTU WebApp </h2> -->
+        <nb-layout-column class="title">Library Status</nb-layout-column>
+        <nb-layout-column class="menu">
+            <!-- <button nbButton routerLink="/">Home</button>
+            <button nbButton routerLink="mazemap">Mazemap</button>
+            <button nbButton routerLink="survey-management">Manage surveys</button> -->
+            <!-- <a routerLink="/">Home</a>
+            <a routerLink="mazemap">Mazemap</a>
+            <a routerLink="survey-management">Manage Surveys</a> -->
 
-  <nb-layout-header fixed>
-    <app-login-button></app-login-button>
-    <a nbButton routerLink="/mazemap" class="header-nav-button">
-      <fa-icon [icon]="faMap"></fa-icon>
-    </a>
-    <a nbButton routerLink="/survey-management" class="header-nav-button">
-      <fa-icon [icon]="faPoll"></fa-icon>
-    </a>
-    <a nbButton routerLink="/calendar" class="header-nav-button">
-      <fa-icon [icon]="faCalendarAlt"></fa-icon>
-    </a>
+            <!-- <nb-menu [items]="menuItems"></nb-menu> -->
+            <div class="links">
+                <a *ngFor="let item of menuItems" routerLink="{{ item.link }}" [ngClass]="(userHasAccess(item.link) | async) ? '' : 'hide'">{{ item.title }}</a>
+            </div>
+        </nb-layout-column>
+        <fa-icon class="burger-menu-button" [icon]="faBars" (click)="toggleMobileMenu()"></fa-icon>
+        <nb-user class="user" *ngIf="user$ | async" name="{{ (user$ | async).studentId }}" style="justify-content: flex-end;"></nb-user>
+    </nb-layout-header>
 
-  </nb-layout-header>
-
-  <nb-layout-column>
-    <app-roles-view></app-roles-view>
-    <router-outlet></router-outlet>
-  </nb-layout-column>
-  <nb-layout-footer fixed>
-    <!-- Insert footer here -->
-  </nb-layout-footer>
+    <nb-layout-column (click)="hideMobileMenu()">
+        <div class="mobile-menu" [@toggleMobileMenu]="mobileMenuToggled ? 'show' : 'hide'">
+            <div class="mobile-user-container">
+                <nb-user class="mobile-user" size="large"  color="#cccccc" *ngIf="user$ | async" name="{{ (user$ | async).studentId }}"></nb-user>
+            </div>
+            <div class="links">
+                <div class="mobile-link" *ngFor="let item of menuItems" routerLink="{{ item.link }}" [ngClass]="(userHasAccess(item.link) | async) ? '' : 'hide'">
+                    {{ item.title }}
+                </div>
+            </div>
+        </div>
+        <router-outlet></router-outlet>
+    </nb-layout-column>
+    <nb-layout-footer fixed>
+        <!-- Insert footer here -->
+    </nb-layout-footer>
 
 </nb-layout>

@@ -10,3 +10,6 @@ export class SetToken {
     constructor(public payload: Token) {}
 }
 
+export class GetUser {
+    static readonly type = '[User] Get';
+}

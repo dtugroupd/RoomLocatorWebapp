@@ -3,11 +3,11 @@
  */
 
 export interface User {
+    id: string;
     studentId: string;
     roles: string[];
 }
 
 export interface Token {
-    user: User;
     token: string;
-} 
+}

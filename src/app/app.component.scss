@@ -2,6 +2,7 @@ nb-layout-column {
     padding: 0 !important;
 }
 
+<<<<<<< HEAD
 .header-nav-button {
     background: none !important;
     border: none !important;
@@ -11,3 +12,116 @@ nb-layout-column {
 .header-nav-button fa-icon {
     color: #0B8BED;
 }
+=======
+// .nb-theme-default nb-menu ul.menu-items {
+//     display: flex !important;
+//     flex-flow: row;
+// }
+.title {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.menu {
+    flex-grow: 1;
+    margin-right: 48px;
+}
+
+.menu .links {
+    display: none;
+}
+
+.user {
+    display: none;
+}
+
+.links a {
+    padding: 24px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.mobile-menu {
+    position: fixed;
+    top: 15%;
+    left: 10%;
+    width: 80%;
+    margin: 0 auto;
+    background: #ddd;
+    z-index: 999;
+    transition: display ease-in-out 300ms;
+}
+
+.mobile-menu .links {
+    display: flex;
+    flex-flow: column;
+}
+
+.mobile-link {
+    padding: 24px;
+    width: 100%;
+    font-size: 20px;
+    justify-content: center;
+    border-bottom: 1px solid black;
+}
+
+.mobile-link:hover {
+    background: #f5f5f5;
+    cursor: pointer;
+}
+
+.mobile-user-container {
+    background: #f5f5f5;
+    padding: 20px;
+    border-bottom: 1px solid black;
+}
+
+.mobile-user {
+    justify-content: center;
+}
+
+.burger-menu-button {
+    display: block;
+    justify-content: flex-end;
+    padding: 24px;
+    font-size: 24px;
+    color: #ddd;
+    cursor: pointer;
+}
+
+.burger-menu-button:hover {
+    color: black;
+}
+
+.hide {
+    display: none;
+}
+
+@media only screen and (min-width: 720px) {
+    .menu .links {
+        display: flex;
+        flex-flow: row;
+        justify-content: flex-start;
+    }
+
+    .user {
+        display: block;
+    }
+
+    .burger-menu-button {
+        display: none;
+    }
+
+    .mobile-menu {
+        display: none;
+    }
+}
+
+@import '~@nebular/theme/styles/theming';
+@import '~@nebular/theme/styles/themes/default';
+$nb-enable-css-custom-properties: true; // <-- enable css custom properties
+.menu .links a:hover {
+    color: var(--color-primary-500)
+}
+
+>>>>>>> 6aa272df9f4a735ea1a545b658e8c07d162ccdae
