@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RolesViewComponent } from './roles-view.component';
+import { AccessDeniedComponent } from './access-denied.component';
 
-describe('RolesViewComponent', () => {
-  let component: RolesViewComponent;
-  let fixture: ComponentFixture<RolesViewComponent>;
+describe('AccessDeniedComponent', () => {
+  let component: AccessDeniedComponent;
+  let fixture: ComponentFixture<AccessDeniedComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RolesViewComponent ]
+      declarations: [ AccessDeniedComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RolesViewComponent);
+    fixture = TestBed.createComponent(AccessDeniedComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
