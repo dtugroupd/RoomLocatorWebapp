@@ -4,27 +4,28 @@
 */
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Feedback} from '../models/feedback/feedback.model';
 import { BaseService } from './base.service';
+import {Observable} from "rxjs/index";
+import { saveAs } from 'file-saver';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FeedbackService extends BaseService {
 
-  constructor(http: HttpClient) {
-    super(http);
-  }
+  constructor(http: HttpClient) {super(http); }
 
-  fetchUpvoted() {
-    return this.http.get<Feedback[]>(`${this.backendBaseUrl}/api/v1/mazemap`);
+  postSurveyAnswer(feedback: Feedback) {
+    const options = {
+        headers: new HttpHeaders({
+            'Content-Type':  'application/json',
+        })
+    };
+
+    return this.http.post<Feedback>(`${this.backendBaseUrl}/api/v1/feedback`, feedback, options);
   }
-  
-  fetchDownvoted() {
-    return this.http.get<Feedback[]>(`${this.backendBaseUrl}/api/v1/mazemap`);
-  }
-  // DET SKAL VÆRE HTTPClient.Post ISTEDET
 
   }
 

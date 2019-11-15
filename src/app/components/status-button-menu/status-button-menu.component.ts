@@ -11,7 +11,6 @@ import { SetFeedback } from '../../_actions/feedback.action';
 import { Store } from '@ngxs/store';
 
 
-
  @Component({
   selector: 'app-status-button-menu',
   templateUrl: './status-button-menu.component.html',
@@ -21,6 +20,7 @@ export class StatusButtonMenuComponent implements OnInit{
 
   constructor(private store: Store) { }
   
+  
   thumbsDown = thumbsDown; // defining objects
   thumbsDownPressed = thumbsDownPressed;
   thumbsUp = thumbsUp;
@@ -29,12 +29,11 @@ export class StatusButtonMenuComponent implements OnInit{
   upVoted = false;  // setting initial value for object like/dislike
   downVoted = false;
 
-   //@Output()
+   
    countThumbpsupChanged: EventEmitter<boolean> = new EventEmitter<boolean>(); //register event with a value of boolean
    
-   //@Output()
    countThumbpsdownChanged: EventEmitter<boolean> = new EventEmitter<boolean>(); 
-  
+ 
   onThumbsupChanged(upVoted,downVoted){ 
     if (this.downVoted === true){
       this.downVoted = false;
@@ -42,23 +41,23 @@ export class StatusButtonMenuComponent implements OnInit{
 
     this.upVoted = upVoted;
     this.countThumbpsupChanged.emit(this.upVoted=true); // metoden sætter ændringens værdi
-    this.store.dispatch(new SetFeedback({upVotedFeedback: upVoted, downVotedFeedback:downVoted})) // Store-service til at påkalde 
-    //dispatch med en action eller array af action som man vil udløse(trigger)
-   
+    this.store.dispatch(new SetFeedback({upVotedFeedback: upVoted, downVotedFeedback:downVoted})) // Store-service til at påkalde dispatch med en action som man vil udløse(trigger)
+    return upVoted
   }
  
-  onThumbsdownChanged(upVoted,downVoted){
+  onThumbsdownChanged(upVoted, downVoted){
     if (this.upVoted === true) {
       this.upVoted = false;
+      
     }
     
-    this.downVoted = downVoted;
-    this.countThumbpsdownChanged.emit(this.downVoted=true);   
+    this.downVoted = downVoted;   
+    this.countThumbpsdownChanged.emit(this.downVoted=true);
     this.store.dispatch(new SetFeedback({upVotedFeedback: upVoted, downVotedFeedback:downVoted}))
-    
+    return downVoted
   }
 
   ngOnInit() {
   }
-
+     
 }
