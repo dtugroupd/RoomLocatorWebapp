@@ -1,29 +1,48 @@
-#listWrapper {
-    vertical-align:center;
-    padding:30px 30px;
+.searchBar {
+    width:100%;
+    background:white;
+    height:2.8em;
+    margin-bottom:1.5em;
+    border-radius:1.5em;
 }
 
-#listView {
-    max-width: 200px;
-}
-
-#iconRow {
-    margin-top: 12px;
-    display: flex;
-    justify-content: space-around;
+.eventInfoTable {
     width: 100%;
-    font-size: 46px;
+
 }
 
+.eventInfoTable th {
+    vertical-align: top;
+}
 
-
-.calendarContainer h6 {
+.eventInfoTable h6 {
     margin:0;
     padding: 0;
 }
 
-.calendarColumnContainer div {
-    display:inline-block;
-    vertical-align: top;
-    min-width:10px;
+.eventInfoTable fa-icon {
+    font-size: 2.8em;
+}
+
+.eventInfoTable th:nth-child(1) {
+    width: 3em;
+}
+
+.eventInfoTable th:nth-child(2) {
+    width: 6em;
+}
+
+.eventCard {
+    margin:1em 0em;
+    padding:0;
+    max-width:35em;
+    margin: auto;
+}
+
+.eventCard nb-card-body {
+    padding:0;
+}
+
+.eventCard nb-accordion {
+    box-shadow: none;
 }
