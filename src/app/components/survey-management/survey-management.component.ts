@@ -6,7 +6,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Survey } from 'src/app/models/survey/survey.model';
 import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
 import { Store, Select } from '@ngxs/store';
-import { SurveyState } from '../../_states/survey.state';
 import { Observable } from 'rxjs';
 import { MazemapState } from '../../_states/mazemap.state';
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
@@ -33,7 +32,7 @@ export class SurveyManagementComponent implements OnInit {
 
   activeStyle = {'background-color': '#ddd'};
 
-  @Select(SurveyState.getSurveys) surveys$: Observable<Survey[]>;
+  @Select(MazemapState.getSurveys) surveys$: Observable<Survey[]>;
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
 
   ngOnInit() {

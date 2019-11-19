@@ -26,16 +26,16 @@ const routes: Routes = [
   {
     path: 'survey-management',
     component: SurveyManagementComponent,
-    canActivate: [AuthRouteGuard],
-    data: {
-      expectedRoles: 'researcher'
-    }
+    // canActivate: [AuthRouteGuard],
+    // data: {
+    //   expectedRoles: 'researcher'
+    // }
   },
   {
     path: 'access-denied',
     component: AccessDeniedComponent,
   },
-  
+
 ]
 
 @NgModule({

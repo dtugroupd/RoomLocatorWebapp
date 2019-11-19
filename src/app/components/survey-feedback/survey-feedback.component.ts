@@ -9,7 +9,7 @@ import { QuestionAnswerSubmition } from 'src/app/models/question/question-answer
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
 import { SurveyService } from '../../_services/survey.service';
 import { Store } from '@ngxs/store';
-import { AddSurveyAnswer } from 'src/app/_actions/survey.actions';
+import { AddSurveyAnswer } from 'src/app/_actions/mazemap.actions';
 
 @Component({
   selector: 'app-survey-feedback',

@@ -8,7 +8,7 @@ import { Store, Select } from '@ngxs/store';
 import { SetActivateFeedbackAndStatus } from './_actions/mazemap.actions';
 import { MazemapState } from './_states/mazemap.state';
 import { Observable } from 'rxjs';
-import { GetSurveys } from './_actions/survey.actions';
+import { GetSurveys } from './_actions/mazemap.actions';
 import { LibrarySection } from './models/mazemap/library-section.model';
 import { NbMenuItem, NbThemeService } from '@nebular/theme';
 import { TokenState } from './_states/token.state';
