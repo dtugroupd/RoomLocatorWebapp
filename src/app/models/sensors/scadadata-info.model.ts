@@ -1,4 +1,4 @@
-import { ScadadataScores } from '../sensors/Scadadata-scores.model';
+import { ScadadataScores } from '../sensors/scadadata-scores.model';
 
 export interface ScadadataInfo {
     status: string;
