@@ -20,4 +20,13 @@ export class UserService extends BaseService {
   fetchUser(): Observable<User> {
     return this.http.get<User>(`${this.backendBaseUrl}/api/v1/user/me`);
   }
+
+  fetchUsers() {
+    return this.http.get<User[]>(`${this.backendBaseUrl}/api/v1/user`);
+  }
+
+  updatehUserRole(id: string, roleName: string) {
+    return this.http.put<User>(`${this.backendBaseUrl}/api/v1/id`, {id, roleName});
+  }
+
 }

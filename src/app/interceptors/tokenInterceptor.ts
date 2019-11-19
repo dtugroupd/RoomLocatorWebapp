@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { Select } from '@ngxs/store';
 import { TokenState } from '../_states/token.state';
-import { UserService } from '../_services/login.service';
+import { UserService } from '../_services/user.service';
 import { AuthService } from '../_services/auth.service';
 
 @Injectable()
