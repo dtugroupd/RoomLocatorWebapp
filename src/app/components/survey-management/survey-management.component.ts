@@ -2,10 +2,10 @@
  * @author Thomas Lien Christensen, s165242
  */
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Survey } from 'src/app/models/survey/survey.model';
 import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
-import { Store, Select } from '@ngxs/store';
+import { Select, Actions, ofActionDispatched } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { MazemapState } from '../../_states/mazemap.state';
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
@@ -13,6 +13,7 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { SurveyService } from 'src/app/_services/survey.service';
+import { AddSurveySuccess } from 'src/app/_actions/mazemap.actions';
 
 @Component({
   selector: 'app-survey-management',
@@ -20,7 +21,7 @@ import { SurveyService } from 'src/app/_services/survey.service';
   styleUrls: ['./survey-management.component.scss']
 })
 export class SurveyManagementComponent implements OnInit {
-  constructor(private service: SurveyService) {}
+  constructor(private service: SurveyService, private action$: Actions) {}
 
   surveys: Survey[];
   unsortedSurveys: Survey[];
@@ -43,19 +44,28 @@ export class SurveyManagementComponent implements OnInit {
 
     this.activeSection$.subscribe(x => {
       this.activeSection = x;
-      this.surveys = Object.create(this.unsortedSurveys);
-
-      if (x) {
-        const indexOfSurvey = this.surveys.map(s => s.id).indexOf(x.survey.id);
-        console.log(indexOfSurvey);
-        if (indexOfSurvey > 0) {
-          this.surveys.splice(indexOfSurvey, 1);
-          this.surveys.unshift(x.survey);
-        }
-      } else {
-        this.surveys = this.unsortedSurveys;
+      if (this.activeSection) {
+        this.toggleActiveSurvey(this.activeSection.survey);
       }
     });
+
+    this.action$.pipe(ofActionDispatched(AddSurveySuccess)).subscribe(() => {
+      this.toggleActiveSurvey(this.activeSection.survey);
+    });
+  }
+
+  toggleActiveSurvey(survey: Survey) {
+    this.surveys = Object.create(this.unsortedSurveys);
+
+    if (this.activeSection) {
+      const indexOfSurvey = this.surveys.map(s => s.id).indexOf(survey.id);
+      if (indexOfSurvey > 0) {
+        this.surveys.splice(indexOfSurvey, 1);
+        this.surveys.unshift(survey);
+      }
+    } else {
+      this.surveys = this.unsortedSurveys;
+    }
   }
 
   isActive(index: number) {

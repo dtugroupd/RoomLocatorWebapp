@@ -122,7 +122,6 @@ export class AppComponent implements OnInit {
 
   toggleMobileMenu() {
     this.mobileMenuToggled = !this.mobileMenuToggled;
-    console.log(this.mobileMenuToggled);
   }
 
   hideMobileMenu() {

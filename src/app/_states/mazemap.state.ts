@@ -3,11 +3,11 @@
  * @author Hadi Horani, s144885
  */
 
-import { State, Action, StateContext, Selector, Select } from '@ngxs/store';
+import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { LibrarySection } from '../models/mazemap/library-section.model';
 import {
     GetLibrarySections, SetActiveSection, SetActivateFeedbackAndStatus,
-    GetSurveys, AddSurveyAnswer
+    GetSurveys, AddSurveyAnswer, AddSurvey, AddSurveySuccess, AddSurveyError
 } from '../_actions/mazemap.actions';
 import { MazemapService } from '../_services/mazemap.service';
 import { tap } from 'rxjs/operators';
@@ -81,8 +81,6 @@ export class MazemapState {
         });
     }
 
-
-
     @Action(GetSurveys)
     getSurveys({ patchState }: StateContext<MazemapStateModel>) {
         return this.surveyService.getSurveys().pipe(tap((result) => {
@@ -90,6 +88,38 @@ export class MazemapState {
                 surveys: result
             });
         }));
+    }
+
+    @Action(AddSurvey)
+    addSurvey({ setState, patchState, dispatch, getState }: StateContext<MazemapStateModel>, { payload }: AddSurvey) {
+        const state = getState();
+        return this.surveyService.createSurvey(payload).subscribe(
+            res => {
+                    setState(
+                        patch({
+                            surveys: append([res])
+                        }),
+                        );
+                    setState(
+                        patch({
+                            librarySections: updateItem(
+                                x => x.id === payload.sectionId,
+                                patch({
+                                    survey: res
+                                })
+                            )
+                        }),
+                    );
+
+                    const newActiveSection = state.activeSection;
+                    newActiveSection.survey = res;
+                    patchState({
+                        activeSection: newActiveSection
+                    });
+                    dispatch(new AddSurveySuccess());
+            },
+            () => dispatch(new AddSurveyError())
+        );
     }
 
     @Action(AddSurveyAnswer)

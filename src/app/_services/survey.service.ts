@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 import { Survey } from '../models/survey/survey.model';
 import { SurveyAnswerSubmition } from '../models/survey/survey-answer-submition.model';
 import { SurveyToCreate } from '../models/survey/survey-to-create.model';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { saveAs } from 'file-saver';
 import { SurveyAnswer } from '../models/survey/survey-answer.model';
@@ -40,7 +40,7 @@ export class SurveyService extends BaseService {
       })
     };
 
-    return this.http.post<SurveyToCreate>(`${this.backendBaseUrl}/api/v1/survey/create`, survey, options);
+    return this.http.post<Survey>(`${this.backendBaseUrl}/api/v1/survey/create`, survey, options);
   }
 
   downloadSurveyAnswers(id: number) {
