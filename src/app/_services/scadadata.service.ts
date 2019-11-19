@@ -19,7 +19,7 @@ export class ScadadataService extends BaseService {
   }
 
   getStatus() {
-    return this.http.get<ScadadataInfo>(`${this.backendBaseUrl}/api/v1/scadadata/getstatus`);
+    return this.http.get<ScadadataInfo>(`${this.backendBaseUrl}/api/v1/status/getstatus`);
   }
 
  
