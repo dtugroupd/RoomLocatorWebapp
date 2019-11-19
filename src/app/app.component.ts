@@ -12,9 +12,7 @@ import { MazemapState } from './_states/mazemap.state';
 import { Observable } from 'rxjs';
 import { GetSurveys } from './_actions/survey.actions';
 import { LibrarySection } from './models/mazemap/library-section.model';
-<<<<<<< HEAD
 import { faMap, faCalendarAlt, faPoll } from '@fortawesome/free-solid-svg-icons';
-=======
 import { NbMenuItem, NbThemeService } from '@nebular/theme';
 import { TokenState } from './_states/token.state';
 import { User } from './models/login/user.model';
@@ -22,7 +20,6 @@ import { AuthService } from './_services/auth.service';
 import { map, tap } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
->>>>>>> 6aa272df9f4a735ea1a545b658e8c07d162ccdae
 
 @Component({
   selector: 'app-root',
@@ -51,14 +48,11 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 export class AppComponent implements OnInit {
   title = 'RoomLocatorWebapp';
   activeSection: LibrarySection;
-<<<<<<< HEAD
   faPoll = faPoll;
   faCalendarAlt = faCalendarAlt;
   faMap = faMap;
-=======
   mobileMenuToggled = false;
   faBars = faBars;
->>>>>>> 6aa272df9f4a735ea1a545b658e8c07d162ccdae
 
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
   @Select(TokenState.getUser) user$: Observable<User>;
