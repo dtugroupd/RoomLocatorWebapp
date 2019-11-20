@@ -33,6 +33,8 @@ import { TokenInterceptor } from './interceptors/tokenInterceptor';
 import { TokenState } from './_states/token.state';
 import { RouterModule, Routes } from '@angular/router';
 import { AccessDeniedComponent } from './components/access_denied/access-denied/access-denied.component';
+import { AdminPageComponent } from './components/admin_page/admin-page.component';
+import { AdminState } from './_states/admin.state';
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
 ];
@@ -51,6 +53,7 @@ const appRoutes: Routes = [
     StatusButtonMenuComponent,
     SurveyManagementComponent,
     AccessDeniedComponent,
+    AdminPageComponent,
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -59,6 +62,7 @@ const appRoutes: Routes = [
     SurveyFeedbackButtonComponent,
     SurveyCreateComponent,
     MazemapComponent,
+    AdminPageComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -90,6 +94,7 @@ const appRoutes: Routes = [
       MazemapState,
       SurveyState,
       TokenState,
+      AdminState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),

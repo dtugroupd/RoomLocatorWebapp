@@ -1,8 +1,8 @@
-import { User, Token } from '../models/login/user.model';
-
 /**
  * @author Hadi Horani, s144885
  */
+
+import { User, Token } from '../models/login/user.model';
 
 export class SetToken {
     static readonly type = '[Token] Set';

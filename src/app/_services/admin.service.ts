@@ -11,14 +11,18 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService extends BaseService {
+export class AdminService extends BaseService {
 
   constructor(http: HttpClient) {
     super(http);
   }
 
-  fetchUser(): Observable<User> {
-    return this.http.get<User>(`${this.backendBaseUrl}/api/v1/user/me`);
+  fetchUsers() {
+    return this.http.get<User[]>(`${this.backendBaseUrl}/api/v1/user`);
+  }
+
+  updatehUserRole(id: string, roleName: string) {
+    return this.http.put<User>(`${this.backendBaseUrl}/api/v1/id`, {id, roleName});
   }
 
 }

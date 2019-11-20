@@ -6,6 +6,7 @@ import { EventCalendarComponent } from './components/event-calendar/event-calend
 import { SurveyManagementComponent } from './components/survey-management/survey-management.component';
 import { AuthRouteGuard } from './_services/_guards/auth-guard.service';
 import { AccessDeniedComponent } from './components/access_denied/access-denied/access-denied.component';
+import { AdminPageComponent } from './components/admin_page/admin-page.component';
 
 
 const routes: Routes = [
@@ -17,6 +18,10 @@ const routes: Routes = [
     path: 'mazemap',
     component: MazemapComponent,
     canActivate: [AuthRouteGuard]
+  },
+  {
+    path: 'admin',
+    component: AdminPageComponent,
   },
   {
     path: 'calendar',
