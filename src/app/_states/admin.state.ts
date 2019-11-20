@@ -10,6 +10,7 @@ import { tap } from 'rxjs/operators';
 import { AuthService } from '../_services/auth.service';
 import { GetUsers } from '../_actions/admin.actions';
 import { AdminService } from '../_services/admin.service';
+import { state } from '@angular/animations';
 
 export class AdminStateModel
 {
@@ -26,18 +27,14 @@ export class AdminState
 {
     constructor ( private adminService: AdminService ) { }
 
-    @Selector()
-    static getUsers ( state: AdminStateModel )
-    {
-        return state.users;
-    }
-
     @Action( GetUsers )
-    getUsers ( { setState }: StateContext<AdminStateModel> )
+    getUsers ( {getState, setState }: StateContext<AdminStateModel> )
     {
         return this.adminService.fetchUsers().pipe( tap( ( result ) =>
         {
+            const s = getState();
             setState( {
+                ...s,
                 users: result,
             } );
         } ) );

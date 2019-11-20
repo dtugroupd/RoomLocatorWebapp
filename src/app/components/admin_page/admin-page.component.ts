@@ -21,7 +21,7 @@ export class AdminPageComponent implements OnInit {
   constructor(private store: Store) { }
 
   ngOnInit() {
-    this.store.dispatch(GetUsers).subscribe(x => {
+    this.store.dispatch(new GetUsers()).subscribe(x => {
       this.users = x;
       console.log(this.users);
     });
