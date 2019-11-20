@@ -16,7 +16,7 @@ import { GetUsers } from 'src/app/_actions/admin.actions';
 })
 export class AdminPageComponent implements OnInit {
 
-  users: User[];
+  users: any;
 
   constructor(private store: Store) { }
 
