@@ -20,21 +20,21 @@ export class AuthService {
 
   constructor(private store: Store) { }
 
-  public isAuthenticated(): boolean {
-    let token = null;
+  // public isAuthenticated(): boolean {
+  //   let token = null;
 
-    this.token$.pipe(tap(t => {
-      token = t;
-    }));
+  //   this.token$.pipe(tap(t => {
+  //     token = t;
+  //   }));
     
-    return token !== null && !jwtHelper.isTokenExpired(token);
-  }
+  //   return token !== null && !jwtHelper.isTokenExpired(token);
+  // }
 
   public authenticate() {
-    this.store.dispatch(new Login());
+    // this.store.dispatch(new Login());
   }
 
   public loginWithSso() {
-    window.location.href = `https://auth.dtu.dk/dtu/?service=${environment.backendUrl}/api/v1/auth/validate`;
+    // window.location.href = `https://auth.dtu.dk/dtu/?service=${environment.backendUrl}/api/v1/auth/validate`;
   }
 }

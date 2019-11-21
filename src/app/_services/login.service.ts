@@ -20,4 +20,8 @@ export class UserService extends BaseService {
   fetchUser(): Observable<User> {
     return this.http.get<User>(`${this.backendBaseUrl}/api/v1/user/me`);
   }
+
+  login(username: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.backendBaseUrl}/api/v1/auth/login`, { username, password });
+  }
 }

@@ -47,9 +47,11 @@ export class AppComponent implements OnInit {
   activeSection: LibrarySection;
   mobileMenuToggled = false;
   faBars = faBars;
+  base64Image: string = "";
 
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
   @Select(TokenState.getUser) user$: Observable<User>;
+  @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
 
   constructor(private store: Store, private router: Router, private themeService: NbThemeService, private authService: AuthService) {
     // this.themeService.changeTheme('cosmic')
@@ -81,6 +83,11 @@ export class AppComponent implements OnInit {
     });
 
     this.store.dispatch(new GetSurveys());
+    this.user$.subscribe(x => {
+      if (x) {
+        this.base64Image = `data:image/png;base64,${x.profile}`;
+      }
+    });
 
     this.router.events.subscribe(x => {
       if (x instanceof NavigationEnd) {

@@ -12,54 +12,42 @@ import { User } from 'src/app/models/login/user.model';
 import { tap, map } from 'rxjs/operators';
 
 @Injectable()
-export class AuthRouteGuard implements CanActivate
-{
+export class AuthRouteGuard implements CanActivate {
 
-  @Select( TokenState.getUser ) user$: Observable<User>;
+  @Select(TokenState.getUser) user$: Observable<User>;
+  @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
 
-
-  constructor ( private auth: AuthService, private router: Router )
-  {
+  constructor(private auth: AuthService, private router: Router) {
   }
 
-  canActivate ( route: ActivatedRouteSnapshot ): Observable<boolean> | boolean
-  {
-    if ( !this.auth.isAuthenticated() )
-    {
+  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
+    if (!this.auth.isAuthenticated()) {
       this.auth.authenticate();
     }
-    return this.userIsInRole( route );
+    return this.userIsInRole(route);
   }
 
-  userIsInRole ( route: ActivatedRouteSnapshot ): Observable<boolean> | boolean
-  {
-
-
+  userIsInRole(route: ActivatedRouteSnapshot): Observable<boolean> | boolean {
     const expectedRolesString = route.data.expectedRoles;
-    
+
     if (!expectedRolesString) {
-    return true;
+      return true;
     }
 
-    const expectedRoles = expectedRolesString.split( /[ ,]+/ );
+    const expectedRoles = expectedRolesString.split(/[ ,]+/);
 
     if (expectedRoles.length === 0) {
       return true;
     }
 
-    return this.user$.pipe( map( user =>
-    {
+    return this.user$.pipe(map(user => {
 
-      if ( expectedRoles.filter( e => user.roles.includes( e ) ).length === 0 )
-      {
+      if (expectedRoles.filter(e => user.roles.includes(e)).length === 0) {
         this.router.navigate(["/access-denied"]);
         return false;
-      } else
-      {
+      } else {
         return true;
       }
-    }
-    )
-    )
+    }));
   }
 }
