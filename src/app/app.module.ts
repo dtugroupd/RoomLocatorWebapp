@@ -5,9 +5,12 @@ import { AppComponent } from './app.component';
 import { MazemapComponent } from './components/mazemap/mazemap.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
-         NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
-         NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule, NbUserModule } from '@nebular/theme';
+import
+{
+  NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
+  NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
+  NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule, NbUserModule
+} from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -35,10 +38,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { AccessDeniedComponent } from './components/access_denied/access-denied/access-denied.component';
 import { AdminPageComponent } from './components/admin_page/admin-page.component';
 import { AdminState } from './_states/admin.state';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+
+
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
 ];
-@NgModule({
+@NgModule( {
   declarations: [
     AppComponent,
     ValidateComponent,
@@ -74,7 +80,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     FontAwesomeModule,
     FormsModule,
-    NbThemeModule.forRoot({ name: 'default' }),
+    NbThemeModule.forRoot( { name: 'default' } ),
     NbLayoutModule,
     NbEvaIconsModule,
     NbButtonModule,
@@ -90,23 +96,24 @@ const appRoutes: Routes = [
     NbMenuModule.forRoot(),
     NbDialogModule.forRoot(),
     NbToastrModule.forRoot(),
-    NgxsModule.forRoot([
+    Ng2SearchPipeModule,
+    NgxsModule.forRoot( [
       MazemapState,
       SurveyState,
       TokenState,
       AdminState
-    ]),
+    ] ),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
   ],
-  providers: [  {
+  providers: [ {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true,
-  }, DynamicComponentService, AuthService, authRouteGuard],
-  bootstrap: [AppComponent],
+  }, DynamicComponentService, AuthService, authRouteGuard ],
+  bootstrap: [ AppComponent ],
   exports: [
     SurveyCreateActionComponent,
   ]
-})
+} )
 export class AppModule { }

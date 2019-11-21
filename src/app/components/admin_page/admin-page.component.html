@@ -1,7 +1,31 @@
-<h3>Users:</h3>
+<div class="container">
+        <input type="text" [(ngModel)]="searchText" placeholder="Search for an user by ID">
+        <table class="table table-hover">
+                <thead>
+                        <tr>
+                                <th>User ID</th>
+                                <th>User Roles</th>
+                        </tr>
+                </thead>
+                <tbody>
+                        <tr *ngFor="let user of users | filter:searchText; let i = index" (click)="setClickedRow(i)"
+                                [class.active]="i == selectedRow">
+                                <td>{{user.studentId}}</td>
+                                <td>{{user.roles.join(", " )}}</td>
+                        </tr>
 
-<ul>
-        <li *ngFor="let user of users.users.users">
-                {{ user.studentId }} 
-        </li>
-</ul>
+                </tbody>
+        </table>
+        <div class="well well-lg">      
+                Selected Row : <strong>{{selectedRow}}</strong>
+        </div>
+        <select [(ngModel)]="selectedRole" *ngIf = "selectedRow > -1">
+                        <option value="" disabled selected>Please Select</option>
+                        <option *ngFor="let r of roles" [value]="r.name">
+                        {{r.viewName}}
+                </option>
+        </select>
+        <button (click)="saveNewRole()" *ngIf = "selectedRole != null">Save</button>
+
+
+</div>

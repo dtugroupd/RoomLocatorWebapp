@@ -8,3 +8,9 @@ import { User } from '../models/login/user.model';
 export class GetUsers {
     static readonly type = '[Users] Get';
 }
+
+export class UpdateRole {
+    static readonly type = '[Role] Update';
+    constructor(public id: string, public roleName: string) {}
+
+}
