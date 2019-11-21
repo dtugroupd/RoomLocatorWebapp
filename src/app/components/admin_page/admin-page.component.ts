@@ -3,10 +3,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { User } from 'src/app/models/login/user.model';
-import { Observable } from 'rxjs';
-import { Select, Store, Actions, ofActionSuccessful } from '@ngxs/store';
-import { AdminState } from 'src/app/_states/admin.state';
+import { Store, Actions } from '@ngxs/store';
 import { GetUsers, UpdateRole } from 'src/app/_actions/admin.actions';
 
 export interface Role {
@@ -53,13 +50,8 @@ export class AdminPageComponent implements OnInit
   }
 
   saveNewRole() {
-    console.log('Tjeeek')
     this.selectedUserId = this.users[this.selectedRow].studentId;
-    console.log(this.selectedUserId);
-    console.log(this.selectedRole);
-    this.store.dispatch(new UpdateRole(this.selectedUserId, this.selectedRole)).subscribe(() => {
-      console.log('Tjeeek2')
-    });
+    this.store.dispatch(new UpdateRole(this.selectedUserId, this.selectedRole)).subscribe(() => {});
 
 
   }

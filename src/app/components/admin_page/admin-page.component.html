@@ -1,4 +1,9 @@
+<!--
+    author: Hadi Horani, s144885
+-->
+<h1>Users</h1>
 <div class="container">
+        <p>Select the user you want to change the role for</p>
         <input type="text" [(ngModel)]="searchText" placeholder="Search for an user by ID">
         <table class="table table-hover">
                 <thead>
@@ -16,9 +21,7 @@
 
                 </tbody>
         </table>
-        <div class="well well-lg">      
-                Selected Row : <strong>{{selectedRow}}</strong>
-        </div>
+        <p *ngIf = "selectedRow > -1">Choose the new role</p>
         <select [(ngModel)]="selectedRole" *ngIf = "selectedRow > -1">
                         <option value="" disabled selected>Please Select</option>
                         <option *ngFor="let r of roles" [value]="r.name">
