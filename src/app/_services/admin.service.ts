@@ -22,7 +22,7 @@ export class AdminService extends BaseService {
   }
 
   updatehUserRole(id: string, roleName: string) {
-    return this.http.put<User>(`${this.backendBaseUrl}/api/v1/user/id`, {id, roleName});
+    return this.http.put<User>(`${this.backendBaseUrl}/api/v1/user/id?studentId=${id}&roleName=${roleName}`, {});
   }
 
 }
