@@ -28,6 +28,8 @@ export class AdminPageComponent implements OnInit
   selectedRole: string;
   selectedUserId: string;
 
+  searchText;
+
   constructor ( private store: Store, private actions: Actions) { }
 
   roles: Role[] = [
