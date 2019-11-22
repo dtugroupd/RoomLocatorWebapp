@@ -1,11 +1,12 @@
 /**
  * @author Hadi Horani, s144885
+ * @author Anders Wiberg Olsen, s165241
  */
 
 import { Injectable, OnInit } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { TokenState } from 'src/app/_states/token.state';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/models/login/user.model';
@@ -17,13 +18,10 @@ export class AuthRouteGuard implements CanActivate {
   @Select(TokenState.getUser) user$: Observable<User>;
   @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
 
-  constructor(private auth: AuthService, private router: Router) {
+  constructor(private auth: AuthService, private router: Router, private store: Store) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
-    if (!this.auth.isAuthenticated()) {
-      this.auth.authenticate();
-    }
+  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> | boolean {
     return this.userIsInRole(route);
   }
 

@@ -4,9 +4,9 @@
  */
 
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { Login } from '../_actions/token.actions';
+import { Login, SetTokenAndUser } from '../_actions/token.actions';
 import { UserService } from '../_services/login.service';
-import { User } from '../models/login/user.model';
+import { User, LoginModel, AuthenticatedModel } from '../models/login/user.model';
 import { tap } from 'rxjs/operators';
 import { AuthService } from '../_services/auth.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -20,8 +20,8 @@ export class TokenStateModel {
     name: 'token'
 })
 export class TokenState {
-    constructor(private userService: UserService, private authService: AuthService) {}
-    
+    constructor(private userService: UserService, private authService: AuthService) { }
+
     @Selector()
     static getToken(state: TokenStateModel): string {
         return state.token;
@@ -39,26 +39,28 @@ export class TokenState {
         return state.token !== null && !jwtHelper.isTokenExpired(state.token);
     }
 
-    @Action(Login)
-    login({ patchState }: StateContext<TokenStateModel>) {
-        const token = localStorage.getItem('token');
-        if (token !== null) {
-            patchState({ token });
-            // return this.userService.fetchUser().pipe(tap((user: User) => {
-            //     patchState({ user });
-            // }));
-            return this.userService.login("s123456", "MyAwesomePassword").pipe(tap((user: any) => {
-                var userModel: User = {
-                    id: user.userId,
-                    name: user.fullName,
-                    studentId: user.userName,
-                    roles: ["student"],
-                    profile: user.profileImage
-                }
-                patchState({ user: userModel });
-            }));
-        } else {
-            this.authService.loginWithSso();
+    @Action(SetTokenAndUser)
+    setTokenAndUser({ setState }: StateContext<TokenStateModel>) {
+        const jwtHelper = new JwtHelperService();
+        let token = localStorage.getItem('token');
+
+        if (!token) {
+            return;
         }
+
+        if (token && jwtHelper.isTokenExpired(token)) {
+            setState({ user: null });
+        } else {
+            return this.userService.fetchUser().pipe(tap((user: User) => {
+                setState({ user: user, token: token });
+            }));
+        }
+    }
+
+    @Action(Login)
+    login({ patchState }: StateContext<TokenStateModel>, login: LoginModel) {
+        return this.userService.login(login).pipe(tap((auth: AuthenticatedModel) => {
+            patchState({ user: auth.user, token: auth.token });
+        }));
     }
 }

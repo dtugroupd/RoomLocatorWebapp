@@ -17,7 +17,7 @@
             <div class="link" *ngIf="!(isAuthenticated$ | async)">Not logged in</div>
         </nb-layout-column>
         <fa-icon class="burger-menu-button" [icon]="faBars" (click)="toggleMobileMenu()"></fa-icon>
-        <nb-user class="user" *ngIf="user$ | async" name="{{ (user$ | async).name }}" title="{{ (user$ | async).studentId }}" [picture]="base64Image" style="justify-content: flex-end;"></nb-user>
+        <nb-user class="user" *ngIf="user$ | async" name="{{ (user$ | async).fullName }}" title="{{ (user$ | async).studentId }}" [picture]="base64Image" style="justify-content: flex-end;"></nb-user>
     </nb-layout-header>
 
     <nb-layout-column (click)="hideMobileMenu()">
@@ -31,7 +31,8 @@
                 </div>
             </div>
         </div>
-        <router-outlet></router-outlet>
+        <app-login *ngIf="!(isAuthenticated$ | async)"></app-login>
+        <router-outlet *ngIf="(isAuthenticated$ | async)"></router-outlet>
     </nb-layout-column>
     <nb-layout-footer fixed>
         <!-- Insert footer here -->

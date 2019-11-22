@@ -1,5 +1,6 @@
 /**
  * @author Thomas Lien Christensen, s165242
+ * @author Anders Wiberg Olsen, s165241
  */
 
 import { Component, OnInit } from '@angular/core';
@@ -85,7 +86,7 @@ export class AppComponent implements OnInit {
     this.store.dispatch(new GetSurveys());
     this.user$.subscribe(x => {
       if (x) {
-        this.base64Image = `data:image/png;base64,${x.profile}`;
+        this.base64Image = `data:image/png;base64,${x.profileImage}`;
       }
     });
 

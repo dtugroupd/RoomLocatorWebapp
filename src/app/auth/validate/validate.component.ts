@@ -8,7 +8,6 @@ import { environment } from 'src/environments/environment';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
-import { Token } from 'src/app/models/login/user.model';
 import { Router} from "@angular/router"
 
 
@@ -21,7 +20,7 @@ export class ValidateComponent implements OnInit, OnDestroy {
   apiUrl: string;
   prod: boolean;
 
-  token: Token;
+  token: string;
   jwt: any;
 
   subscriptions: Subscription;
@@ -34,12 +33,12 @@ export class ValidateComponent implements OnInit, OnDestroy {
       this.route.queryParams.subscribe(params => {
         this.token = JSON.parse(atob(params['token']));
 
-        this.jwt = JSON.parse(atob(this.token.token.split('.')[1]));
+        this.jwt = JSON.parse(atob(this.token.split('.')[1]));
       }));
   }
 
   ngOnInit() {
-    localStorage.setItem("token", this.token.token);
+    localStorage.setItem("token", this.token);
     this.router.navigate(["/"]);
   }
 
