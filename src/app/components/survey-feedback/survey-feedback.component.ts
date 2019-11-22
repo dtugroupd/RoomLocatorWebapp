@@ -58,13 +58,6 @@ export class SurveyFeedbackComponent implements OnInit {
       return;
     }
 
-    // this.service.postSurveyAnswer(this.answer).subscribe(
-    //   res => {
-    //     this.dialogRef.close({ submit: true });
-    //     this.store.dispatch(new AddSurveyAnswer(res));
-    //   },
-    //   error => this.dialogRef.close({ submit: false, error: true }));
-
     this.store.dispatch(new AddSurveyAnswer(this.answer));
   }
 

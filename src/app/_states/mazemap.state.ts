@@ -14,7 +14,6 @@ import { tap } from 'rxjs/operators';
 import { SurveyService } from '../_services/survey.service';
 import { Survey } from '../models/survey/survey.model';
 import { patch, updateItem, append } from '@ngxs/store/operators';
-import { dispatch } from 'rxjs/internal/observable/range';
 
 export class MazemapStateModel {
     librarySections: LibrarySection[];
