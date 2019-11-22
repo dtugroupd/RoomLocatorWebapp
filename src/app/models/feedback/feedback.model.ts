@@ -1,7 +1,9 @@
 
 export interface Feedback {
 
-    upVotedFeedback: boolean;
-    downVotedFeedback:boolean;   
+    // upVotedFeedback: boolean;
+    // downVotedFeedback:boolean;   
+
+    vote: boolean;
 }
 

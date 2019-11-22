@@ -9,16 +9,14 @@ import { AddUpvote, AddDownvote} from '../_actions/feedback.action';
 
 
 export class FeedbackStateModel {
-  
-  thumps:Feedback[]
-  selectedFeedback: Feedback;
+//   thumps:Feedback[]
+  feedback: Feedback
 } 
 
  @State<FeedbackStateModel>({
   name: 'Feedback',
   defaults: {   
-    thumps:[],
-    selectedFeedback: null
+    feedback: null
   }
 }) 
 
@@ -28,31 +26,29 @@ export class FeedbackState {
   
 
   @Selector()
-  static getSelectedFeedback(state: FeedbackStateModel) {
-      return state.selectedFeedback;
+  static getVote(state: FeedbackStateModel) {
+      return state.feedback.vote;
   }
 
 
   @Action(AddUpvote)
-  upvotedAction({getState, setState}: StateContext<FeedbackStateModel>, {upVotedFeedback}: AddUpvote) {
-      return this.feedbackService.addUpvote(upVotedFeedback).pipe(tap(() => {
+  upvotedAction({getState, patchState}: StateContext<FeedbackStateModel>) {
+      return this.feedbackService.addUpvote(true).pipe(tap(() => {
           const state = getState();
-          const filteredArray = state.thumps.filter(item => item.upVotedFeedback !== upVotedFeedback);
-          setState({
-              ...state,
-              thumps: filteredArray,
+        //   const filteredArray = state.thumps.filter(item => item.upVotedFeedback !== upVotedFeedback);
+          patchState({
+              feedback: state.feedback.vote ? { vote: null } : { vote: true }
           });
       }));
   }
 
   @Action(AddDownvote)
-  downvotedAction({getState, setState}: StateContext<FeedbackStateModel>, {downVotedFeedback}: AddDownvote) {
-      return this.feedbackService.addUpvote(downVotedFeedback).pipe(tap(() => {
+  downvotedAction({getState, setState}: StateContext<FeedbackStateModel>) {
+      return this.feedbackService.addUpvote(false).pipe(tap(() => {
           const state = getState();
-          const filteredArray = state.thumps.filter(item => item.downVotedFeedback !== downVotedFeedback);
+        //   const filteredArray = state.thumps.filter(item => item.downVotedFeedback !== downVotedFeedback);
           setState({
-              ...state,
-              thumps: filteredArray,
+              feedback: state.feedback.vote ? { vote: false } : { vote: null }, 
           });
       }));
   }

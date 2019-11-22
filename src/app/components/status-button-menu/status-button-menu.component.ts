@@ -23,45 +23,22 @@ export class StatusButtonMenuComponent implements OnInit {
   thumbsDown = thumbsDown;
   thumbsUpPressed = thumbsUpPressed;
   thumbsDownPressed = thumbsDownPressed;
-  upVoted = false;
-  downVoted = false;
+  vote = null;
 
-  @Select(FeedbackState.getSelectedFeedback) selectedFeedback: Observable<Feedback>;
-  constructor(private store: Store, private route: ActivatedRoute, private router: Router) { 
-    this.initVote;
-  }
+  @Select(FeedbackState.getVote) currentVote: Observable<Feedback>;
+  constructor(private store: Store, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
-  }
-
-  initVote(){
-
-    this.upVoted;
-    this.downVoted;
+    this.currentVote.subscribe(x => {
+      this.vote = x;
+    })
   }
 
   upVote() {
-    if (this.downVoted === true) {
-      this.downVoted = false;
-    }
-
-    else {
-      this.store.dispatch(new AddUpvote(this.upVoted));
-      this.upVoted = !this.upVoted;
-}
-
-    
+    this.store.dispatch(new AddUpvote());
   }
 
   downVote() {
-    if (this.upVoted === true) {
-      this.upVoted = false;
-    }
-
-    else {
-      this.store.dispatch(new AddDownvote(this.downVoted));
-      this.downVoted = !this.upVoted;
-}
-  
+    this.store.dispatch(new AddDownvote());
   }
 }
