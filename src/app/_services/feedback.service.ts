@@ -14,12 +14,12 @@ import { BaseService } from './base.service';
 })
 export class FeedbackService extends BaseService {
 
-  addUpvote(upVotedFeedback: boolean) {
-    return this.http.post<Feedback>('https://jsonplaceholder.typicode.com/', upVotedFeedback);
+ addUpvote(upVotedFeedback: boolean) {
+    return this.http.post<Feedback>(`${this.backendBaseUrl}/api/v1/feedback/create`, upVotedFeedback);
 }
 
  addDownvote(downVotedFeedback: boolean) {
-  return this.http.post<Feedback>('https://jsonplaceholder.typicode.com/', downVotedFeedback);
+  return this.http.post<Feedback>(`${this.backendBaseUrl}/api/v1/feedback/create`, downVotedFeedback);
 }
 
   }

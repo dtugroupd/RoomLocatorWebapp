@@ -54,8 +54,8 @@ export class StatusButtonMenuComponent implements OnInit {
   }
 
   downVote() {
-    if (this.downVoted === true) {
-      this.downVoted = false;
+    if (this.upVoted === true) {
+      this.upVoted = false;
     }
 
     else {
