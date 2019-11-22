@@ -28,8 +28,7 @@ export class SurveyCreateComponent implements OnInit {
   questions: QuestionToCreate[];
   activeSection: LibrarySection;
 
-  constructor(private dialogRef: NbDialogRef<any>, private service: SurveyService,
-              private toastrService: NbToastrService, private store: Store, private action$: Actions) {
+  constructor(private dialogRef: NbDialogRef<any>, private toastrService: NbToastrService, private store: Store, private action$: Actions) {
     this.questions = [{text: ''}, {text: ''}];
    }
 

@@ -7,13 +7,14 @@ import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { LibrarySection } from '../models/mazemap/library-section.model';
 import {
     GetLibrarySections, SetActiveSection, SetActivateFeedbackAndStatus,
-    GetSurveys, AddSurveyAnswer, AddSurvey, AddSurveySuccess, AddSurveyError
+    GetSurveys, AddSurveyAnswer, AddSurvey, AddSurveySuccess, AddSurveyError, AddSurveyAnswerError, AddSurveyAnswerSuccess
 } from '../_actions/mazemap.actions';
 import { MazemapService } from '../_services/mazemap.service';
 import { tap } from 'rxjs/operators';
 import { SurveyService } from '../_services/survey.service';
 import { Survey } from '../models/survey/survey.model';
 import { patch, updateItem, append } from '@ngxs/store/operators';
+import { dispatch } from 'rxjs/internal/observable/range';
 
 export class MazemapStateModel {
     librarySections: LibrarySection[];
@@ -123,15 +124,25 @@ export class MazemapState {
     }
 
     @Action(AddSurveyAnswer)
-    addSurveyAnswer({ setState }: StateContext<MazemapStateModel>, { payload }: AddSurveyAnswer) {
-        setState(
-            patch({
-                surveys: updateItem(
-                    x => x.id === payload.surveyId,
-                    patch({
-                        surveyAnswers: append([payload])
-                    }))
-            })
+    addSurveyAnswer({ setState, dispatch }: StateContext<MazemapStateModel>, { payload }: AddSurveyAnswer) {
+        return this.surveyService.createSurveyAnswer(payload).subscribe(
+            res => {
+                if (res) {
+                    setState(
+                        patch({
+                            surveys: updateItem(
+                                x => x.id === res.surveyId,
+                                patch({
+                                    surveyAnswers: append([res])
+                                }))
+                        })
+                    );
+                }
+                dispatch(new AddSurveyAnswerSuccess());
+            },
+            () => {
+                dispatch(new AddSurveyAnswerError());
+            }
         );
     }
 }

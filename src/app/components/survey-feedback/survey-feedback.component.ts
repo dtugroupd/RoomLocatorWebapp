@@ -8,8 +8,8 @@ import { Survey } from 'src/app/models/survey/survey.model';
 import { QuestionAnswerSubmition } from 'src/app/models/question/question-answer-submition.model';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
 import { SurveyService } from '../../_services/survey.service';
-import { Store } from '@ngxs/store';
-import { AddSurveyAnswer } from 'src/app/_actions/mazemap.actions';
+import { Store, Actions, ofActionDispatched } from '@ngxs/store';
+import { AddSurveyAnswer, AddSurveyAnswerSuccess, AddSurveyAnswerError } from 'src/app/_actions/mazemap.actions';
 
 @Component({
   selector: 'app-survey-feedback',
@@ -24,7 +24,7 @@ export class SurveyFeedbackComponent implements OnInit {
   comment: string;
 
   constructor(protected dialogRef: NbDialogRef<any>, private service: SurveyService, private toastrService: NbToastrService,
-              private store: Store) { }
+              private store: Store, private action$: Actions) { }
 
   ngOnInit() {
     const qAnswers: QuestionAnswerSubmition[] = [];
@@ -34,6 +34,14 @@ export class SurveyFeedbackComponent implements OnInit {
     });
 
     this.answer = { surveyId: this.survey.id, comment: this.comment, questionAnswers: qAnswers };
+
+    this.action$.pipe(ofActionDispatched(AddSurveyAnswerSuccess)).subscribe(() => {
+      this.dialogRef.close({ submit: true });
+    });
+
+    this.action$.pipe(ofActionDispatched(AddSurveyAnswerError)).subscribe(() => {
+      this.dialogRef.close({ submit: false, error: true });
+    });
   }
 
   close() {
@@ -50,12 +58,14 @@ export class SurveyFeedbackComponent implements OnInit {
       return;
     }
 
-    this.service.postSurveyAnswer(this.answer).subscribe(
-      res => {
-        this.dialogRef.close({ submit: true });
-        this.store.dispatch(new AddSurveyAnswer(res));
-      },
-      error => this.dialogRef.close({ submit: false, error: true }));
+    // this.service.postSurveyAnswer(this.answer).subscribe(
+    //   res => {
+    //     this.dialogRef.close({ submit: true });
+    //     this.store.dispatch(new AddSurveyAnswer(res));
+    //   },
+    //   error => this.dialogRef.close({ submit: false, error: true }));
+
+    this.store.dispatch(new AddSurveyAnswer(this.answer));
   }
 
   showWarningToast(position, status) {

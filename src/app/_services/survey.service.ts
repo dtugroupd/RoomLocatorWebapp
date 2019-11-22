@@ -23,7 +23,7 @@ export class SurveyService extends BaseService {
     super(http);
   }
 
-  postSurveyAnswer(answer: SurveyAnswerSubmition): Observable<SurveyAnswer> {
+  createSurveyAnswer(answer: SurveyAnswerSubmition): Observable<SurveyAnswer> {
     const options = {
         headers: new HttpHeaders({
             'Content-Type':  'application/json',
