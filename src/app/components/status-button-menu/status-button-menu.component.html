@@ -8,9 +8,9 @@
             Been here recently? How did you like it?
         </p>
         <div ngClass="thumbs">
-            <fa-icon *ngIf="vote === true || vote === null" [icon]="thumbsDown" [className]="'thumb-inactive'" (click)="downVote()"></fa-icon>
+            <fa-icon *ngIf="vote === true || vote === null || vote === undefined" [icon]="thumbsDown" [className]="'thumb-inactive'" (click)="downVote()"></fa-icon>
             <fa-icon *ngIf="vote === false" [icon]="thumbsDownPressed" [className]="'thumb-active'" (click)="downVote()"></fa-icon>
-            <fa-icon *ngIf="vote === false || vote === null" [icon]="thumbsUp" [className]="'thumb-inactive'" (click)="upVote()"></fa-icon>
+            <fa-icon *ngIf="vote === false || vote === null || vote === undefined" [icon]="thumbsUp" [className]="'thumb-inactive'" (click)="upVote()"></fa-icon>
             <fa-icon *ngIf="vote === true" [icon]="thumbsUpPressed" [className]="'thumb-active'" (click)="upVote()"></fa-icon>
         </div>
     </nb-card-body>
