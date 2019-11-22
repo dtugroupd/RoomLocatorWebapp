@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ValidateComponent } from './auth/validate/validate.component';
 import { MazemapComponent } from './components/mazemap/mazemap.component';
 import { EventCalendarComponent } from './components/event-calendar/event-calendar.component';
+import { EventCreateComponent } from './components/event-create/event-create.component';
 import { SurveyManagementComponent } from './components/survey-management/survey-management.component';
 import { AuthRouteGuard } from './_services/_guards/auth-guard.service';
 import { AccessDeniedComponent } from './components/access_denied/access-denied/access-denied.component';
@@ -21,6 +22,11 @@ const routes: Routes = [
   {
     path: 'calendar',
     component: EventCalendarComponent,
+    canActivate: [AuthRouteGuard]
+  },
+  {
+    path: 'calendar-management',
+    component: EventCreateComponent,
     canActivate: [AuthRouteGuard]
   },
   {

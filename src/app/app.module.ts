@@ -7,7 +7,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
          NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
-         NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule, NbUserModule } from '@nebular/theme';
+         NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule, NbUserModule, NbDatepickerModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -33,6 +33,8 @@ import { TokenInterceptor } from './interceptors/tokenInterceptor';
 import { TokenState } from './_states/token.state';
 import { RouterModule, Routes } from '@angular/router';
 import { AccessDeniedComponent } from './components/access_denied/access-denied/access-denied.component';
+import { EventCreateComponent } from './components/event-create/event-create.component';
+import { EventState } from './_states/event.state';
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
 ];
@@ -51,6 +53,7 @@ const appRoutes: Routes = [
     StatusButtonMenuComponent,
     SurveyManagementComponent,
     AccessDeniedComponent,
+    EventCreateComponent,
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -74,6 +77,7 @@ const appRoutes: Routes = [
     NbLayoutModule,
     NbEvaIconsModule,
     NbButtonModule,
+    NbDatepickerModule.forRoot(),
     NbAccordionModule,
     NbActionsModule,
     NbCardModule,
@@ -90,6 +94,7 @@ const appRoutes: Routes = [
       MazemapState,
       SurveyState,
       TokenState,
+      EventState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),

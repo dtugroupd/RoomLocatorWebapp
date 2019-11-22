@@ -10,9 +10,8 @@
         
      
   
-   
-      
-        <nb-card class="eventCard">
+  
+        <nb-card *ngFor="let event of events$ | async"  class="eventCard">
             <nb-card-body>
                 <nb-accordion>
                     <nb-accordion-item >
@@ -23,7 +22,7 @@
                                 <fa-icon [icon]="faCalendarAltReg" [className]="'calendar'"></fa-icon>  
                               </th>
                               <th>
-                                  <h6>OCT 30</h6>
+                                  <h6>{{ event.date }}</h6>
                                   <h6>kl. 12:00</h6>
                               </th>
                               <th >
