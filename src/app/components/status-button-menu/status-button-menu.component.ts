@@ -59,8 +59,8 @@ export class StatusButtonMenuComponent implements OnInit {
     }
 
     else {
-      this.store.dispatch(new AddDownvote(this.upVoted));
-      this.upVoted = !this.upVoted;
+      this.store.dispatch(new AddDownvote(this.downVoted));
+      this.downVoted = !this.upVoted;
 }
   
   }
