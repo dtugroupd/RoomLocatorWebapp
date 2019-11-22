@@ -3,45 +3,39 @@
 -->
 <h1>Users</h1>
 <div class="container">
-  <p>Select the user you want to change the role for</p>
-  <input type="text" [(ngModel)]="searchText" placeholder="Search for an user">
-  <table mat-table [dataSource]="users" class="mat-elevation-z8">
-    <ng-container matColumnDef="userID">
-      <th class="header" mat-header-cell *matHeaderCellDef>
-        User ID
-        <mat-form-field class="filter" floatLabel="never">
-          <mat-label>Search by user ID</mat-label>
-          <input matInput [formControl]="idFilter">
-        </mat-form-field>
-      </th>
-      <th mat-header-cell *matHeaderCellDef> User ID</th>
-      <td mat-cell *matCellDef="let user"> {{user.studentId}} </td>
-    </ng-container>
-    <ng-container matColumnDef="userRole">
-      <th class="header" mat-header-cell *matHeaderCellDef>
-        User Role
-        <mat-form-field class="filter" floatLabel="never">
-          <mat-label>Search by user role</mat-label>
-          <input matInput [formControl]="roleFilter">
-        </mat-form-field>
-      </th>
-      <th mat-header-cell *matHeaderCellDef>User Role</th>
-      <td mat-cell *matCellDef="let user"> {{user.roles.join(", " )}} </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index" (click)="setClickedRow(i)"
-      [ngClass]="{ 'highlight': i == selectedRow }"></tr>
+        <p>Select the user you want to change the role for</p>
 
-  </table>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-  <p *ngIf="selectedRow > -1">Choose the new role</p>
-  <select [(ngModel)]="selectedRole" *ngIf="selectedRow > -1">
-    <option value="" disabled selected>Please Select</option>
-    <option *ngFor="let r of roles" [value]="r.name">
-      {{r.viewName}}
-    </option>
-  </select>
-  <button (click)="saveNewRole()" *ngIf="selectedRole != null">Save</button>
+                <ng-container matColumnDef="userID">
+                        <th class="header" mat-header-cell *matHeaderCellDef>
+                                User ID
+                        </th>
+                        <th mat-header-cell *matHeaderCellDef> User ID</th>
+                        <td mat-cell *matCellDef="let user"> {{user.studentId}} </td>
+                </ng-container>
+                <ng-container matColumnDef="userRole">
+                        <th class="header" mat-header-cell *matHeaderCellDef>
+                                User Role
+                        </th>
+                        <th mat-header-cell *matHeaderCellDef>User Role</th>
+                        <td mat-cell *matCellDef="let user"> {{user.roles.join(", " )}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index" (click)="setClickedRow(i)"
+                        [ngClass]="{ 'highlight': i == selectedRow }"></tr>
+
+        </table>
+
+        <p *ngIf="selectedRow > -1">Choose the new role</p>
+        <select [(ngModel)]="selectedRole" *ngIf="selectedRow > -1">
+                <option value="" disabled selected>Please Select</option>
+                <option *ngFor="let r of roles" [value]="r.name">
+                        {{r.viewName}}
+                </option>
+        </select>
+        <button (click)="saveNewRole()" *ngIf="selectedRole != null">Save</button>
 
 
 </div>

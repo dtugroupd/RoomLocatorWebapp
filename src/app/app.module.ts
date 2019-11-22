@@ -118,6 +118,8 @@ const appRoutes: Routes = [
   bootstrap: [AppComponent],
   exports: [
     SurveyCreateActionComponent,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class AppModule { }

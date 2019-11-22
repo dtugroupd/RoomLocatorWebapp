@@ -3,22 +3,25 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { Store, Actions } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { GetUsers, UpdateRole } from 'src/app/_actions/admin.actions';
 import { MatTableDataSource } from '@angular/material';
-import { FormControl } from '@angular/forms';
+import { User } from 'src/app/models/login/user.model';
 
-export interface Role {
+export interface Role
+{
   name: string;
   viewName: string;
 }
 
-@Component({
+
+@Component( {
   selector: 'app-admin-page',
   templateUrl: './admin-page.component.html',
-  styleUrls: ['./admin-page.component.scss']
-})
-export class AdminPageComponent implements OnInit {
+  styleUrls: [ './admin-page.component.scss' ]
+} )
+export class AdminPageComponent implements OnInit
+{
 
   users: any;
   selectedRow: number;
@@ -26,15 +29,7 @@ export class AdminPageComponent implements OnInit {
   selectedRole: string;
   selectedUserId: string;
   searchText;
-  dataSource = new MatTableDataSource();
-
-  roleFilter = new FormControl('');
-  idFilter = new FormControl('');
-
-  filterValues = {
-    role: '',
-    id: '',
-  };
+  dataSource: MatTableDataSource<User>;
 
   roles: Role[] = [
     { name: 'admin', viewName: 'Admin' },
@@ -42,53 +37,51 @@ export class AdminPageComponent implements OnInit {
     { name: 'student', viewName: 'Student' }
   ];
 
-  displayedColumns: string[] = ['userID', 'userRole'];
+  displayedColumns: string[] = [ 'userID', 'userRole' ];
 
-  constructor(private store: Store) { }
+  constructor ( private store: Store ) { }
 
-  ngOnInit() {
-    this.store.dispatch(new GetUsers()).subscribe(x => {
+  ngOnInit ()
+  {
+    this.store.dispatch( new GetUsers() ).subscribe( x =>
+    {
       this.users = x.users.users;
-      this.dataSource.data = this.users;
-      this.dataSource.filterPredicate = this.tableFilter();
+      this.dataSource = new MatTableDataSource( this.users );
+
+      this.dataSource.filterPredicate = ( item, filter: string ) =>
+      {
+        let exists = false;
+        item.roles.forEach(x => {
+          if (x.includes(filter)) {
+            exists = true;
+          }
+        });
+        if ( item.studentId.includes( filter) ) {
+          return true;
+        }
+        return exists;
+
+      }
+
+
     }
     );
 
-    this.setClickedRow = function (index) {
+    this.setClickedRow = function ( index )
+    {
       this.selectedRow = index;
     }
-
-    this.roleFilter.valueChanges
-      .subscribe(
-        role => {
-          console.log('role changed');
-          this.filterValues.role = role;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-        }
-      )
-    this.idFilter.valueChanges
-      .subscribe(
-        id => {
-          console.log('id changed');
-          this.filterValues.id = id;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-        }
-      )
   }
 
-  tableFilter(): (data: any, filter: string) => boolean {
-    let filterFunction = function(data, filter): boolean {
-      let searchTerms = JSON.parse(filter);
-      return data.role.indexOf(searchTerms.role) !== -1
-        && data.id.indexOf(searchTerms.id) !== -1
-    }
-    return filterFunction;
-  } 
+  applyFilter ( filterValue: string )
+  {
+    this.dataSource.filter = filterValue;
+  }
 
-
-  saveNewRole() {
-    this.selectedUserId = this.users[this.selectedRow].studentId;
-    this.store.dispatch(new UpdateRole(this.selectedUserId, this.selectedRole)).subscribe(() => { });
+  saveNewRole ()
+  {
+    this.selectedUserId = this.users[ this.selectedRow ].studentId;
+    this.store.dispatch( new UpdateRole( this.selectedUserId, this.selectedRole ) ).subscribe( () => { } );
 
 
   }
