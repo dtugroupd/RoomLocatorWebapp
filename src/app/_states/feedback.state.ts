@@ -3,11 +3,10 @@
  * @author Thomas Lien Christensen, s165242
  */
 
-import { State, Action, StateContext, Selector, Select } from '@ngxs/store';
-import { SurveyService } from '../_services/survey.service';
+import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { Feedback } from '../models/feedback/feedback.model';
 import { FeedbackService } from '../_services/feedback.service';
-import { AddUpvote, AddDownvote } from '../_actions/feedback.actions';
+import { AddFeedback, ChangeFeedback, GetCurrentFeedback } from '../_actions/feedback.actions';
 import { tap } from 'rxjs/operators';
 
 export class FeedbackStateModel {
@@ -17,7 +16,7 @@ export class FeedbackStateModel {
 @State<FeedbackStateModel>({
     name: 'Feedback',
     defaults: {
-        feedback: { vote: null },
+        feedback: null,
     }
 })
 
@@ -26,33 +25,36 @@ export class FeedbackState {
     constructor(private feedbackService: FeedbackService) { }
 
     @Selector()
-    static getVote(state: FeedbackStateModel) {
-        return state.feedback.vote;
+    static getFeedback(state: FeedbackStateModel) {
+        return state.feedback;
     }
 
-    @Action(AddUpvote)
-    addUpvote({ getState, setState }: StateContext<FeedbackStateModel>) {
-        // return this.feedbackService.addUpvote(true).pipe(tap(() => {
-            const state = getState();
+    @Action(AddFeedback)
+    addVote({ setState }: StateContext<FeedbackStateModel>, { payload }: AddFeedback) {
+        return this.feedbackService.addFeedback(payload).pipe(tap((result) => {
             setState({
-                feedback: state.feedback.vote ? { vote: null } : { vote: true }
+                feedback: result
             });
-        // }));
+        }));
     }
 
-    @Action(AddDownvote)
-    addDownvote({ getState, setState }: StateContext<FeedbackStateModel>) {
-        // return this.feedbackService.addUpvote(false).pipe(tap(() => {
+    @Action(GetCurrentFeedback)
+    getCurrentFeedback({ setState }: StateContext<FeedbackStateModel>, { payload }: GetCurrentFeedback) {
+        return this.feedbackService.getCurrentFeedback(payload).pipe(tap((result) => {
+            setState({
+                feedback: result
+            });
+        }));
+    }
+
+    @Action(ChangeFeedback)
+    changeFeedback({ getState, setState }: StateContext<FeedbackStateModel>, { payload }: ChangeFeedback) {
         const state = getState();
-        const isNull = getState().feedback.vote === null;
-        setState({
-            feedback:
-                isNull ?
-                    { vote: false } :
-                    state.feedback.vote ?
-                        { vote: false } :
-                        { vote: null },
-        });
-        // }));
+        const feedbackToUpdate = { id: state.feedback.id, vote: payload };
+        return this.feedbackService.changeFeedback(feedbackToUpdate).pipe(tap((result) => {
+            setState({
+                feedback: result
+            });
+        }));
     }
 }

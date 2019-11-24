@@ -17,6 +17,7 @@ import { AuthService } from './_services/auth.service';
 import { map, tap } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { GetCurrentFeedback } from './_actions/feedback.actions';
 
 @Component({
   selector: 'app-root',
@@ -78,6 +79,12 @@ export class AppComponent implements OnInit {
     this.authService.authenticate();
     this.activeSection$.subscribe(x => {
       this.activeSection = x;
+    });
+
+    this.user$.subscribe(x => {
+      if (x) {
+        this.store.dispatch(new GetCurrentFeedback(x.id));
+      }
     });
 
     this.store.dispatch(new GetSurveys());

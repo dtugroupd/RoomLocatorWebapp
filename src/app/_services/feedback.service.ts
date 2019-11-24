@@ -1,10 +1,11 @@
 /**
  * @author Hamed kadkhodaie, s083485
+ * @author Thomas Lien Christensen, s165242
  */
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Feedback} from '../models/feedback/feedback.model';
+import { Feedback, FeedbackToCreate, FeedbackToUpdate } from '../models/feedback/feedback.model';
 import { BaseService } from './base.service';
 
 
@@ -17,13 +18,16 @@ export class FeedbackService extends BaseService {
     super(http);
   }
 
- addUpvote(upVotedFeedback: boolean) {
-    return this.http.post<Feedback>(`${this.backendBaseUrl}/api/v1/feedback/create`, upVotedFeedback);
-}
+  addFeedback(feedback: FeedbackToCreate) {
+    return this.http.post<Feedback>(`${this.backendBaseUrl}/api/v1/feedback/create`, feedback);
+  }
 
- addDownvote(downVotedFeedback: boolean) {
-  return this.http.post<Feedback>(`${this.backendBaseUrl}/api/v1/feedback/create`, downVotedFeedback);
-}
+  changeFeedback(feedback: FeedbackToUpdate) {
+    return this.http.put<Feedback>(`${this.backendBaseUrl}/api/v1/feedback/update`, feedback);
+  }
 
+  getCurrentFeedback(userId: string) {
+    return this.http.get<Feedback>(`${this.backendBaseUrl}/api/v1/feedback/getCurrentUserFeedback`, { params: { userId } });
+  }
 }
 
