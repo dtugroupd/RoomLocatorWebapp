@@ -26,7 +26,6 @@ import { StatusButtonComponent } from './components/status-button/status-button.
 import { StatusButtonMenuComponent } from './components/status-button-menu/status-button-menu.component';
 import { FormsModule } from '@angular/forms';
 import { SurveyManagementComponent } from './components/survey-management/survey-management.component';
-import { SurveyState } from './_states/survey.state';
 import { AuthService } from './_services/auth.service';
 import { AuthRouteGuard as authRouteGuard } from './_services/_guards/auth-guard.service';
 import { TokenInterceptor } from './interceptors/tokenInterceptor';
@@ -89,7 +88,6 @@ const appRoutes: Routes = [
     NbToastrModule.forRoot(),
     NgxsModule.forRoot([
       MazemapState,
-      SurveyState,
       TokenState,
       FeedbackState
     ]),
