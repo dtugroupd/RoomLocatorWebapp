@@ -14,6 +14,8 @@ import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { SurveyService } from 'src/app/_services/survey.service';
 import { AddSurveySuccess } from 'src/app/_actions/mazemap.actions';
+import { NbDialogService } from '@nebular/theme';
+import { ShowFeedbackComponent } from '../showFeedback/show-feedback.component';
 
 @Component({
   selector: 'app-survey-management',
@@ -21,7 +23,7 @@ import { AddSurveySuccess } from 'src/app/_actions/mazemap.actions';
   styleUrls: ['./survey-management.component.scss']
 })
 export class SurveyManagementComponent implements OnInit {
-  constructor(private service: SurveyService, private action$: Actions) {}
+  constructor(private service: SurveyService, private action$: Actions, private dialogService: NbDialogService) {}
 
   surveys: Survey[];
   unsortedSurveys: Survey[];
@@ -83,5 +85,12 @@ export class SurveyManagementComponent implements OnInit {
 
   downloadFile(id: number) {
     this.service.downloadSurveyAnswers(id);
+  }
+
+  open() {
+    console.log('VIRKER');
+    // const surveyContext = { survey: this.activeSection.survey};
+    const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true  };
+    this.dialogService.open(ShowFeedbackComponent, {context: 'THIS IS A TEST'})
   }
 }

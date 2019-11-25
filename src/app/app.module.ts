@@ -32,6 +32,7 @@ import { TokenInterceptor } from './interceptors/tokenInterceptor';
 import { TokenState } from './_states/token.state';
 import { RouterModule, Routes } from '@angular/router';
 import { AccessDeniedComponent } from './components/access_denied/access-denied/access-denied.component';
+import { ShowFeedbackComponent } from './components/showFeedback/show-feedback.component';
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
 ];
@@ -47,6 +48,7 @@ const appRoutes: Routes = [
     EventCalendarComponent,
     SurveyFeedbackButtonComponent,
     StatusButtonComponent,
+    ShowFeedbackComponent,
     StatusButtonMenuComponent,
     SurveyManagementComponent,
     AccessDeniedComponent,
@@ -57,6 +59,7 @@ const appRoutes: Routes = [
     SurveyFeedbackSmileyRowComponent,
     SurveyFeedbackButtonComponent,
     SurveyCreateComponent,
+    ShowFeedbackComponent,
     MazemapComponent,
   ],
   imports: [
