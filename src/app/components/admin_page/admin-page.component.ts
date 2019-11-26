@@ -107,13 +107,14 @@ export class AdminPageComponent implements OnInit
 
   saveNewRole() {
     this.selectedUserId = this.users[ this.selectedRow ].studentId;
+    this.isShow = false;
     this.store.dispatch( new UpdateRole( this.selectedUserId, this.selectedRole ) );
   }
 
   confirmDeletion(u: User) {
 
     if (this.isShow) {
-    this.toggleDisplay();
+      this.toggleDisplay();
     }
 
     this.dialogService.open(UserDeleteComponent, {
@@ -122,5 +123,4 @@ export class AdminPageComponent implements OnInit
       data: {user: u}
     });
   }
-
 }
