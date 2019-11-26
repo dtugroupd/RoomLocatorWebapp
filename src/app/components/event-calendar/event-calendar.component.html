@@ -22,22 +22,22 @@
                                 <fa-icon [icon]="faCalendarAltReg" [className]="'calendar'"></fa-icon>  
                               </th>
                               <th>
-                                  <h6>{{ event.date }}</h6>
-                                  <h6>kl. 12:00</h6>
+                                  <h6>{{ moment(event.date).format('DD MMM') }} </h6>
+                                  <h6>kl. {{ moment(event.date).format('HH:mm') }}</h6>
                               </th>
                               <th >
-                                  <h6 style="font-weight: normal;">Hackathon i hovedbygningen med netcompany</h6>
+                                  <h6 style="font-weight: normal;">{{ event.title }}</h6>
                               </th>
                             </tr>
                           </table>
-                    </nb-accordion-item-header>
+                    </nb-accordion-item-header>.substr(5,5).replace('-','/')
                      <nb-accordion-item-body>
                        <table>
                         <tr>
-                          Jakob Thorsgård fortæller om cybersecurity og bruger hans egne erfaringer til at forklare udfordringerne fagfolk kæmper med.
+                          {{ event.description }}
                         </tr>
                         <tr>
-                          Varighed: ca 2 timer.
+                          Varighed: ca {{ event.durationInHours }} timer.
                         </tr>
                         </table>
                      </nb-accordion-item-body>

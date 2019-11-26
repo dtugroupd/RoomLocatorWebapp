@@ -10,6 +10,7 @@ import { EventState } from 'src/app/_states/event.state';
 import { Select, Store } from '@ngxs/store';
 import { GetEvents } from 'src/app/_actions/event.actions';
 import { Event } from '../../models/calendar/event.model'
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-event-calendar',
@@ -19,6 +20,7 @@ import { Event } from '../../models/calendar/event.model'
 })
 
 export class EventCalendarComponent {
+  moment = moment;
   faCalendarAltReg = faCalendarAltReg;
   events: Event[];
   constructor( private service: EventService, private store: Store) { }

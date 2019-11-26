@@ -1,9 +1,7 @@
-import { DateTime } from './date-time.model';
-
 export interface EventToCreate {
     title: string;
     description: string;
-    date: DateTime;
+    date: string;
     durationInHours: number;
     durationApproximated: boolean;
     speakers: string;

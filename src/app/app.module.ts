@@ -35,6 +35,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AccessDeniedComponent } from './components/access_denied/access-denied/access-denied.component';
 import { EventCreateComponent } from './components/event-create/event-create.component';
 import { EventState } from './_states/event.state';
+import * as moment from 'moment';
+
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
 ];

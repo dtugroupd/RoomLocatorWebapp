@@ -10,7 +10,7 @@
         <h6>Time</h6>
         <input nbInput fullWidth placeholder="Pick Date" [nbDatepicker]="formpicker" [(ngModel)]="date" #dateModel="ngModel" required>
         <nb-datepicker #formpicker></nb-datepicker>
-        <input type="time" nbInput fullWidth value="12:00" [(ngModel)]="time" #timeModel="ngModel" required>
+        <input type="time" nbInput fullWidth [(ngModel)]="time" #timeModel="ngModel" required>
         <input type="number" nbInput fullWidth placeholder="Duration (hours)" [(ngModel)]="duration" #durationModel="ngModel">
         <button nbButton outline (click)=submit()>Submit</button>
     </nb-card-body>

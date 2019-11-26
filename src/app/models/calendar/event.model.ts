@@ -1,6 +1,8 @@
+import { Moment } from 'moment';
+
 export interface Event {
     id: string;
-    date: string;
+    date: Moment;
     title: string;
     description: string;
     durationInHours: number;

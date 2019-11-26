@@ -5,6 +5,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
 import { EventService } from '../../_services/event.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-event-create',
@@ -19,6 +20,7 @@ export class EventCreateComponent {
   date:string;
   time:string;
   duration:number;
+  moment = moment;
 
   constructor( private service: EventService, private toastrService: NbToastrService) { }
 
@@ -27,12 +29,11 @@ export class EventCreateComponent {
       const eventToCreate = {
         title: this.title,
         description: this.description,
-        date: this.date,
+        date: moment(this.date).format('YYYY-MM-DD') + 'T' + this.time + ':00',
         durationInHours: this.duration,
         durationApproximated: false,
         speakers: this.speakers
       };
-
       this.service.createEvent(eventToCreate).subscribe(
 
       );
