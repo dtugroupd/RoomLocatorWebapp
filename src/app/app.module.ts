@@ -89,7 +89,6 @@ const appRoutes: Routes = [
     NbToastrModule.forRoot(),
     NgxsModule.forRoot([
       MazemapState,
-      SurveyState,
       TokenState,
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
