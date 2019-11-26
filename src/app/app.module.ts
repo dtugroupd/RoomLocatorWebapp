@@ -26,12 +26,12 @@ import { StatusButtonComponent } from './components/status-button/status-button.
 import { StatusButtonMenuComponent } from './components/status-button-menu/status-button-menu.component';
 import { FormsModule } from '@angular/forms';
 import { SurveyManagementComponent } from './components/survey-management/survey-management.component';
-import { AuthService } from './_services/auth.service';
 import { AuthRouteGuard as authRouteGuard } from './_services/_guards/auth-guard.service';
 import { TokenInterceptor } from './interceptors/tokenInterceptor';
 import { TokenState } from './_states/token.state';
 import { RouterModule, Routes } from '@angular/router';
 import { AccessDeniedComponent } from './components/access_denied/access-denied/access-denied.component';
+import { LoginComponent } from './auth/login/login.component';
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
 ];
@@ -50,6 +50,7 @@ const appRoutes: Routes = [
     StatusButtonMenuComponent,
     SurveyManagementComponent,
     AccessDeniedComponent,
+    LoginComponent,
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -96,7 +97,7 @@ const appRoutes: Routes = [
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true,
-  }, DynamicComponentService, AuthService, authRouteGuard],
+  }, DynamicComponentService, authRouteGuard],
   bootstrap: [AppComponent],
   exports: [
     SurveyCreateActionComponent,

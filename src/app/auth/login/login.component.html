@@ -1,0 +1,24 @@
+<!-- Author: Anders Wiberg Olsen, s165241 -->
+<nb-card>
+    <nb-card-header>
+        DTU Login
+    </nb-card-header>
+    <form name="loginForm" #f="ngForm" (ngSubmit)="f.form.valid && onSubmit()">
+        <nb-card-body>
+            <div class="form-control">
+                <label for="username">DTU Username</label>
+                <input type="text" name="username" [(ngModel)]="username" nbInput required />
+            </div>
+
+            <br>
+
+            <div class="form-control">
+                <label for="password">DTU Password</label>
+                <input type="password" name="password" [(ngModel)]="password" nbInput required />
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+                <button ngButton outline type="submit">Sign In</button>
+        </nb-card-footer>
+    </form>
+</nb-card>
