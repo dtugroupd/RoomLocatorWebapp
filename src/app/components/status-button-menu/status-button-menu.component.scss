@@ -45,25 +45,24 @@
      padding-bottom: 0px !important;
 }
 
-.thumb-active {
-    color: #3366ff;
-}
-
-.thumb-inactive {
-    color: #ddd;
+.status-menu-body {
+    height: 50%;
 }
 
 .thumbs {
     display: flex;
-    justify-content: space-around;
+    justify-content: right;
     margin-top: 20px;
-    width: 25%;
-    font-size: 30px;
+    width: 100%;
+    font-size: 26px;
+}
+
+.thumbs fa-icon {
+    padding: 5px;
 }
 
 @media only screen and (min-width: 360px) {
     .thumbs {
-        width: 30%;
-        font-size: 38px;
+        width: 15%;
     }
 }
