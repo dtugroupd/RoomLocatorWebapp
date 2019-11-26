@@ -18,9 +18,12 @@ export class LoginComponent implements OnInit {
   constructor(private store: Store) { }
 
   ngOnInit() {
+    console.log('SIGN IN');
   }
 
   onSubmit() {
+    console.log('SIGN IN 2222');
+
     const login: LoginModel =
     {
       username: this.username,

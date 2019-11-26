@@ -37,7 +37,7 @@ export class AdminPageComponent implements OnInit
     { name: 'student', viewName: 'Student' }
   ];
 
-  displayedColumns: string[] = [ 'userID', 'userRole' ];
+  displayedColumns: string[] = [ 'userID', 'fullName', 'userRole' ];
 
   constructor ( private store: Store ) { }
 
