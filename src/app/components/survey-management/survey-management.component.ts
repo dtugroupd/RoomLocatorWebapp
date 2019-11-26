@@ -1,5 +1,6 @@
 /**
  * @author Thomas Lien Christensen, s165242
+ * added function: Amal Qasim, s132957
  */
 
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -23,13 +24,8 @@ import { ShowFeedbackComponent } from '../showFeedback/show-feedback.component';
   templateUrl: './survey-management.component.html',
   styleUrls: ['./survey-management.component.scss']
 })
-// export class NgbdModalContent {
-//   @Input() name;
-
-//   constructor(public activeModal: NgbActiveModal) {}
-// }
 export class SurveyManagementComponent implements OnInit {
-  constructor(private service: SurveyService, private action$: Actions, private dialogService: NbDialogService, private modalService: NgbModal) {}
+  constructor(private service: SurveyService, private action$: Actions, private dialogService: NbDialogService) {}
 
   surveys: Survey[];
   unsortedSurveys: Survey[];
@@ -93,12 +89,11 @@ export class SurveyManagementComponent implements OnInit {
     this.service.downloadSurveyAnswers(id);
   }
 
-  open() {
-    console.log('VIRKER');
-    // const surveyContext = { survey: this.activeSection.survey};
-    const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true  };
-    // const modalRef = this.modalService.open(NgbdModalContent);
+  open(survey: Survey) {
 
-    this.dialogService.open(ShowFeedbackComponent, {context: 'THIS IS A TEST'})
+    const surveyContext = {survey};
+    const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true, context: surveyContext };
+
+    this.dialogService.open(ShowFeedbackComponent, settings);
   }
 }
