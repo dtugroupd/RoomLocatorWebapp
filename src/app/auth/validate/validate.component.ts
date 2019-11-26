@@ -1,8 +1,3 @@
-/**
- * @author Anders Wiberg Olsen, s165241
- * @author Hadi Horani, s144885
- */
-
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute } from '@angular/router';
@@ -12,6 +7,7 @@ import { Router} from "@angular/router"
 
 /**
  * @author Anders Wiberg Olsen, s165241
+ * @author Hadi Horani, s144885
  */
 @Component({
   selector: 'app-validate',
