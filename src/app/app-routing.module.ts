@@ -26,7 +26,7 @@ const routes: Routes = [
   {
     path: 'survey-management',
     component: SurveyManagementComponent,
-    canActivate: [AuthRouteGuard],
+   // canActivate: [AuthRouteGuard],
     data: {
       expectedRoles: 'researcher'
     }

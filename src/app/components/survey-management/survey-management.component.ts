@@ -2,7 +2,8 @@
  * @author Thomas Lien Christensen, s165242
  */
 
-import { Component, OnInit } from '@angular/core';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, Input} from '@angular/core';
 import { Survey } from 'src/app/models/survey/survey.model';
 import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
 import { Select, Actions, ofActionDispatched } from '@ngxs/store';
@@ -22,8 +23,13 @@ import { ShowFeedbackComponent } from '../showFeedback/show-feedback.component';
   templateUrl: './survey-management.component.html',
   styleUrls: ['./survey-management.component.scss']
 })
+// export class NgbdModalContent {
+//   @Input() name;
+
+//   constructor(public activeModal: NgbActiveModal) {}
+// }
 export class SurveyManagementComponent implements OnInit {
-  constructor(private service: SurveyService, private action$: Actions, private dialogService: NbDialogService) {}
+  constructor(private service: SurveyService, private action$: Actions, private dialogService: NbDialogService, private modalService: NgbModal) {}
 
   surveys: Survey[];
   unsortedSurveys: Survey[];
@@ -91,6 +97,8 @@ export class SurveyManagementComponent implements OnInit {
     console.log('VIRKER');
     // const surveyContext = { survey: this.activeSection.survey};
     const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true  };
+    // const modalRef = this.modalService.open(NgbdModalContent);
+
     this.dialogService.open(ShowFeedbackComponent, {context: 'THIS IS A TEST'})
   }
 }
