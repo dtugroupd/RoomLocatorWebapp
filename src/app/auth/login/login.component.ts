@@ -3,6 +3,9 @@ import { Store } from '@ngxs/store';
 import { Login } from 'src/app/_actions/token.actions';
 import { LoginModel } from 'src/app/models/login/user.model';
 
+/**
+ * @author Anders Wiberg Olsen, s165241
+ */
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

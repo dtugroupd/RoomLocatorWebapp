@@ -10,7 +10,9 @@ import { Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { Router} from "@angular/router"
 
-
+/**
+ * @author Anders Wiberg Olsen, s165241
+ */
 @Component({
   selector: 'app-validate',
   template: '',
