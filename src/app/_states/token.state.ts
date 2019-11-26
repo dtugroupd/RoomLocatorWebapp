@@ -4,11 +4,11 @@
  */
 
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { Login } from '../_actions/token.actions';
+import { Login, SetTokenAndUser } from '../_actions/token.actions';
 import { UserService } from '../_services/user.service';
-import { User } from '../models/login/user.model';
+import { User, LoginModel, AuthenticatedModel } from '../models/login/user.model';
 import { tap } from 'rxjs/operators';
-import { AuthService } from '../_services/auth.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 export class TokenStateModel {
     token?: string;
@@ -19,8 +19,8 @@ export class TokenStateModel {
     name: 'token'
 })
 export class TokenState {
-    constructor(private userService: UserService, private authService: AuthService) {}
-    
+    constructor(private userService: UserService) { }
+
     @Selector()
     static getToken(state: TokenStateModel): string {
         return state.token;
@@ -31,16 +31,35 @@ export class TokenState {
         return state.user;
     }
 
-    @Action(Login)
-    login({ patchState }: StateContext<TokenStateModel>) {
-        const token = localStorage.getItem('token');
-        if (token !== null) {
-            patchState({ token });
-            return this.userService.fetchUser().pipe(tap((user: User) => {
-                patchState({ user });
-            }));
-        } else {
-            this.authService.loginWithSso();
+    @Selector()
+    static isAuthenticated(state: TokenStateModel): boolean {
+        const jwtHelper = new JwtHelperService();
+
+        return state.token !== null && !jwtHelper.isTokenExpired(state.token);
+    }
+
+    @Action(SetTokenAndUser)
+    setTokenAndUser({ setState }: StateContext<TokenStateModel>) {
+        const jwtHelper = new JwtHelperService();
+        let token = localStorage.getItem('token');
+
+        if (!token) {
+            return;
         }
+
+        if (token && jwtHelper.isTokenExpired(token)) {
+            setState({ user: null });
+        } else {
+            return this.userService.fetchUser().pipe(tap((user: User) => {
+                setState({ user: user, token: token });
+            }));
+        }
+    }
+
+    @Action(Login)
+    login({ patchState }: StateContext<TokenStateModel>, login: LoginModel) {
+        return this.userService.login(login).pipe(tap((auth: AuthenticatedModel) => {
+            patchState({ user: auth.user, token: auth.token });
+        }));
     }
 }

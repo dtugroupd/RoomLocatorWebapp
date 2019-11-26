@@ -1,13 +1,13 @@
 /**
  * @author Hadi Horani, s144885
+ * @author Anders Wiberg Olsen, s165241
  */
 
-import { User, Token } from '../models/login/user.model';
 
 export class SetToken {
     static readonly type = '[Token] Set';
 
-    constructor(public payload: Token) {}
+    constructor(public payload: string) {}
 }
 
 export class GetUser {

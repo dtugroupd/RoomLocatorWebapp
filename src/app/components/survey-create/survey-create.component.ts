@@ -2,14 +2,14 @@
  * @author Thomas Lien Christensen, s165242
  */
 
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { QuestionToCreate } from 'src/app/models/question/question-to-create.model';
 import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
-import { SurveyService } from '../../_services/survey.service';
 import { MazemapState } from '../../_states/mazemap.state';
 import { Observable } from 'rxjs';
-import { Select } from '@ngxs/store';
+import { Select, Store, Actions, ofActionDispatched } from '@ngxs/store';
+import { AddSurvey, AddSurveySuccess, AddSurveyError } from 'src/app/_actions/mazemap.actions';
 
 @Component({
   selector: 'app-survey-create',
@@ -27,13 +27,21 @@ export class SurveyCreateComponent implements OnInit {
   questions: QuestionToCreate[];
   activeSection: LibrarySection;
 
-  constructor(private dialogRef: NbDialogRef<any>, private service: SurveyService, private toastrService: NbToastrService) {
+  constructor(private dialogRef: NbDialogRef<any>, private toastrService: NbToastrService, private store: Store, private action$: Actions) {
     this.questions = [{text: ''}, {text: ''}];
    }
 
   ngOnInit() {
     this.activeSection$.subscribe(x => {
       this.activeSection = x;
+    });
+
+    this.action$.pipe(ofActionDispatched(AddSurveySuccess)).subscribe(() => {
+      this.dialogRef.close({ submit: true, sectionId: this.activeSection.id });
+    });
+
+    this.action$.pipe(ofActionDispatched(AddSurveyError)).subscribe(() => {
+      this.dialogRef.close({ submit: false, error: true });
     });
   }
 
@@ -58,18 +66,13 @@ export class SurveyCreateComponent implements OnInit {
     }
 
     if (emptyQuestions.length !== this.questions.length) {
-
       const survey = {
         sectionId: this.activeSection.id,
         title: this.title,
         description: this.description,
         questions: this.questions
       };
-
-      this.service.createSurvey(survey).subscribe(
-        res => this.dialogRef.close({ submit: true, sectionId: this.activeSection.id }),
-        error => this.dialogRef.close({ submit: false, error: true })
-      );
+      this.store.dispatch(new AddSurvey(survey));
     } else {
       this.showWarningToast('top-right', 'warning', `Can't submit an empty survey`);
       return;

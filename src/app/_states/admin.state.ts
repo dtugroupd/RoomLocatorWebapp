@@ -3,14 +3,10 @@
  */
 
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { Login } from '../_actions/token.actions';
-import { UserService } from '../_services/user.service';
 import { User } from '../models/login/user.model';
 import { tap } from 'rxjs/operators';
-import { AuthService } from '../_services/auth.service';
 import { GetUsers, UpdateRole } from '../_actions/admin.actions';
 import { AdminService } from '../_services/admin.service';
-import { state } from '@angular/animations';
 
 export class AdminStateModel
 {

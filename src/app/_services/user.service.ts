@@ -1,11 +1,12 @@
 /**
  * @author Hadi Horani, s144885
+ * @author Anders Wiberg Olsen, s165241
  */
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base.service';
-import { User } from '../models/login/user.model';
+import { User, AuthenticatedModel, LoginModel } from '../models/login/user.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -21,4 +22,7 @@ export class UserService extends BaseService {
     return this.http.get<User>(`${this.backendBaseUrl}/api/v1/user/me`);
   }
 
+  login(loginModel: LoginModel): Observable<AuthenticatedModel> {
+    return this.http.post<AuthenticatedModel>(`${this.backendBaseUrl}/api/v1/auth/login`, loginModel);
+  }
 }

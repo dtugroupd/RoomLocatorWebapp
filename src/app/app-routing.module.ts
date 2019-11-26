@@ -5,8 +5,9 @@ import { MazemapComponent } from './components/mazemap/mazemap.component';
 import { EventCalendarComponent } from './components/event-calendar/event-calendar.component';
 import { SurveyManagementComponent } from './components/survey-management/survey-management.component';
 import { AuthRouteGuard } from './_services/_guards/auth-guard.service';
-import { AccessDeniedComponent } from './components/access_denied/access-denied/access-denied.component';
+import { AccessDeniedComponent } from './components/access_denied/access-denied.component';
 import { AdminPageComponent } from './components/admin_page/admin-page.component';
+import { LoginComponent } from './components/login/login.component';
 
 
 const routes: Routes = [
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'admin',
     component: AdminPageComponent,
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
   },
   {
     path: 'calendar',
@@ -40,7 +45,7 @@ const routes: Routes = [
     path: 'access-denied',
     component: AccessDeniedComponent,
   },
-  
+
 ]
 
 @NgModule({
