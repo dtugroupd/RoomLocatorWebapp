@@ -27,7 +27,6 @@ import { StatusButtonMenuComponent } from './components/status-button-menu/statu
 import { FormsModule } from '@angular/forms';
 import { SurveyManagementComponent } from './components/survey-management/survey-management.component';
 import { SurveyState } from './_states/survey.state';
-import { AuthService } from './_services/auth.service';
 import { AuthRouteGuard as authRouteGuard } from './_services/_guards/auth-guard.service';
 import { TokenInterceptor } from './interceptors/tokenInterceptor';
 import { TokenState } from './_states/token.state';
@@ -100,7 +99,7 @@ const appRoutes: Routes = [
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true,
-  }, DynamicComponentService, AuthService, authRouteGuard],
+  }, DynamicComponentService, authRouteGuard],
   bootstrap: [AppComponent],
   exports: [
     SurveyCreateActionComponent,

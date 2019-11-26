@@ -14,7 +14,6 @@ import { LibrarySection } from './models/mazemap/library-section.model';
 import { NbMenuItem, NbThemeService } from '@nebular/theme';
 import { TokenState } from './_states/token.state';
 import { User } from './models/login/user.model';
-import { AuthService } from './_services/auth.service';
 import { map, tap } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -54,7 +53,7 @@ export class AppComponent implements OnInit {
   @Select(TokenState.getUser) user$: Observable<User>;
   @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
 
-  constructor(private store: Store, private router: Router, private themeService: NbThemeService, private authService: AuthService) {
+  constructor(private store: Store, private router: Router, private themeService: NbThemeService) {
     // this.themeService.changeTheme('cosmic')
   }
 
@@ -78,7 +77,6 @@ export class AppComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.authService.authenticate();
     this.activeSection$.subscribe(x => {
       this.activeSection = x;
     });

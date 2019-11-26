@@ -8,7 +8,6 @@ import { Login, SetTokenAndUser } from '../_actions/token.actions';
 import { UserService } from '../_services/login.service';
 import { User, LoginModel, AuthenticatedModel } from '../models/login/user.model';
 import { tap } from 'rxjs/operators';
-import { AuthService } from '../_services/auth.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 export class TokenStateModel {
@@ -20,7 +19,7 @@ export class TokenStateModel {
     name: 'token'
 })
 export class TokenState {
-    constructor(private userService: UserService, private authService: AuthService) { }
+    constructor(private userService: UserService) { }
 
     @Selector()
     static getToken(state: TokenStateModel): string {
