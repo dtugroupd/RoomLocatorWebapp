@@ -1,6 +1,22 @@
 import { SurveyToCreate } from '../models/survey/survey-to-create.model';
 import { SurveyAnswerSubmition } from '../models/survey/survey-answer-submition.model';
 
+export class GetLocations {
+    static readonly type = '[Locations] Get';
+}
+
+export class SetActiveLocation {
+    static readonly type = '[ActiveLocation] Set';
+    constructor(public payload: string) { }
+}
+
+export class ToggleFlyToComplete {
+    static readonly type = '[FlyToComplete] Toggle';
+}
+export class ResetActiveLocation {
+    static readonly type = '[ActiveLocation] Reset';
+}
+
 export class GetLibrarySections {
     static readonly type = '[LibrarySection] Get';
 }

@@ -3,7 +3,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
+import { Section } from 'src/app/models/mazemap/section.model';
 import { NbDialogService, NbToastrService } from '@nebular/theme';
 import { SurveyFeedbackComponent } from '../survey-feedback/survey-feedback.component';
 import { Select, Store } from '@ngxs/store';
@@ -18,12 +18,12 @@ import { Observable } from 'rxjs';
 
 export class SurveyFeedbackButtonComponent implements OnInit {
 
-  activeSection: LibrarySection;
+  activeSection: Section;
   isExpanded = false;
   upVoted = false;
   downVoted = false;
 
-  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
+  @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
 
   constructor(private dialogService: NbDialogService, private toastrService: NbToastrService) { }
 

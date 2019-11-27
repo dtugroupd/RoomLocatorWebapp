@@ -4,7 +4,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Survey } from 'src/app/models/survey/survey.model';
-import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
+import { Section } from 'src/app/models/mazemap/section.model';
 import { Select, Actions, ofActionDispatched } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { MazemapState } from '../../_states/mazemap.state';
@@ -25,7 +25,7 @@ export class SurveyManagementComponent implements OnInit {
 
   surveys: Survey[];
   unsortedSurveys: Survey[];
-  activeSection: LibrarySection;
+  activeSection: Section;
   faPlusSquare = faPlusSquare;
   faDownload = faDownload;
   faComments = faComments;
@@ -34,7 +34,7 @@ export class SurveyManagementComponent implements OnInit {
   activeStyle = {'background-color': '#ddd'};
 
   @Select(MazemapState.getSurveys) surveys$: Observable<Survey[]>;
-  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
+  @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
 
   ngOnInit() {
     this.surveys$.subscribe(x => {

@@ -1,7 +1,7 @@
 import { QuestionAnswerSubmition } from '../question/question-answer-submition.model';
 
 export interface SurveyAnswerSubmition {
-    surveyId: number;
+    surveyId: string;
     comment: string;
     questionAnswers: QuestionAnswerSubmition[];
 }

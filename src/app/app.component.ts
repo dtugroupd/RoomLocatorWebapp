@@ -5,11 +5,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Store, Select } from '@ngxs/store';
-import { SetActivateFeedbackAndStatus } from './_actions/mazemap.actions';
+import { SetActivateFeedbackAndStatus, GetLocations } from './_actions/mazemap.actions';
 import { MazemapState } from './_states/mazemap.state';
 import { Observable } from 'rxjs';
 import { GetSurveys } from './_actions/mazemap.actions';
-import { LibrarySection } from './models/mazemap/library-section.model';
+import { Section } from './models/mazemap/section.model';
 import { NbMenuItem, NbThemeService } from '@nebular/theme';
 import { TokenState } from './_states/token.state';
 import { User } from './models/login/user.model';
@@ -17,6 +17,7 @@ import { AuthService } from './_services/auth.service';
 import { map, tap } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { MapLocation } from './models/mazemap/map-location.model';
 
 @Component({
   selector: 'app-root',
@@ -39,16 +40,35 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
         animate('0.15s ease-in-out')
       ]),
     ]),
+    trigger('activeLocation', [
+      state('show', style({
+        height: '40px',
+        opacity: 1,
+      })),
+      state('hide', style({
+        height: '0px',
+        opacity: 0.0,
+      })),
+      transition('show => hide', [
+        animate('0.15s ease-in-out')
+      ]),
+      transition('hide => show', [
+        animate('0.15s ease-in-out')
+      ]),
+    ]),
   ]
 })
 
 export class AppComponent implements OnInit {
   title = 'RoomLocatorWebapp';
-  activeSection: LibrarySection;
+  activeSection: Section;
+  activeLocation: MapLocation = null;
   mobileMenuToggled = false;
+  isLocationActive = false;
   faBars = faBars;
 
-  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
+  @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
+  @Select(MazemapState.getActiveLocation) activeLocation$: Observable<MapLocation>;
   @Select(TokenState.getUser) user$: Observable<User>;
 
   constructor(private store: Store, private router: Router, private themeService: NbThemeService, private authService: AuthService) {
@@ -57,20 +77,20 @@ export class AppComponent implements OnInit {
 
   menuItems: NbMenuItem[] = [
     {
-      'title': 'Home',
-      'link': '/'
+      title: 'Home',
+      link: '/'
     },
     {
-      'title': 'Mazemap',
-      'link': '/mazemap'
+      title: 'Mazemap',
+      link: '/mazemap'
     },
     {
-      'title': 'Calendar',
-      'link': '/calendar',
+      title: 'Calendar',
+      link: '/calendar',
     },
     {
-      'title': 'Manage Surveys',
-      'link': '/survey-management'
+      title: 'Manage Surveys',
+      link: '/survey-management'
     }
   ];
 
@@ -79,7 +99,16 @@ export class AppComponent implements OnInit {
     this.activeSection$.subscribe(x => {
       this.activeSection = x;
     });
+    this.activeLocation$.subscribe(x => {
+      this.activeLocation = x;
+      if (this.activeLocation) {
+        this.isLocationActive = true;
+      } else {
+        this.isLocationActive = false;
+      }
+    });
 
+    this.store.dispatch(new GetLocations());
     this.store.dispatch(new GetSurveys());
 
     this.router.events.subscribe(x => {

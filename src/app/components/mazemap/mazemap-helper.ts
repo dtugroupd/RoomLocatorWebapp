@@ -1,8 +1,9 @@
-import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
+import { Section } from 'src/app/models/mazemap/section.model';
+import { MapLocation } from 'src/app/models/mazemap/map-location.model';
 
 // Convert sections from backend to layers readable by MazeMap
-export function convertLibrarySectionsToLayers(ls: Array<LibrarySection>) {
-    const librarySectionLayers = [];
+export function convertSectionsToLayers(ls: Array<Section>) {
+    const sectionLayers = [];
 
     ls.forEach(x => {
         const coordinates = x.coordinates.map(c => {
@@ -37,12 +38,60 @@ export function convertLibrarySectionsToLayers(ls: Array<LibrarySection>) {
         }
         };
 
-        librarySectionLayers.push(lsLayer);
+        sectionLayers.push(lsLayer);
     });
 
-    return librarySectionLayers;
+    return sectionLayers;
 }
 
+export function convertLocationsToLayers(ls: MapLocation[]) {
+
+      const locationLayers = [];
+
+      ls.forEach(x => {
+        const lsLayer = {
+          id: `${x.id}`,
+          name: `${x.name}`,
+          type: 'symbol',
+          source: {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              properties: {
+                description: '\n\n\n' + x.name,
+                id: x.id
+              },
+              geometry: {
+                type: 'Point',
+                coordinates: [x.longitude, x.latitude]
+              }
+            }
+          },
+          layout: {
+            visibility: 'visible',
+            'text-field': ['get', 'description'],
+            'text-justify': 'right',
+            'icon-image': getLocationIcon(x.name),
+            'icon-size': 1.5
+          },
+        };
+
+        locationLayers.push(lsLayer);
+      });
+
+      return locationLayers;
+}
+
+export function getLocationIcon(name: string) {
+  switch (name) {
+    case 'Bibliotek':
+      return 'library';
+    case 'Skylab':
+      return 'rocket';
+    default:
+      return 'marker';
+  }
+}
 export function getCenter(coordinates) {
     const pts = coordinates;
     const off = pts[0];
@@ -79,7 +128,7 @@ const latLng = coordinates.map(c => {
 return latLng;
 }
 
-export function getMarkerIconUrl(section: LibrarySection) {
+export function getMarkerIconUrl(section: Section) {
     let iconUrl: string;
 
     switch (section.type) {
@@ -111,6 +160,15 @@ export function getMarkerIconUrl(section: LibrarySection) {
     return iconUrl;
 }
 
+export function locationMarkerOptions() {
+  return {
+    default: {
+      color: 'MazeBlue',
+      size: 50,
+
+    }
+  };
+}
 export function layerMarkerOptions(layer) {
     return  {
         default:  {

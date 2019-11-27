@@ -14,6 +14,7 @@
             <div class="links">
                 <a *ngFor="let item of menuItems" routerLink="{{ item.link }}" [ngClass]="(userHasAccess(item.link) | async) ? '' : 'hide'">{{ item.title }}</a>
             </div>
+            <div class="location-info" [@activeLocation]="isLocationActive ? 'show' : 'hide'">{{ (activeLocation$ | async)?.name }}</div>
         </nb-layout-column>
         <fa-icon class="burger-menu-button" [icon]="faBars" (click)="toggleMobileMenu()"></fa-icon>
         <nb-user class="user" *ngIf="user$ | async" name="{{ (user$ | async).studentId }}" style="justify-content: flex-end;"></nb-user>

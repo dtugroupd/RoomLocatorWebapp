@@ -3,13 +3,20 @@
  */
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
+import { Section } from 'src/app/models/mazemap/section.model';
 import { Store, Select } from '@ngxs/store';
-import { GetLibrarySections, SetActiveSection, SetActivateFeedbackAndStatus } from '../../_actions/mazemap.actions';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MazemapState } from '../../_states/mazemap.state';
 import { Observable } from 'rxjs';
-import { toLatLng, getCenter, convertLibrarySectionsToLayers, layerMarkerOptions } from './mazemap-helper';
+import { MapLocation } from 'src/app/models/mazemap/map-location.model';
+import {
+  SetActiveSection, SetActivateFeedbackAndStatus,
+  SetActiveLocation, ResetActiveLocation
+} from '../../_actions/mazemap.actions';
+import {
+  toLatLng, getCenter, convertSectionsToLayers,
+  layerMarkerOptions, convertLocationsToLayers,
+} from './mazemap-helper';
 
 declare let Mazemap: any;
 
@@ -61,44 +68,72 @@ export class MazemapComponent implements OnInit, OnDestroy {
   showStatusMenu = false;
   activateFeedbackAndStatus = false;
   lastHoveredLayer = null;
-  activeLayer = null;
+  activeLocation: MapLocation  = null;
+  activeLayerId = null;
   activeLayerMarker = null;
+  activeSection: Section = null;
   popup = null;
   defaultColor = 'rgba(220, 150, 120, 0.075)';
   hoverColor = 'rgba(220, 150, 120, 0.25)';
   activeColor = 'rgba(220, 150, 120, 0.75)';
-  librarySections: LibrarySection[] = [];
-  librarySectionLayers = [];
+  locations: MapLocation[] = [];
+  sections: Section[] = [];
+  sectionLayers = [];
+  sectionLayerMarkers = [];
+  locationLayers = [];
 
-  @Select(MazemapState.getLibrarySections) librarySections$: Observable<LibrarySection[]>;
   @Select(MazemapState.getActivateFeedbackAndStatus) activateFeedbackAndStatus$: Observable<boolean>;
+  @Select(MazemapState.getLocations) locations$: Observable<MapLocation[]>;
+  @Select(MazemapState.getActiveLocation) activeLocation$: Observable<MapLocation>;
+  @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
 
   constructor(private store: Store) {
-      this.activateFeedbackAndStatus$.subscribe(x => {
-        this.activateFeedbackAndStatus = x;
-      });
+    this.activateFeedbackAndStatus$.subscribe(x => {
+      this.activateFeedbackAndStatus = x;
+    });
 
-      // Get library sections from store and convert to layers
-      this.store.dispatch(GetLibrarySections).subscribe(x => {
-        this.librarySections = x.MazeMap.librarySections;
-        this.librarySectionLayers = convertLibrarySectionsToLayers(this.librarySections);
-      });
-   }
+    this.locations$.subscribe(x => {
+      if (x) {
+        this.locations = x;
+        this.locationLayers = convertLocationsToLayers(this.locations);
+      }
+    });
+
+    this.activeLocation$.subscribe(x => {
+      this.activeLocation = x;
+
+      if (this.map && this.activeLocation) {
+        this.sectionLayers = convertSectionsToLayers(this.activeLocation.sections);
+        this.initLayers();
+        this.toggleLocationLayers(false);
+        this.map.flyTo({
+          center: { lng: x.longitude, lat: x.latitude },
+          zoom: x.zoom,
+        });
+      }
+    });
+
+    this.activeSection$.subscribe(x => {
+      if (x && x.survey) {
+        this.openFeedbackPrompt();
+      } else {
+        this.closeFeedbackPrompt();
+      }
+    });
+    }
 
   ngOnInit() {
 
     // Vertical view of the library
     this.mapOptions = {
-       container: 'map',
-       campuses: 89,
-       center: { lng: 12.5233335, lat: 55.7868826 },
-       zoom: 19.1,
-       maxZoom: 19.5,
-       minZoom: 18.5,
-       zLevel: 1,
-       bearing: -72.8,
-       autoSetRTLTextPlugin: false,
-     };
+      container: 'map',
+      campuses: 89,
+      center: { lng: 12.52082545886367, lat: 55.78604408577766 },
+      zoom: 15.65,
+      zLevel: null,
+      bearing: -72.8,
+      autoSetRTLTextPlugin: false
+    };
 
     // Horizontal view of the library
     // this.mapOptions = {
@@ -114,24 +149,57 @@ export class MazemapComponent implements OnInit, OnDestroy {
     this.map = new Mazemap.Map(this.mapOptions);
 
     this.map.on('load', () => {
-      this.map.on('zlevel', () => {
-        this.updateLayers();
-        this.setActiveLayer(null);
-        this.setLayerHoverState(null);
-        this.closeFeedbackPrompt();
+
+      this.map.loadImage('../assets/mapIcons/skylab.png', (error, image) => {
+        if (error) {
+          throw error;
+        }
+        this.map.addImage('rocket', image);
       });
 
-      this.initLayers();
+      this.map.loadImage('../assets/mapIcons/books.png', (error, image) => {
+        if (error) {
+          throw error;
+        }
+        this.map.addImage('library', image);
+      });
+
+      this.map.on('zlevel', () => {
+        if (this.sectionLayers.length > 0) {
+          this.updateLayers();
+          this.setActiveLayer(null);
+          this.setLayerHoverState(null);
+        }
+        this.closeFeedbackPrompt();
+      });
+      this.map.on('zoom', () => {
+        this.map.getZoom();
+      });
+      this.map.on('zoomend', () => {
+        if (this.map.getZoom() < 18 && !this.activeLocation) {
+          this.toggleLocationLayers(true);
+        } else if (this.map.getZoom() > 18 && this.activeLocation) {
+          this.toggleLocationLayers(false);
+        } else if (this.map.getZoom() < 17.5 && this.activeLocation) {
+          this.toggleLocationLayers(true);
+          this.removeSectionLayers();
+          this.store.dispatch(new ResetActiveLocation());
+        }
+      });
+
+      this.initLocationLayers();
     });
 
     this.map.on('click', (e: any) => {
-     // console.log(e.lngLat);
+      // console.log(e.lngLat);
+      // console.log(this.map.getZoom());
     });
   }
 
   ngOnDestroy() {
     this.store.dispatch(new SetActivateFeedbackAndStatus(false));
     this.store.dispatch(new SetActiveSection(null));
+    this.removeSectionLayers();
     this.map.remove();
   }
 
@@ -139,12 +207,36 @@ export class MazemapComponent implements OnInit, OnDestroy {
     this.showStatusMenu = !this.showStatusMenu;
   }
 
+  initLocationLayers() {
+    if (this.locationLayers) {
+      this.locationLayers.forEach(l => {
+        this.map.addLayer(l);
+        this.map.layerEventHandler.on('click', l.id, () => {
+          this.store.dispatch(new SetActiveLocation(l.id));
+        });
+      });
+    }
+  }
+
+  toggleLocationLayers(display: boolean) {
+    this.locationLayers.forEach(l => {
+      if (this.map.getLayer(l.id)) {
+        const visibility = this.map.getLayoutProperty(l.id, 'visibility');
+        if (visibility === 'visible' && display === false) {
+          this.map.setLayoutProperty(l.id, 'visibility', 'none');
+        }
+        if (visibility === 'none' && display === true) {
+          this.map.setLayoutProperty(l.id, 'visibility', 'visible');
+        }
+      }
+    });
+  }
   // Runs every time map changes zLevel
   updateLayers() {
     const zLevel = this.map.getZLevel();
 
     // Hide all currently visible layers
-    this.librarySectionLayers.forEach(l => {
+    this.sectionLayers.forEach(l => {
       if (this.map.getLayer(l.id)) {
         const visibility = this.map.getLayoutProperty(l.id, 'visibility');
         if (visibility === 'visible') {
@@ -153,7 +245,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
       }
     });
 
-    const zLevelLayers = this.librarySectionLayers.filter(l => {
+    const zLevelLayers = this.sectionLayers.filter(l => {
       return l.zLevel === zLevel;
     });
 
@@ -168,84 +260,121 @@ export class MazemapComponent implements OnInit, OnDestroy {
 
   // Add all layers and eventhandlers once
   initLayers() {
-    this.librarySectionLayers.forEach(layer => {
-      this.map.addLayer(layer);
+    if (this.sectionLayers) {
+      this.sectionLayers.forEach(layer => {
+        if (!this.map.getLayer(layer.id)) {
+          this.map.addLayer(layer);
+          this.map.layerEventHandler.on('click', layer.id, (e: any, features: any) => {
+            this.setActiveLayer(layer);
+          });
+          this.map.layerEventHandler.on('mousemove', layer.id, () => {
+            if (this.map.getLayer(layer.id)) {
+              this.setLayerHoverState(layer.id);
+            }
+          });
+          const featureCoordinates = toLatLng(layer.source.data.geometry.coordinates[0]);
+          const center = getCenter(featureCoordinates);
+          const marker = new Mazemap.MazeMarker(layerMarkerOptions(layer).default).setLngLat(center).addTo(this.map);
+          marker.on('click', () => {
+            this.setActiveLayer(layer);
+          });
 
-      this.map.layerEventHandler.on('click', layer.id, (e: any, features: any) => {
-        this.setActiveLayer(layer);
-        this.openFeedbackPrompt();
+          this.sectionLayerMarkers.push(marker);
+        }
       });
 
-      this.map.layerEventHandler.on('mousemove', layer.id, () => {
-        this.setLayerHoverState(layer.id);
+      this.map.layerEventHandler.on('mousemove', null, () => {
+        if (this.sectionLayers.length > 0) {
+          this.setLayerHoverState(null);
+        }
       });
 
-      const featureCoordinates = toLatLng(layer.source.data.geometry.coordinates[0]);
-      const center = getCenter(featureCoordinates);
-      const marker = new Mazemap.MazeMarker(layerMarkerOptions(layer).default).setLngLat(center).addTo(this.map);
-
-      marker.on('click', () => {
-        this.setActiveLayer(layer);
+      this.map.layerEventHandler.on('click', null, () => {
+        this.setActiveLayer(null);
       });
-    });
 
-    this.map.layerEventHandler.on('mousemove', null, () => {
-      this.setLayerHoverState(null);
-    });
+      this.updateLayers();
+    }
+  }
 
-    this.map.layerEventHandler.on('click', null, () => {
-      this.setActiveLayer(null);
+  removeSectionLayers() {
+    if (this.sectionLayers.length > 0) {
+      let i = 1;
+      this.sectionLayers.forEach(layer => {
+        if (this.map.getLayer(layer.id)) {
+          this.map.layerEventHandler.off('mousemove', layer.id);
+          this.map.layerEventHandler.off('click', layer.id);
+          this.map.on('mousemove', () => { });
+          this.map.removeLayer(layer.id);
+          if (this.map.getSource(layer.id)) {
+            this.map.removeSource(layer.id);
+          }
+          i++;
+        }
+      });
+      this.sectionLayers = [];
+      this.activeLayerId = null;
+      this.lastHoveredLayer = null;
       this.closeFeedbackPrompt();
-      this.store.dispatch(new SetActiveSection(null));
-    });
-
-    this.updateLayers();
+      this.sectionLayerMarkers.forEach(x => {
+        x.off('click');
+        x.remove();
+      });
+    }
   }
 
   // Change layer style properties. Runs on layer 'mouseover' event.
   setLayerHoverState(layerId: number) {
-    if (layerId === this.lastHoveredLayer) {
-      return;
-    }
+    if (this.sectionLayers.length > 0) {
 
-    if (this.lastHoveredLayer) {
-      if (this.lastHoveredLayer !== this.activeLayer) {
-        this.map.setPaintProperty(this.lastHoveredLayer, 'fill-color', this.defaultColor);
-      }
-    }
-
-    if (layerId && this.activeLayer !== layerId) {
-        this.map.setPaintProperty(layerId, 'fill-color', this.hoverColor);
-      }
-
-    this.lastHoveredLayer = layerId;
-  }
-
-  setActiveLayer(layer: any)  {
-    if (!layer) {
-      if (this.activeLayer) {
-        this.map.setPaintProperty(this.activeLayer, 'fill-color', this.defaultColor);
-        this.activeLayer = null;
+      if (layerId === this.lastHoveredLayer) {
         return;
       }
 
-      return;
-    }
+      if (this.lastHoveredLayer) {
+        if (this.lastHoveredLayer !== this.activeLayerId) {
+        this.map.setPaintProperty(this.lastHoveredLayer, 'fill-color', this.defaultColor);
+      }
+      }
 
-    if (layer.id === this.activeLayer) {
-      return;
-    }
+      if (layerId && this.activeLayerId !== layerId) {
+        this.map.setPaintProperty(layerId, 'fill-color', this.hoverColor);
+      }
 
-    if (this.activeLayer) {
-      this.map.setPaintProperty(this.activeLayer, 'fill-color', this.defaultColor);
+      this.lastHoveredLayer = layerId;
     }
+  }
 
-    if (layer.id) {
-      this.map.setPaintProperty(layer.id, 'fill-color', this.activeColor);
-    }
+  setActiveLayer(layer: any)  {
+      if (!layer) {
+        if (this.activeLayerId) {
+          this.map.setPaintProperty(this.activeLayerId, 'fill-color', this.defaultColor);
+          this.activeLayerId = null;
+          this.store.dispatch(new SetActiveSection(null));
+          return;
+        }
 
-    this.activeLayer = layer.id;
-    this.store.dispatch(new SetActiveSection(layer.section));
+        return;
+      }
+
+      if (layer.id === this.activeLayerId) {
+        return;
+      }
+
+      if (this.activeLayerId) {
+        this.map.setPaintProperty(this.activeLayerId, 'fill-color', this.defaultColor);
+        this.store.dispatch(new SetActiveSection(null));
+      }
+
+      if (layer.id) {
+        this.map.setPaintProperty(layer.id, 'fill-color', this.activeColor);
+        this.store.dispatch(new SetActiveSection(layer.section));
+        if (this.activeSection) {
+          this.openFeedbackPrompt();
+        }
+      }
+
+      this.activeLayerId = layer.id;
   }
 
   openFeedbackPrompt() {

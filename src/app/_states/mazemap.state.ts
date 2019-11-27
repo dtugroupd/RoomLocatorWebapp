@@ -4,20 +4,23 @@
  */
 
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { LibrarySection } from '../models/mazemap/library-section.model';
 import {
     GetLibrarySections, SetActiveSection, SetActivateFeedbackAndStatus,
-    GetSurveys, AddSurveyAnswer, AddSurvey, AddSurveySuccess, AddSurveyError, AddSurveyAnswerError, AddSurveyAnswerSuccess
+    GetSurveys, AddSurveyAnswer, AddSurvey, AddSurveySuccess, AddSurveyError,
+    AddSurveyAnswerError, AddSurveyAnswerSuccess, GetLocations, SetActiveLocation, ResetActiveLocation
 } from '../_actions/mazemap.actions';
 import { MazemapService } from '../_services/mazemap.service';
 import { tap } from 'rxjs/operators';
 import { SurveyService } from '../_services/survey.service';
 import { Survey } from '../models/survey/survey.model';
 import { patch, updateItem, append } from '@ngxs/store/operators';
+import { Section } from '../models/mazemap/section.model';
+import { MapLocation } from '../models/mazemap/map-location.model';
 
 export class MazemapStateModel {
-    librarySections: LibrarySection[];
-    activeSection: LibrarySection;
+    locations: MapLocation[];
+    activeLocation: MapLocation;
+    activeSection: Section;
     activateFeedbackAndStatus: boolean;
     surveys: Survey[];
 }
@@ -25,7 +28,8 @@ export class MazemapStateModel {
 @State<MazemapStateModel>({
     name: 'MazeMap',
     defaults: {
-        librarySections: null,
+        locations: undefined,
+        activeLocation: null,
         activeSection: null,
         activateFeedbackAndStatus: false,
         surveys: []
@@ -37,8 +41,13 @@ export class MazemapState {
     constructor(private mazemapService: MazemapService, private surveyService: SurveyService) {}
 
     @Selector()
-    static getLibrarySections(state: MazemapStateModel) {
-        return state.librarySections;
+    static getLocations(state: MazemapStateModel) {
+        return state.locations;
+    }
+
+    @Selector()
+    static getActiveLocation(state: MazemapStateModel) {
+        return state.activeLocation;
     }
 
     @Selector()
@@ -56,15 +65,32 @@ export class MazemapState {
         return state.surveys;
     }
 
-    @Action(GetLibrarySections)
-    getLibrarySections({getState, setState}: StateContext<MazemapStateModel>) {
-        return this.mazemapService.fetchLibrarySections().pipe(tap((result) => {
-            const state = getState();
-            setState({
-                ...state,
-                librarySections: result,
+    @Action(GetLocations)
+    getLocations({ patchState }: StateContext<MazemapStateModel>) {
+        return this.mazemapService.getLocations().pipe(tap((res) => {
+            patchState({
+                locations: res
             });
         }));
+    }
+
+    @Action(SetActiveLocation)
+    getLocation({ patchState }: StateContext<MazemapStateModel>, { payload }: SetActiveLocation) {
+        return this.mazemapService.getLocation(payload).pipe(tap((res) => {
+            patchState({
+                activeLocation: res
+            });
+        }));
+    }
+
+    @Action(ResetActiveLocation)
+    resetActiveLocation({ patchState }: StateContext<MazemapStateModel>) {
+        patchState({
+            activeLocation: null
+        });
+        patchState({
+            activeSection: null
+        });
     }
 
     @Action(SetActiveSection)
@@ -99,18 +125,12 @@ export class MazemapState {
                         patch({
                             surveys: append([res])
                         }),
-                        );
-                    setState(
-                        patch({
-                            librarySections: updateItem(
-                                x => x.id === payload.sectionId,
-                                patch({
-                                    survey: res
-                                })
-                            )
-                        }),
                     );
-
+                    const newActiveLocation = state.activeLocation;
+                    newActiveLocation.sections.find(x => x.id === payload.sectionId).survey = res;
+                    patchState({
+                       activeLocation: newActiveLocation
+                    });
                     const newActiveSection = state.activeSection;
                     newActiveSection.survey = res;
                     patchState({

@@ -15,7 +15,7 @@
             <nb-accordion id="accordion">
                 <nb-accordion-item info *ngFor="let survey of surveys, let i = index" [ngClass]="{'active': isActive(i)}" [expanded]="isActive(i)">
                     <nb-accordion-item-header style="margin-bottom: 0px !important;">
-                            {{ survey.id }}. {{ survey.title }}
+                            {{ survey.title }}
                         </nb-accordion-item-header>
                         <nb-accordion-item-body>
                             <div style="width: 100%; margin-bottom: 20px;">
