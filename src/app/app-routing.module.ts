@@ -23,6 +23,10 @@ const routes: Routes = [
   {
     path: 'admin',
     component: AdminPageComponent,
+    canActivate: [AuthRouteGuard],
+    data: {
+      expectedRoles: 'admin'
+    }
   },
   {
     path: 'login',
