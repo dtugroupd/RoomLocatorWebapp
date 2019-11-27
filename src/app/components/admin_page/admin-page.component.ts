@@ -30,6 +30,8 @@ export class AdminPageComponent implements OnInit
   selectedUserId: string;
   searchText;
   dataSource: MatTableDataSource<User>;
+  isShow = false;
+
 
   roles: Role[] = [
     { name: 'admin', viewName: 'Admin' },
@@ -37,7 +39,7 @@ export class AdminPageComponent implements OnInit
     { name: 'student', viewName: 'Student' }
   ];
 
-  displayedColumns: string[] = [ 'userID', 'fullName', 'userRole' ];
+  displayedColumns: string[] = [ 'userID', 'fullName', 'userRole', 'action' ];
 
   constructor ( private store: Store ) { }
 
@@ -78,6 +80,10 @@ export class AdminPageComponent implements OnInit
     this.dataSource.filter = filterValue;
   }
 
+  toggleDisplay() {
+    this.isShow = !this.isShow;
+  }
+
   saveNewRole ()
   {
     this.selectedUserId = this.users[ this.selectedRow ].studentId;
@@ -86,6 +92,7 @@ export class AdminPageComponent implements OnInit
   }
 
   deleteUser() {
+    this.isShow = !this.isShow;
     this.selectedUserId = this.users[ this.selectedRow ].studentId;
     this.store.dispatch( new DeleteUser( this.selectedUserId ) ).subscribe( () => { } );
   }
