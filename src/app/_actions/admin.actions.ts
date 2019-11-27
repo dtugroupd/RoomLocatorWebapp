@@ -14,3 +14,10 @@ export class UpdateRole {
     constructor(public id: string, public roleName: string) {}
 
 }
+
+export class DeleteUser {
+    static readonly type = '[User] Delete';
+
+    constructor(public id: string) {
+    }
+}

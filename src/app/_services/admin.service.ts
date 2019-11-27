@@ -25,4 +25,8 @@ export class AdminService extends BaseService {
     return this.http.put<User>(`${this.backendBaseUrl}/api/v1/user/id?studentId=${id}&roleName=${roleName}`, {});
   }
 
+  deleteUser(id: string) {
+    return this.http.delete<User>(`${this.backendBaseUrl}/api/v1/user/id?studentId=${id}`);
+  }
+
 }

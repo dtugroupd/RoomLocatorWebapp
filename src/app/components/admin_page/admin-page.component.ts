@@ -4,7 +4,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { GetUsers, UpdateRole } from 'src/app/_actions/admin.actions';
+import { GetUsers, UpdateRole, DeleteUser } from 'src/app/_actions/admin.actions';
 import { MatTableDataSource } from '@angular/material';
 import { User } from 'src/app/models/login/user.model';
 
@@ -83,7 +83,11 @@ export class AdminPageComponent implements OnInit
     this.selectedUserId = this.users[ this.selectedRow ].studentId;
     this.store.dispatch( new UpdateRole( this.selectedUserId, this.selectedRole ) ).subscribe( () => { } );
 
+  }
 
+  deleteUser() {
+    this.selectedUserId = this.users[ this.selectedRow ].studentId;
+    this.store.dispatch( new DeleteUser( this.selectedUserId ) ).subscribe( () => { } );
   }
 
 }

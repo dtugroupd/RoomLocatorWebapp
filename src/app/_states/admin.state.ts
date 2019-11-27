@@ -5,7 +5,7 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { User } from '../models/login/user.model';
 import { tap } from 'rxjs/operators';
-import { GetUsers, UpdateRole } from '../_actions/admin.actions';
+import { GetUsers, UpdateRole, DeleteUser } from '../_actions/admin.actions';
 import { AdminService } from '../_services/admin.service';
 
 export class AdminStateModel
@@ -49,5 +49,16 @@ export class AdminState
                 user: result,
             } );
         } ) );
+    }
+
+    @Action(DeleteUser)
+    deleteUser({getState, setState}: StateContext<AdminStateModel>, {id}: DeleteUser) {
+        return this.adminService.deleteUser(id).pipe(tap((result) => {
+            const state = getState();
+            setState({
+                ...state,
+                user: result,
+            });
+        }));
     }
 }
