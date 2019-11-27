@@ -11,19 +11,20 @@
             <a routerLink="survey-management">Manage Surveys</a> -->
 
             <!-- <nb-menu [items]="menuItems"></nb-menu> -->
-            <div class="links">
+            <div class="links" *ngIf="isAuthenticated$ | async">
                 <a *ngFor="let item of menuItems" routerLink="{{ item.link }}" [ngClass]="(userHasAccess(item.link) | async) ? '' : 'hide'">{{ item.title }}</a>
             </div>
             <div class="location-info" [@activeLocation]="isLocationActive ? 'show' : 'hide'">{{ (activeLocation$ | async)?.name }}</div>
+            <div class="link" *ngIf="!(isAuthenticated$ | async)">Not logged in</div>
         </nb-layout-column>
         <fa-icon class="burger-menu-button" [icon]="faBars" (click)="toggleMobileMenu()"></fa-icon>
-        <nb-user class="user" *ngIf="user$ | async" name="{{ (user$ | async).studentId }}" style="justify-content: flex-end;"></nb-user>
+        <nb-user class="user" *ngIf="user$ | async" name="{{ (user$ | async).fullName }}" title="{{ (user$ | async).studentId }}" [picture]="base64Image" style="justify-content: flex-end;"></nb-user>
     </nb-layout-header>
 
     <nb-layout-column (click)="hideMobileMenu()">
         <div class="mobile-menu" [@toggleMobileMenu]="mobileMenuToggled ? 'show' : 'hide'">
             <div class="mobile-user-container">
-                <nb-user class="mobile-user" size="large"  color="#cccccc" *ngIf="user$ | async" name="{{ (user$ | async).studentId }}"></nb-user>
+                <nb-user class="mobile-user" size="large" color="#cccccc" *ngIf="user$ | async" name="{{ (user$ | async).studentId }}"></nb-user>
             </div>
             <div class="links">
                 <div class="mobile-link" *ngFor="let item of menuItems" routerLink="{{ item.link }}" [ngClass]="(userHasAccess(item.link) | async) ? '' : 'hide'">
@@ -31,7 +32,8 @@
                 </div>
             </div>
         </div>
-        <router-outlet></router-outlet>
+        <app-login *ngIf="!(isAuthenticated$ | async)"></app-login>
+        <router-outlet *ngIf="(isAuthenticated$ | async)"></router-outlet>
     </nb-layout-column>
     <nb-layout-footer fixed>
         <!-- Insert footer here -->
