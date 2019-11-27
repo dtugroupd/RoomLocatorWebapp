@@ -35,7 +35,7 @@ export class EventCreateComponent {
         speakers: this.speakers
       };
       this.service.createEvent(eventToCreate).subscribe(
-
+        
       );
 
   }
