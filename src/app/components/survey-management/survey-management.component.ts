@@ -3,7 +3,6 @@
  * added function: Amal Qasim, s132957
  */
 
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit, Input} from '@angular/core';
 import { Survey } from 'src/app/models/survey/survey.model';
 import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
