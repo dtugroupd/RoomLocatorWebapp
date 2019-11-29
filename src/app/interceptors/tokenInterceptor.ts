@@ -10,14 +10,12 @@ import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { Select } from '@ngxs/store';
 import { TokenState } from '../_states/token.state';
-import { UserService } from '../_services/login.service';
-import { AuthService } from '../_services/auth.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor, OnDestroy {
   subscriptions: Subscription;
 
-  constructor(public router: Router, private authService: AuthService) {
+  constructor(public router: Router) {
     this.subscriptions = new Subscription();
   }
 
@@ -40,7 +38,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
       (err: any) => {
         if (err instanceof HttpErrorResponse) {
           if (err.status === 401) {
-            this.authService.loginWithSso();
+            this.router.navigate(["/"]); // Root should show the login page automatically
           } else if (err.status === 403) {
             this.router.navigate(["/access-denied"]);
           }
