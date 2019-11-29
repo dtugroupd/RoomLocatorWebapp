@@ -1,5 +1,6 @@
 /**
  * @author Thomas Lien Christensen, s165242
+ * @author Anders Wiberg Olsen, s165241
  */
 
 import { Component, OnInit } from '@angular/core';
@@ -13,7 +14,6 @@ import { LibrarySection } from './models/mazemap/library-section.model';
 import { NbMenuItem, NbThemeService } from '@nebular/theme';
 import { TokenState } from './_states/token.state';
 import { User } from './models/login/user.model';
-import { AuthService } from './_services/auth.service';
 import { map, tap } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -48,11 +48,13 @@ export class AppComponent implements OnInit {
   activeSection: LibrarySection;
   mobileMenuToggled = false;
   faBars = faBars;
+  base64Image: string = "";
 
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
   @Select(TokenState.getUser) user$: Observable<User>;
+  @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
 
-  constructor(private store: Store, private router: Router, private themeService: NbThemeService, private authService: AuthService) {
+  constructor(private store: Store, private router: Router, private themeService: NbThemeService) {
     // this.themeService.changeTheme('cosmic')
   }
 
@@ -76,7 +78,6 @@ export class AppComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.authService.authenticate();
     this.activeSection$.subscribe(x => {
       this.activeSection = x;
     });
@@ -88,6 +89,11 @@ export class AppComponent implements OnInit {
     });
 
     this.store.dispatch(new GetSurveys());
+    this.user$.subscribe(x => {
+      if (x) {
+        this.base64Image = `data:image/png;base64,${x.profileImage}`;
+      }
+    });
 
     this.router.events.subscribe(x => {
       if (x instanceof NavigationEnd) {
