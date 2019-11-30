@@ -3,6 +3,34 @@
     width: 100%;
 }
 
+.sensors-div {
+    border-bottom: 1px solid gainsboro;
+}
+
+.sensors-div p {
+    line-height:0.3em;
+}
+
+.verygood {
+    color:green;
+}
+
+.good {
+    color: green;
+}
+
+.okay {
+    color:goldenrod;
+}
+
+.bad {
+    color:red;
+}
+
+.verybad {
+    color:darkred;
+}
+
 #statusSmileyButtonMenu:after {
     content: " ";
     position: absolute;

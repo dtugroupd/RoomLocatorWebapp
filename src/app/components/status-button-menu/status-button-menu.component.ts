@@ -1,4 +1,5 @@
 /**
+ * @author Andreas Gøricke, s153804
  * @author Thomas Lien Christensen, s165242
  * @author Hamed kadkhodaie, s083485
  */
@@ -14,7 +15,7 @@ import { AddFeedback, ChangeFeedback } from 'src/app/_actions/feedback.actions';
 import { TokenState } from 'src/app/_states/token.state';
 import { User } from 'src/app/models/login/user.model';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { typeWithParameters } from '@angular/compiler/src/render3/util';
+import { ScadadataService } from '../../_services/scadadata.service';
 
 @Component({
   selector: 'app-status-button-menu',
@@ -64,12 +65,41 @@ export class StatusButtonMenuComponent implements OnInit {
   likeIcon = thumbsUp;
   dislikeIcon = thumbsDown;
 
+  temperature = '';
+  light = '';
+  sound = '';
+  availableSeats = '';
+
   @Select(FeedbackState.getFeedback) currentFeedback$: Observable<Feedback>;
   @Select(TokenState.getUser) user$: Observable<User>;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store, private service: ScadadataService) { }
 
   ngOnInit() {
+    this.service.getStatus().subscribe(res => {
+
+      res.details.forEach(element => {
+        switch (element.type) {
+          case 'Temperature': {
+            this.temperature = element.value;
+            break;
+          }
+          case 'Sound': {
+            this.sound = element.value;
+            break;
+          }
+          case 'Light': {
+            this.light = element.value;
+            break;
+          }
+          case 'Seats Available': {
+            this.availableSeats = element.value;
+            break;
+          }
+        }
+      });
+    });
+
     this.currentFeedback$.subscribe(x => {
       this.feedback = x;
       if (x) {
@@ -126,4 +156,5 @@ export class StatusButtonMenuComponent implements OnInit {
     this.likeIcon = thumbsUp;
     this.dislikeIcon = thumbsDown;
   }
+
 }

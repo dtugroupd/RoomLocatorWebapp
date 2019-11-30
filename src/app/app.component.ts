@@ -1,5 +1,7 @@
 /**
  * @author Thomas Lien Christensen, s165242
+ * @author Hadi Horani, s165242
+ * @author Andreas Gøricke, s153804
  * @author Anders Wiberg Olsen, s165241
  */
 
@@ -11,6 +13,7 @@ import { MazemapState } from './_states/mazemap.state';
 import { Observable } from 'rxjs';
 import { GetSurveys } from './_actions/mazemap.actions';
 import { LibrarySection } from './models/mazemap/library-section.model';
+import { faMap, faCalendarAlt, faPoll } from '@fortawesome/free-solid-svg-icons';
 import { NbMenuItem, NbThemeService } from '@nebular/theme';
 import { TokenState } from './_states/token.state';
 import { User } from './models/login/user.model';
@@ -46,6 +49,9 @@ import { GetCurrentFeedback } from './_actions/feedback.actions';
 export class AppComponent implements OnInit {
   title = 'RoomLocatorWebapp';
   activeSection: LibrarySection;
+  faPoll = faPoll;
+  faCalendarAlt = faCalendarAlt;
+  faMap = faMap;
   mobileMenuToggled = false;
   faBars = faBars;
   base64Image: string = "";

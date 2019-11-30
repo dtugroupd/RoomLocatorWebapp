@@ -4,12 +4,13 @@
 
 <nb-card id="statusSmileyButtonMenu" style="z-index: 999">
     <nb-card-body>
-        <div class="status-menu-body">
-
-            <p>
-                Been here recently? How did you like it?
-            </p>
+        <div class="sensors-div">
+        <p>Available Seats: <span class="{{this.availableSeats.replace(' ','')}}">{{this.availableSeats}}</span></p>
+        <p>Temperature: <span class="{{this.temperature.replace(' ','')}}">{{this.temperature}}</span></p>
+        <p>Light: <span class="{{this.light.replace(' ','')}}">{{this.light}}</span></p>
+        <p>Sound: <span class="{{this.sound.replace(' ','')}}">{{this.sound}}</span></p>
         </div>
+        <p>Been here recently? How did you like it?</p>
         <div ngClass="thumbs">
             <fa-icon [@dislike]="dislikeState" [icon]="dislikeIcon" (click)="downVote()"></fa-icon>
             <fa-icon [@like]="likeState" [icon]="likeIcon" (click)="upVote()"></fa-icon>
