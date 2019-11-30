@@ -120,6 +120,7 @@ export class AppComponent implements OnInit
       case '/calendar':
         return new Observable( ( observer: any ) => observer.next( true ) );
       case '/admin':
+//          return this.userHasRole( [ 'admin'] ).pipe( tap( val => val ) );
         return new Observable( ( observer: any ) => observer.next( true ) );
       case '/survey-management':
         return this.userHasRole( [ 'library', 'researcher' ] ).pipe( tap( val => val ) );

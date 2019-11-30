@@ -54,11 +54,11 @@ export class AdminPageComponent implements OnInit
       {
         let exists = false;
         item.roles.forEach(x => {
-          if (x.includes(filter)) {
+          if (x.toLowerCase().includes(filter.toLowerCase())) { 
             exists = true;
           }
         });
-        if ( item.studentId.includes( filter) ) {
+        if ( item.studentId.toLowerCase().includes(filter.toLowerCase()) || item.fullName.toLowerCase().includes(filter.toLowerCase()) ) {
           return true;
         }
         return exists;
@@ -77,7 +77,7 @@ export class AdminPageComponent implements OnInit
 
   applyFilter ( filterValue: string )
   {
-    this.dataSource.filter = filterValue;
+    this.dataSource.filter = filterValue.toLowerCase();
   }
 
   toggleDisplay() {

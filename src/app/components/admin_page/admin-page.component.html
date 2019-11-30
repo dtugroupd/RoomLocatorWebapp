@@ -3,7 +3,7 @@
 -->
 <h1>Users</h1>
 <div class="container">
-        <p>Select the user you want to change the role for</p>
+        <p>Select the user you want to change the role for or delete</p>
 
         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -33,8 +33,8 @@
                 <ng-container matColumnDef="action">
                         <th mat-header-cell *matHeaderCellDef> Action </th>
                         <td mat-cell *matCellDef="let user" class="action-link"> 
-                          <a (click)="toggleDisplay()">Edit</a> | 
-                          <a (click)="deleteUser()">Delete</a>  
+                          <button (click)="toggleDisplay()">Edit</button> | 
+                          <button (click)="deleteUser()">Delete</button>  
                         </td>
                       </ng-container>
                
