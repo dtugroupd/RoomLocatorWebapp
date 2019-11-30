@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 import { MapLocation } from 'src/app/models/mazemap/map-location.model';
 import {
   SetActiveSection, SetActivateFeedbackAndStatus,
-  SetActiveLocation, ResetActiveLocation
+  SetActiveLocation, ResetActiveLocation, GetLocations
 } from '../../_actions/mazemap.actions';
 import {
   toLatLng, getCenter, convertSectionsToLayers,
@@ -123,6 +123,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit() {
+    this.store.dispatch(new GetLocations());
 
     // Vertical view of the library
     this.mapOptions = {

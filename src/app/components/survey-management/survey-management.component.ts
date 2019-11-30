@@ -5,7 +5,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Survey } from 'src/app/models/survey/survey.model';
 import { Section } from 'src/app/models/mazemap/section.model';
-import { Select, Actions, ofActionDispatched } from '@ngxs/store';
+import { Select, Actions, ofActionDispatched, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { MazemapState } from '../../_states/mazemap.state';
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
@@ -13,7 +13,7 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { SurveyService } from 'src/app/_services/survey.service';
-import { AddSurveySuccess } from 'src/app/_actions/mazemap.actions';
+import { AddSurveySuccess, GetSurveys } from 'src/app/_actions/mazemap.actions';
 
 @Component({
   selector: 'app-survey-management',
@@ -21,7 +21,8 @@ import { AddSurveySuccess } from 'src/app/_actions/mazemap.actions';
   styleUrls: ['./survey-management.component.scss']
 })
 export class SurveyManagementComponent implements OnInit {
-  constructor(private service: SurveyService, private action$: Actions) {}
+  constructor(private service: SurveyService, private store: Store, private action$: Actions) {
+  }
 
   surveys: Survey[];
   unsortedSurveys: Survey[];
@@ -37,6 +38,7 @@ export class SurveyManagementComponent implements OnInit {
   @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
 
   ngOnInit() {
+    this.store.dispatch(new GetSurveys());
     this.surveys$.subscribe(x => {
       this.surveys = x;
       this.unsortedSurveys = Object.create(x);
