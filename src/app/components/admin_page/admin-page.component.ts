@@ -7,6 +7,7 @@ import { Store } from '@ngxs/store';
 import { GetUsers, UpdateRole, DeleteUser } from 'src/app/_actions/admin.actions';
 import { MatTableDataSource } from '@angular/material';
 import { User } from 'src/app/models/login/user.model';
+import { Popup } from 'ng2-opd-popup';
 
 export interface Role
 {
@@ -31,6 +32,7 @@ export class AdminPageComponent implements OnInit
   searchText;
   dataSource: MatTableDataSource<User>;
   isShow = false;
+  showPopUp = false;
 
 
   roles: Role[] = [
@@ -41,7 +43,7 @@ export class AdminPageComponent implements OnInit
 
   displayedColumns: string[] = [ 'userID', 'fullName', 'userRole', 'action' ];
 
-  constructor ( private store: Store ) { }
+  constructor ( private store: Store, private popup: Popup ) { }
 
   ngOnInit ()
   {
@@ -84,17 +86,34 @@ export class AdminPageComponent implements OnInit
     this.isShow = !this.isShow;
   }
 
-  saveNewRole ()
-  {
+  saveNewRole() {
     this.selectedUserId = this.users[ this.selectedRow ].studentId;
     this.store.dispatch( new UpdateRole( this.selectedUserId, this.selectedRole ) ).subscribe( () => { } );
-
   }
 
   deleteUser() {
-    this.isShow = !this.isShow;
     this.selectedUserId = this.users[ this.selectedRow ].studentId;
     this.store.dispatch( new DeleteUser( this.selectedUserId ) ).subscribe( () => { } );
+    this.popup.hide();
+  }
+
+  confirmDeletion() {
+
+    if (this.isShow) {
+    this.toggleDisplay();
+    }
+
+    setTimeout(() => {
+      this.popup.options = {
+        header: 'Deletion of ' + this.users[ this.selectedRow ].studentId + ' (' + this.users[ this.selectedRow ].fullName + ')',
+        confirmBtnContent: 'Yes',
+        cancleBtnContent: 'No',
+        confirmBtnClass: 'btn btn-default',
+        cancleBtnClass: 'btn btn-default',
+        animation: 'fadeInDown'
+    };
+      this.popup.show(this.popup.options);
+    }, 100);
   }
 
 }

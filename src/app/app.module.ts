@@ -39,6 +39,7 @@ import { AdminState } from './_states/admin.state';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { MatTableModule, MatInputModule } from '@angular/material'
 import { LoginComponent } from './components/login/login.component';
+import { PopupModule } from 'ng2-opd-popup';
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
@@ -88,6 +89,7 @@ const appRoutes: Routes = [
     NbActionsModule,
     NbCardModule,
     MatTableModule,
+    PopupModule.forRoot(),
     NbInputModule,
     NbListModule,
     NbSearchModule,

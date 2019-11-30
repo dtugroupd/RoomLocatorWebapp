@@ -34,7 +34,7 @@
                         <th mat-header-cell *matHeaderCellDef> Action </th>
                         <td mat-cell *matCellDef="let user" class="action-link"> 
                           <button (click)="toggleDisplay()">Edit</button> | 
-                          <button (click)="deleteUser()">Delete</button>  
+                          <button (click)="confirmDeletion()">Delete</button>  
                         </td>
                       </ng-container>
                
@@ -42,6 +42,9 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index" (click)="setClickedRow(i)"></tr>
 
         </table>
+
+        <popup (confirmClick)='deleteUser()'>Are you sure you want to delete this user?</popup>
+
 
         <p *ngIf="isShow">Choose the new role</p>
         <select [(ngModel)]="selectedRole" *ngIf="isShow">
