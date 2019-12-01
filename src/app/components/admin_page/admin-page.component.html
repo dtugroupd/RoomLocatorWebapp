@@ -34,7 +34,7 @@
                         <th mat-header-cell *matHeaderCellDef> Action </th>
                         <td mat-cell *matCellDef="let user" class="action-link"> 
                           <button (click)="toggleDisplay()">Edit</button> | 
-                          <button *ngIf="user$.studentId.length > 1 | async" (click)="confirmDeletion()">Delete</button>  
+                          <button *ngIf="user$.studentId != user.studentId | async" (click)="confirmDeletion()">Delete</button>  
                         </td>
                       </ng-container>
                
