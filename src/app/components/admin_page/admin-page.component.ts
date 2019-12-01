@@ -3,12 +3,14 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { Store, Select } from '@ngxs/store';
 import { GetUsers, UpdateRole, DeleteUser } from 'src/app/_actions/admin.actions';
 import { MatTableDataSource } from '@angular/material';
 import { User } from 'src/app/models/login/user.model';
 import { Popup } from 'ng2-opd-popup';
 import { NbDialogService } from '@nebular/theme';
+import { TokenState } from 'src/app/_states/token.state';
+import { Observable } from 'rxjs';
 
 export interface Role
 {
@@ -24,6 +26,8 @@ export interface Role
 } )
 export class AdminPageComponent implements OnInit
 {
+
+  @Select(TokenState.getUser) user$: Observable<User>;
 
   users: any;
   selectedRow: number;
