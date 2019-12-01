@@ -14,7 +14,6 @@
             <div class="links" *ngIf="isAuthenticated$ | async">
                 <a *ngFor="let item of menuItems" routerLink="{{ item.link }}" [ngClass]="(userHasAccess(item.link) | async) ? '' : 'hide'">{{ item.title }}</a>
             </div>
-            <div class="link" *ngIf="!(isAuthenticated$ | async)">Not logged in</div>
         </nb-layout-column>
         <fa-icon class="burger-menu-button" [icon]="faBars" (click)="toggleMobileMenu()"></fa-icon>
         <nb-user class="user" *ngIf="user$ | async" name="{{ (user$ | async).fullName }}" title="{{ (user$ | async).studentId }}" [picture]="base64Image" style="justify-content: flex-end;"></nb-user>

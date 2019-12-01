@@ -8,6 +8,7 @@ import { GetUsers, UpdateRole, DeleteUser } from 'src/app/_actions/admin.actions
 import { MatTableDataSource } from '@angular/material';
 import { User } from 'src/app/models/login/user.model';
 import { Popup } from 'ng2-opd-popup';
+import { NbDialogService } from '@nebular/theme';
 
 export interface Role
 {
@@ -32,8 +33,6 @@ export class AdminPageComponent implements OnInit
   searchText;
   dataSource: MatTableDataSource<User>;
   isShow = false;
-  showPopUp = false;
-
 
   roles: Role[] = [
     { name: 'admin', viewName: 'Admin' },
@@ -43,7 +42,7 @@ export class AdminPageComponent implements OnInit
 
   displayedColumns: string[] = [ 'userID', 'fullName', 'userRole', 'action' ];
 
-  constructor ( private store: Store, private popup: Popup ) { }
+  constructor ( private store: Store, public popup: Popup ) { }
 
   ngOnInit ()
   {
@@ -52,8 +51,14 @@ export class AdminPageComponent implements OnInit
       this.users = x.users.users;
       this.dataSource = new MatTableDataSource( this.users );
 
-      this.dataSource.filterPredicate = ( item, filter: string ) =>
-      {
+      this.dataSource.data.forEach(u => {
+        if (!u.fullName ) {
+          const index = this.dataSource.data.indexOf(u);
+          this.dataSource.data.splice(index, 1);
+        }
+      });
+
+      this.dataSource.filterPredicate = ( item, filter: string ) => {
         let exists = false;
         item.roles.forEach(x => {
           if (x.toLowerCase().includes(filter.toLowerCase())) { 
