@@ -1,10 +1,13 @@
 /**
+ * @author Andreas Gøricke, s153804
  * @author Thomas Lien Christensen, s165242
  */
 
 import { Component, OnInit } from '@angular/core';
 import { faThumbsUp as thumbsUpPressed, faThumbsDown as thumbsDownPressed } from '@fortawesome/free-solid-svg-icons';
 import { faThumbsUp as thumbsUp, faThumbsDown as thumbsDown } from '@fortawesome/free-regular-svg-icons';
+import { ScadadataService } from  '../../_services/scadadata.service';;
+import { ScadadataScores } from '../../models/sensors/scadadata-scores.model';
 
 @Component({
   selector: 'app-status-button-menu',
@@ -19,11 +22,52 @@ export class StatusButtonMenuComponent implements OnInit {
   thumbsDownPressed = thumbsDownPressed;
   upVoted = false;
   downVoted = false;
+  temperature = "";
+  light = "";
+  sound = "";
+  availableSeats = "";
 
-  constructor() { }
+  
+
+  constructor(private service: ScadadataService) {
+    
+  }
+
+  
 
   ngOnInit() {
+
+    this.service.getStatus().subscribe( res => {
+
+      res.details.forEach(element => {
+        switch(element.type){
+          case "Temperature": {
+            this.temperature = element.value;
+            break;
+          }
+          case "Sound": {
+            this.sound = element.value; 
+            break;
+          }
+          case "Light": {
+            this.light = element.value; 
+            break;
+          }
+          case "Seats Available": {
+            this.availableSeats = element.value; 
+            break;
+          }
+        }
+      });
+      
+
+
+
+    }
+  );
   }
+
+  
 
   upVote() {
     if (this.downVoted === true) {
@@ -40,4 +84,5 @@ export class StatusButtonMenuComponent implements OnInit {
 
     this.downVoted = !this.downVoted;
   }
+
 }

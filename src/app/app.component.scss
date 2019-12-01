@@ -1,7 +1,16 @@
-nb-layout-column {
+.nb-layout-column {
     padding: 0 !important;
 }
 
+.header-nav-button {
+    background: none !important;
+    border: none !important;
+    font-size:2em !important;
+}
+
+.header-nav-button fa-icon {
+    color: #0B8BED;
+}
 // .nb-theme-default nb-menu ul.menu-items {
 //     display: flex !important;
 //     flex-flow: row;

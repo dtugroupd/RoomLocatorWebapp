@@ -9,9 +9,7 @@
     box-shadow: none;
 }
 
-#statusSmileyButton fa-icon {
-    color:green;
-}
+
 
 @media only screen and (min-width: 720px) {
     #statusSmileyButton {
@@ -23,4 +21,17 @@
     #statusSmileyButton {
         font-size: 100px;
     }
+}
+
+
+.good {
+    color: green;
+}
+
+.okay {
+    color:goldenrod;
+}
+
+.bad {
+    color:red;
 }
