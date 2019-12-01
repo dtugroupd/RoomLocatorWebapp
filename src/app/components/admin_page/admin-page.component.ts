@@ -37,6 +37,7 @@ export class AdminPageComponent implements OnInit
   searchText;
   dataSource: MatTableDataSource<User>;
   isShow = false;
+  currentUser: User;
 
   roles: Role[] = [
     { name: 'admin', viewName: 'Admin' },
@@ -79,6 +80,10 @@ export class AdminPageComponent implements OnInit
 
     }
     );
+
+    this.user$.subscribe(x => {
+      this.currentUser = x;
+    });
 
     this.setClickedRow = function ( index )
     {
