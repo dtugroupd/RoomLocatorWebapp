@@ -110,19 +110,17 @@ export class AdminPageComponent implements OnInit
     this.store.dispatch( new UpdateRole( this.selectedUserId, this.selectedRole ) ).subscribe( () => { } );
   }
 
-  confirmDeletion() {
+  confirmDeletion(u: User) {
 
     if (this.isShow) {
     this.toggleDisplay();
     }
 
-    setTimeout( () => {
-      this.dialogService.open(UserDeleteComponent, {
-        autoFocus: false,
-        closeOnNavigation: true,
-        data: {user: this.users[ this.selectedRow ]}
-      }); }, 200);
-
+    this.dialogService.open(UserDeleteComponent, {
+      autoFocus: false,
+      closeOnNavigation: true,
+      data: {user: u}
+    });
   }
 
 }
