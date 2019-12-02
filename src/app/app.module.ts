@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
   NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
-  NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule, NbUserModule, NbSelectModule
+  NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule, NbUserModule, NbSelectModule, NbCheckboxModule
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -39,6 +39,7 @@ import { AdminState } from './_states/admin.state';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { MatTableModule, MatInputModule } from '@angular/material'
 import { LoginComponent } from './components/login/login.component';
+import { UserDisclaimerState } from './_states/user.state';
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
@@ -98,6 +99,7 @@ const appRoutes: Routes = [
     NbContextMenuModule,
     NbMenuModule,
     NbSelectModule,
+    NbCheckboxModule,
     NbMenuModule.forRoot(),
     NbDialogModule.forRoot(),
     NbToastrModule.forRoot(),
@@ -105,7 +107,8 @@ const appRoutes: Routes = [
     NgxsModule.forRoot([
       MazemapState,
       TokenState,
-      AdminState
+      AdminState,
+      UserDisclaimerState,
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
