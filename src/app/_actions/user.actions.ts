@@ -13,3 +13,8 @@ export class SetToken {
 export class GetUser {
     static readonly type = '[User] Get';
 }
+
+export class SetAcceptedDisclaimer {
+    constructor(public studentId: string) {}
+    static readonly type = '[User Disclaimer] Set Accept';
+}

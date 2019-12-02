@@ -47,6 +47,14 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 
 export class AppComponent implements OnInit
 {
+
+  constructor(private store: Store, private router: Router, private themeService: NbThemeService) {
+    const preferredTheme = localStorage.getItem("theme");
+    if (preferredTheme) {
+      this.selectedTheme = preferredTheme;
+      this.themeService.changeTheme(preferredTheme);
+    }
+  }
   title = 'RoomLocatorWebapp';
   activeSection: LibrarySection;
   faPoll = faPoll;
@@ -55,15 +63,13 @@ export class AppComponent implements OnInit
   mobileMenuToggled = false;
   faBars = faBars;
   base64Image: string = "";
+  selectedTheme = 'default';
+  themes = [ "Default", "Dark", "Cosmic" ];
 
-  @Select( MazemapState.getActiveSection ) activeSection$: Observable<LibrarySection>;
-  @Select( TokenState.getUser ) user$: Observable<User>;
-  @Select( TokenState.isAuthenticated ) isAuthenticated$: Observable<boolean>;
-
-  constructor ( private store: Store, private router: Router, private themeService: NbThemeService )
-  {
-    // this.themeService.changeTheme('cosmic')
-  }
+  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
+  @Select(TokenState.getUser) user$: Observable<User>;
+  @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
+  @Select(MazemapState.getActivateFeedbackAndStatus) viewIsMazemap$: Observable<boolean>;
 
   menuItems: NbMenuItem[] = [
     {
@@ -87,6 +93,12 @@ export class AppComponent implements OnInit
       'link': '/admin'
     }
   ];
+
+  changeTheme(newTheme: string): void {
+    this.selectedTheme = newTheme.toLowerCase();
+    localStorage.setItem("theme", this.selectedTheme);
+    this.themeService.changeTheme(this.selectedTheme);
+  }
 
   ngOnInit ()
   {

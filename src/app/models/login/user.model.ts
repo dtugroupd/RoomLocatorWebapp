@@ -6,6 +6,7 @@
 export class LoginModel {
     username: string;
     password: string;
+    hasAcceptedDisclaimer?: boolean;
 }
 
 export interface AuthenticatedModel {
@@ -21,4 +22,8 @@ export interface User {
     fullName: string;
     roles: string[];
     profileImage: string;
+}
+
+export interface UserDisclaimer {
+    hasAcceptedDisclaimer?: boolean;
 }

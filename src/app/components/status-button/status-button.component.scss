@@ -1,15 +1,13 @@
 #statusSmileyButton {
-    background:none;
+    background: none;
     outline: none;
-    border:none;
+    border: none;
     font-size: 50px;
 }
 
 #statusSmileyButton:focus {
     box-shadow: none;
 }
-
-
 
 @media only screen and (min-width: 720px) {
     #statusSmileyButton {
@@ -23,15 +21,14 @@
     }
 }
 
-
 .good {
-    color: green;
+    color: var(--text-success-color);
 }
 
 .okay {
-    color:goldenrod;
+    color: var(--text-warning-color);
 }
 
 .bad {
-    color:red;
+    color: var(--text-danger-color);
 }
