@@ -55,13 +55,27 @@ export class AppComponent implements OnInit
   mobileMenuToggled = false;
   faBars = faBars;
   base64Image: string = "";
+  selectedTheme = 'default';
+  themes = [ "Default", "Dark", "Cosmic" ];
 
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
   @Select(TokenState.getUser) user$: Observable<User>;
   @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
+  @Select(MazemapState.getActivateFeedbackAndStatus) viewIsMazemap$: Observable<boolean>;
 
   constructor(private store: Store, private router: Router, private themeService: NbThemeService) {
-    // this.themeService.changeTheme('cosmic')
+    const preferredTheme = localStorage.getItem("theme");
+    if (preferredTheme) {
+      this.selectedTheme = preferredTheme;
+      this.themeService.changeTheme(preferredTheme);
+    }
+  }
+
+  changeTheme(newTheme: string): void {
+    this.selectedTheme = newTheme.toLowerCase();
+    console.log("Changing theme", newTheme)
+    localStorage.setItem("theme", this.selectedTheme);
+    this.themeService.changeTheme(this.selectedTheme);
   }
 
   menuItems: NbMenuItem[] = [
