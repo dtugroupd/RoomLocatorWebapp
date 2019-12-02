@@ -38,9 +38,9 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
       (err: any) => {
         if (err instanceof HttpErrorResponse) {
           if (err.status === 401) {
-            this.router.navigate(["/"]); // Root should show the login page automatically
+            this.router.navigate(['/']);
           } else if (err.status === 403) {
-            this.router.navigate(["/access-denied"]);
+           this.router.navigate(['/access-denied']);
           }
         }
       }

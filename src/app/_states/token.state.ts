@@ -5,7 +5,7 @@
 
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { Login, SetTokenAndUser } from '../_actions/token.actions';
-import { UserService } from '../_services/login.service';
+import { UserService } from '../_services/user.service';
 import { User, LoginModel, AuthenticatedModel } from '../models/login/user.model';
 import { tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';

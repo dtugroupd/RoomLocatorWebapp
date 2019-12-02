@@ -5,9 +5,11 @@ import { AppComponent } from './app.component';
 import { MazemapComponent } from './components/mazemap/mazemap.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
-         NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
-         NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule, NbUserModule } from '@nebular/theme';
+import {
+  NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
+  NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
+  NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule, NbUserModule, NbSelectModule, NbCheckboxModule
+} from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -24,16 +26,24 @@ import { EventCalendarComponent } from './components/event-calendar/event-calend
 import { SurveyFeedbackButtonComponent } from './components/survey-feedback-button/survey-feedback-button.component';
 import { StatusButtonComponent } from './components/status-button/status-button.component';
 import { StatusButtonMenuComponent } from './components/status-button-menu/status-button-menu.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SurveyManagementComponent } from './components/survey-management/survey-management.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { AuthRouteGuard as authRouteGuard } from './_services/_guards/auth-guard.service';
 import { TokenInterceptor } from './interceptors/tokenInterceptor';
 import { TokenState } from './_states/token.state';
 import { RouterModule, Routes } from '@angular/router';
-import { AccessDeniedComponent } from './components/access_denied/access-denied/access-denied.component';
+import { AccessDeniedComponent } from './components/access_denied/access-denied.component';
+import { AdminPageComponent } from './components/admin_page/admin-page.component';
+import { AdminState } from './_states/admin.state';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { MatTableModule, MatInputModule, MatDialogModule } from '@angular/material';
+import { LoginComponent } from './components/login/login.component';
+import { UserDeleteComponent } from './components/user-delete/user-delete.component';
+import { UserDisclaimerState } from './_states/user.state';
 import { ShowFeedbackComponent } from './components/showFeedback/show-feedback.component';
 
-import { LoginComponent } from './auth/login/login.component';
+
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
 ];
@@ -53,7 +63,9 @@ const appRoutes: Routes = [
     StatusButtonMenuComponent,
     SurveyManagementComponent,
     AccessDeniedComponent,
+    AdminPageComponent,
     LoginComponent,
+    UserDeleteComponent,
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -63,6 +75,8 @@ const appRoutes: Routes = [
     SurveyCreateComponent,
     ShowFeedbackComponent,
     MazemapComponent,
+    AdminPageComponent,
+    UserDeleteComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -80,24 +94,34 @@ const appRoutes: Routes = [
     NbButtonModule,
     NbAccordionModule,
     NbActionsModule,
+    MatDialogModule,
     NbCardModule,
+    MatTableModule,
     NbInputModule,
     NbListModule,
     NbSearchModule,
     NbUserModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatInputModule,
     NbContextMenuModule,
     NbMenuModule,
+    NbSelectModule,
+    NbCheckboxModule,
     NbMenuModule.forRoot(),
     NbDialogModule.forRoot(),
     NbToastrModule.forRoot(),
+    Ng2SearchPipeModule,
     NgxsModule.forRoot([
       MazemapState,
       TokenState,
+      AdminState,
+      UserDisclaimerState,
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),
   ],
-  providers: [  {
+  providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true,
@@ -105,6 +129,8 @@ const appRoutes: Routes = [
   bootstrap: [AppComponent],
   exports: [
     SurveyCreateActionComponent,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class AppModule { }
