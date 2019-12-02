@@ -79,7 +79,6 @@ export class TokenState {
             localStorage.setItem('token', auth.token);
             setState({ user: auth.user, token: auth.token, loginLoading: false, error: null });
         }, x => {
-            alert(x.error.title)
             patchState({ loginLoading: false, error: x.error });
         }));
     }

@@ -20,6 +20,7 @@ import { NbToastrService } from '@nebular/theme';
 })
 export class LoginComponent implements OnInit {
   @Select(UserDisclaimerState.hasAcceptedDisclaimer) hasAcceptedDisclaimer$: Observable<boolean>;
+  @Select(UserDisclaimerState.disclaimerIsLoading) disclaimerLoading$: Observable<boolean>;
   @Select(TokenState.loginIsLoading) loginLoading$: Observable<boolean>;
   @Select(TokenState.getError) loginError$: Observable<ErrorModel>;
 

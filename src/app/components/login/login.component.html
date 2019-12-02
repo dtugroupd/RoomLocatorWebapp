@@ -23,8 +23,7 @@
                     the <a href="https://github.com/dtugroupd/RoomLocatorBackend/blob/master/RoomLocator/RoomLocator.Data/Services/CampusNetAuthService.cs#L67L76" rel="noopener noreferrer" target="_blank">source here</a>). We will store student id, full
                     name, email and profile image on the server for better user experience. If you decide you no longer want us to store your details, you can always remove your data from your profile.
                 </p>
-                <div>&nbsp;</div>
-                <nb-checkbox nbSpinner="true" style="padding: 10px 0;" (checkedChange)="acceptDisclaimer($event)" [(checked)]="acceptedDisclaimer" [disabled]="acceptedDisclaimer == null">I Accept the Disclaimer</nb-checkbox>
+                <nb-checkbox [nbSpinner]="disclaimerLoading$ | async" style="padding: 10px 0;" (checkedChange)="acceptDisclaimer($event)" [(checked)]="acceptedDisclaimer" [disabled]="acceptedDisclaimer == null">I Accept the Disclaimer</nb-checkbox>
             </div>
         </nb-card-body>
         <nb-card-footer>

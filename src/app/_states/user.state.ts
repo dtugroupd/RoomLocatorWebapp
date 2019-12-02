@@ -1,4 +1,4 @@
-import { State, Selector, Action, StateContext } from '@ngxs/store';
+import { State, Selector, Action, StateContext, StateStream } from '@ngxs/store';
 import { UserService } from '../_services/user.service';
 import { SetAcceptedDisclaimer } from '../_actions/user.actions';
 import { UserDisclaimer } from '../models/login/user.model';
@@ -21,6 +21,11 @@ export class UserDisclaimerState {
     @Selector()
     static hasAcceptedDisclaimer(state: UserDisclaimerStateModel): boolean {
         return state.hasAccepted;
+    }
+
+    @Selector()
+    static disclaimerIsLoading(state: UserDisclaimerStateModel): boolean {
+        return state.disclaimerLoading;
     }
 
     @Action(SetAcceptedDisclaimer)
