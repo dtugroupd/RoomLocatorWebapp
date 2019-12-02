@@ -50,11 +50,12 @@ export class AppComponent implements OnInit
   faBars = faBars;
   base64Image: string = "";
 
-  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
-  @Select(TokenState.getUser) user$: Observable<User>;
-  @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
+  @Select( MazemapState.getActiveSection ) activeSection$: Observable<LibrarySection>;
+  @Select( TokenState.getUser ) user$: Observable<User>;
+  @Select( TokenState.isAuthenticated ) isAuthenticated$: Observable<boolean>;
 
-  constructor(private store: Store, private router: Router, private themeService: NbThemeService) {
+  constructor ( private store: Store, private router: Router, private themeService: NbThemeService )
+  {
     // this.themeService.changeTheme('cosmic')
   }
 
@@ -81,17 +82,21 @@ export class AppComponent implements OnInit
     }
   ];
 
-  ngOnInit() {
-    this.activeSection$.subscribe(x => {
+  ngOnInit ()
+  {
+    this.activeSection$.subscribe( x =>
+    {
       this.activeSection = x;
     } );
 
-    this.store.dispatch(new GetSurveys());
-    this.user$.subscribe(x => {
-      if (x) {
-        this.base64Image = `data:image/png;base64,${x.profileImage}`;
+    this.store.dispatch( new GetSurveys() );
+    this.user$.subscribe( x =>
+    {
+      if ( x )
+      {
+        this.base64Image = `data:image/png;base64,${ x.profileImage }`;
       }
-    });
+    } );
 
     this.router.events.subscribe( x =>
     {
@@ -120,8 +125,7 @@ export class AppComponent implements OnInit
       case '/calendar':
         return new Observable( ( observer: any ) => observer.next( true ) );
       case '/admin':
-//          return this.userHasRole( [ 'admin'] ).pipe( tap( val => val ) );
-        return new Observable( ( observer: any ) => observer.next( true ) );
+        return this.userHasRole( [ 'admin' ] ).pipe( tap( val => val ) );
       case '/survey-management':
         return this.userHasRole( [ 'library', 'researcher' ] ).pipe( tap( val => val ) );
       default:
