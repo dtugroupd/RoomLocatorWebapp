@@ -1,3 +1,8 @@
+/**
+ * @author Thomas Lien Christensen, s165242
+ * @author Andreas Gøricke, s153804
+ */
+
 import { EventToCreate } from '../models/calendar/event-to-create.model';
 import { EventToUpdate } from '../models/calendar/event-to-update.model';
 

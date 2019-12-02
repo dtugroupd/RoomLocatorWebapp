@@ -1,8 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+/**
+ * @author Thomas Lien Christensen, s165242
+ */
+
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { NbDialogRef } from '@nebular/theme';
 import * as moment from 'moment';
-import { AddEvent, UpdateEvent } from 'src/app/_actions/event.actions';
+import { UpdateEvent } from 'src/app/_actions/event.actions';
 import { Event } from '../../models/calendar/event.model';
 
 @Component({
@@ -38,10 +42,6 @@ export class EventUpdateComponent implements OnInit {
 
     this.store.dispatch(new UpdateEvent(eventToUpdate));
     this.dialogRef.close();
-  }
-
-  printTime() {
-    console.log(this.time);
   }
 
   close() {

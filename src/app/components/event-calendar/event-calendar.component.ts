@@ -1,4 +1,5 @@
 /**
+ * @author Thomas Lien Christensen, s165242
  * @author Andreas Gøricke, s153804
  */
 

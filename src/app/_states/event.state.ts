@@ -8,8 +8,10 @@ import { patch, append, updateItem } from '@ngxs/store/operators';
 import { tap } from 'rxjs/operators';
 import { EventService } from '../_services/event.service';
 import { Event } from '../models/calendar/event.model';
-import { GetEvents, AddEvent, AddEventSuccess, AddEventError, UpdateEvent, UpdateEventSuccess, UpdateEventError } from '../_actions/event.actions';
-import { dispatch } from 'rxjs/internal/observable/range';
+import {
+    GetEvents, AddEvent, AddEventSuccess, AddEventError, UpdateEvent, UpdateEventSuccess,
+    UpdateEventError
+} from '../_actions/event.actions';
 
 export class EventStateModel {
     events: Event[];

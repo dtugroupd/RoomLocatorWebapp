@@ -1,8 +1,10 @@
 /**
  * @author Andreas Gøricke, s153804
+ * @author Thomas Lien Christensen, s165242
  */
-import { Component, OnInit } from '@angular/core';
-import { NbToastrService, NbDialogRef } from '@nebular/theme';
+
+import { Component } from '@angular/core';
+import { NbDialogRef } from '@nebular/theme';
 import * as moment from 'moment';
 import { Store } from '@ngxs/store';
 import { AddEvent } from 'src/app/_actions/event.actions';

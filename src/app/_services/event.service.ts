@@ -1,5 +1,6 @@
 /**
  * @author Andreas Gøricke, s153804
+ * @author Thomas Lien Christensen, s165242
  */
 
 import { Injectable } from '@angular/core';
