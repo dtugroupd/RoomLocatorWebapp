@@ -6,6 +6,7 @@ import { tap } from 'rxjs/operators';
 
 export class UserDisclaimerStateModel {
     hasAccepted: boolean;
+    disclaimerLoading: boolean;
 }
 
 /**
@@ -23,9 +24,10 @@ export class UserDisclaimerState {
     }
 
     @Action(SetAcceptedDisclaimer)
-    setAcceptedDisclaimer({ setState }: StateContext<UserDisclaimerStateModel>, { studentId }) {
+    setAcceptedDisclaimer({ setState, patchState }: StateContext<UserDisclaimerStateModel>, { studentId }) {
+        patchState({ disclaimerLoading: true });
         return this.userService.hasAcceptedDisclaimer(studentId).pipe(tap((userDisclaimer: UserDisclaimer) => {
-            setState({ hasAccepted: userDisclaimer.hasAcceptedDisclaimer})
-        }));
+            setState({ hasAccepted: userDisclaimer.hasAcceptedDisclaimer, disclaimerLoading: false })
+        }, _ => patchState({disclaimerLoading: false })));
     }
 }
