@@ -1,3 +1,7 @@
+/**
+ * @author Andreas Gøricke, s153804
+ */
+
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarAlt as faCalendarAltReg} from '@fortawesome/free-regular-svg-icons';
