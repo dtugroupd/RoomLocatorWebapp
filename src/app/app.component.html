@@ -14,8 +14,8 @@
             <div class="links" *ngIf="isAuthenticated$ | async">
                 <a *ngFor="let item of menuItems" routerLink="{{ item.link }}" [ngClass]="(userHasAccess(item.link) | async) ? '' : 'hide'">{{ item.title }}</a>
             </div>
-            <div class="link" *ngIf="!(isAuthenticated$ | async)">Not logged in</div>
         </nb-layout-column>
+
         <fa-icon class="burger-menu-button" [icon]="faBars" (click)="toggleMobileMenu()"></fa-icon>
         <nb-user class="user" *ngIf="user$ | async" name="{{ (user$ | async).fullName }}" title="{{ (user$ | async).studentId }}" [picture]="base64Image" 
         style="justify-content: flex-end;" 
@@ -23,7 +23,7 @@
         nbContextMenuTag="my-context-menu"></nb-user>
     </nb-layout-header>
 
-    <nb-layout-column (click)="hideMobileMenu()">
+    <nb-layout-column (click)="hideMobileMenu()" [className]="(viewIsMazemap$ | async) ? 'no-padding' : ''">
         <div class="mobile-menu" [@toggleMobileMenu]="mobileMenuToggled ? 'show' : 'hide'">
             <div class="mobile-user-container">
                 <nb-user class="mobile-user" size="large" color="#cccccc" *ngIf="user$ | async" name="{{ (user$ | async).studentId }}"></nb-user>
@@ -39,6 +39,9 @@
     </nb-layout-column>
     <nb-layout-footer fixed>
         <!-- Insert footer here -->
+        <nb-select placeholder="Theme" [(selected)]="selectedTheme" size="tiny" onchange="changeTheme()">
+            <nb-option *ngFor="let theme of themes" [value]="theme" (click)="changeTheme(theme)">{{ theme }}</nb-option>
+        </nb-select>
     </nb-layout-footer>
 
 </nb-layout>

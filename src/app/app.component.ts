@@ -54,6 +54,15 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 
 export class AppComponent implements OnInit
 {
+
+  constructor(private store: Store, private router: Router, private themeService: NbThemeService,
+     private nbMenuService: NbMenuService, @Inject(NB_WINDOW) private window){
+    const preferredTheme = localStorage.getItem("theme");
+    if (preferredTheme) {
+      this.selectedTheme = preferredTheme;
+      this.themeService.changeTheme(preferredTheme);
+    }
+  }
   title = 'RoomLocatorWebapp';
   activeSection: LibrarySection;
   faPoll = faPoll;
@@ -62,16 +71,13 @@ export class AppComponent implements OnInit
   mobileMenuToggled = false;
   faBars = faBars;
   base64Image: string = "";
+  selectedTheme = 'default';
+  themes = [ "Default", "Dark", "Cosmic" ];
 
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
   @Select(TokenState.getUser) user$: Observable<User>;
   @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
-
-  constructor(private store: Store, private router: Router, private themeService: NbThemeService, 
-    private nbMenuService: NbMenuService, @Inject(NB_WINDOW) private window) {
-    // this.themeService.changeTheme('cosmic')
-  }
-  
+  @Select(MazemapState.getActivateFeedbackAndStatus) viewIsMazemap$: Observable<boolean>;
 
 items = [
     { title: 'Profile' },
@@ -102,17 +108,27 @@ items = [
   ];
   
 
-  ngOnInit() {
-    this.activeSection$.subscribe(x => {
+  changeTheme(newTheme: string): void {
+    this.selectedTheme = newTheme.toLowerCase();
+    localStorage.setItem("theme", this.selectedTheme);
+    this.themeService.changeTheme(this.selectedTheme);
+  }
+
+  ngOnInit ()
+  {
+    this.activeSection$.subscribe( x =>
+    {
       this.activeSection = x;
     } );
 
-    this.store.dispatch(new GetSurveys());
-    this.user$.subscribe(x => {
-      if (x) {
-        this.base64Image = `data:image/png;base64,${x.profileImage}`;
+    this.store.dispatch( new GetSurveys() );
+    this.user$.subscribe( x =>
+    {
+      if ( x )
+      {
+        this.base64Image = `data:image/png;base64,${ x.profileImage }`;
       }
-    });
+    } );
 
     this.router.events.subscribe( x =>
     {
@@ -141,7 +157,7 @@ items = [
       case '/calendar':
         return new Observable( ( observer: any ) => observer.next( true ) );
       case '/admin':
-        return new Observable( ( observer: any ) => observer.next( true ) );
+        return this.userHasRole( [ 'admin' ] ).pipe( tap( val => val ) );
       case '/survey-management':
         return this.userHasRole( [ 'library', 'researcher' ] ).pipe( tap( val => val ) );
       default:
