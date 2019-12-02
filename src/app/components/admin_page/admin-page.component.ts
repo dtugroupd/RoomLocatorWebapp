@@ -11,6 +11,7 @@ import { TokenState } from 'src/app/_states/token.state';
 import { Observable } from 'rxjs';
 import { UserDeleteComponent } from '../user-delete/user-delete.component';
 
+
 export interface Role
 {
   name: string;
@@ -30,6 +31,7 @@ export class AdminPageComponent implements OnInit
 
   users: any;
   user: any;
+
   selectedRow: number;
   setClickedRow: Function;
   selectedRole: string;
@@ -39,6 +41,7 @@ export class AdminPageComponent implements OnInit
   isShow = false;
   currentUser: User;
   dialogRef: any;
+
 
   roles: Role[] = [
     { name: 'admin', viewName: 'Admin' },
@@ -72,6 +75,7 @@ export class AdminPageComponent implements OnInit
           }
         });
         if ( item.studentId.toLowerCase().includes(filter.toLowerCase()) || item.fullName.toLowerCase().includes(filter.toLowerCase()) ) {
+
           return true;
         }
         return exists;
@@ -118,6 +122,7 @@ export class AdminPageComponent implements OnInit
         closeOnNavigation: true,
         data: {user: this.users[ this.selectedRow ]}
       }); }, 200);
+
   }
 
 }
