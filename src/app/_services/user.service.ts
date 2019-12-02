@@ -6,7 +6,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base.service';
-import { User, AuthenticatedModel, LoginModel } from '../models/login/user.model';
+import { User, AuthenticatedModel, LoginModel, UserDisclaimer } from '../models/login/user.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -24,5 +24,9 @@ export class UserService extends BaseService {
 
   login(loginModel: LoginModel): Observable<AuthenticatedModel> {
     return this.http.post<AuthenticatedModel>(`${this.backendBaseUrl}/api/v1/auth/login`, loginModel);
+  }
+
+  hasAcceptedDisclaimer(studentId: string): Observable<UserDisclaimer> {
+    return this.http.get<UserDisclaimer>(`${this.backendBaseUrl}/api/v1/user/${studentId}/disclaimer`);
   }
 }

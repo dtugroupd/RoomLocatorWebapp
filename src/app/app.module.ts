@@ -8,7 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
   NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
-  NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule, NbUserModule, NbDatepickerModule
+  NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule,
+  NbActionsModule, NbUserModule, NbSelectModule, NbCheckboxModule, NbDatepickerModule
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -37,11 +38,15 @@ import { AccessDeniedComponent } from './components/access_denied/access-denied.
 import { AdminPageComponent } from './components/admin_page/admin-page.component';
 import { AdminState } from './_states/admin.state';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
-import { MatTableModule, MatInputModule } from '@angular/material'
+import { MatTableModule, MatInputModule, MatDialogModule } from '@angular/material';
 import { LoginComponent } from './components/login/login.component';
 import { EventCreateComponent } from './components/event-create/event-create.component';
 import { EventState } from './_states/event.state';
 import { EventUpdateComponent } from './components/event-update/event-update.component';
+import { UserDeleteComponent } from './components/user-delete/user-delete.component';
+import { UserDisclaimerState } from './_states/user.state';
+import { ShowFeedbackComponent } from './components/showFeedback/show-feedback.component';
+
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
@@ -58,13 +63,15 @@ const appRoutes: Routes = [
     EventCalendarComponent,
     SurveyFeedbackButtonComponent,
     StatusButtonComponent,
+    ShowFeedbackComponent,
     StatusButtonMenuComponent,
     SurveyManagementComponent,
     AccessDeniedComponent,
     EventCreateComponent,
     AdminPageComponent,
     LoginComponent,
-    EventUpdateComponent
+    EventUpdateComponent,
+    UserDeleteComponent,
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -72,9 +79,11 @@ const appRoutes: Routes = [
     SurveyFeedbackSmileyRowComponent,
     SurveyFeedbackButtonComponent,
     SurveyCreateComponent,
+    ShowFeedbackComponent,
     MazemapComponent,
     AdminPageComponent,
-    EventUpdateComponent
+    EventUpdateComponent,
+    UserDeleteComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {
@@ -94,6 +103,7 @@ const appRoutes: Routes = [
     NbDatepickerModule.forRoot(),
     NbAccordionModule,
     NbActionsModule,
+    MatDialogModule,
     NbCardModule,
     MatTableModule,
     NbInputModule,
@@ -105,11 +115,19 @@ const appRoutes: Routes = [
     MatInputModule,
     NbContextMenuModule,
     NbMenuModule,
+    NbSelectModule,
+    NbCheckboxModule,
     NbMenuModule.forRoot(),
     NbDialogModule.forRoot(),
     NbToastrModule.forRoot(),
     Ng2SearchPipeModule,
-    NgxsModule.forRoot([MazemapState, TokenState, EventState, AdminState]),
+    NgxsModule.forRoot([
+      MazemapState,
+      TokenState,
+      AdminState,
+      EventState,
+      UserDisclaimerState,
+    ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot()
   ],
