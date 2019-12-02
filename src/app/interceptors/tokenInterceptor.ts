@@ -40,7 +40,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
           if (err.status === 401) {
             this.router.navigate(['/']);
           } else if (err.status === 403) {
-          //  this.router.navigate(['/access-denied']);
+           this.router.navigate(['/access-denied']);
           }
         }
       }

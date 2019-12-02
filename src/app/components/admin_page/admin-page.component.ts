@@ -2,15 +2,14 @@
  * @author Hadi Horani, s144885
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { GetUsers, UpdateRole, DeleteUser } from 'src/app/_actions/admin.actions';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 import { User } from 'src/app/models/login/user.model';
-import { Popup } from 'ng2-opd-popup';
-import { NbDialogService } from '@nebular/theme';
 import { TokenState } from 'src/app/_states/token.state';
 import { Observable } from 'rxjs';
+import { UserDeleteComponent } from '../user-delete/user-delete.component';
 
 export interface Role
 {
@@ -30,6 +29,7 @@ export class AdminPageComponent implements OnInit
   @Select(TokenState.getUser) user$: Observable<User>;
 
   users: any;
+  user: any;
   selectedRow: number;
   setClickedRow: Function;
   selectedRole: string;
@@ -38,6 +38,7 @@ export class AdminPageComponent implements OnInit
   dataSource: MatTableDataSource<User>;
   isShow = false;
   currentUser: User;
+  dialogRef: any;
 
   roles: Role[] = [
     { name: 'admin', viewName: 'Admin' },
@@ -47,7 +48,7 @@ export class AdminPageComponent implements OnInit
 
   displayedColumns: string[] = [ 'userID', 'fullName', 'userRole', 'action' ];
 
-  constructor ( private store: Store, public popup: Popup ) { }
+  constructor ( private store: Store, private dialogService: MatDialog ) { }
 
   ngOnInit ()
   {
@@ -105,29 +106,18 @@ export class AdminPageComponent implements OnInit
     this.store.dispatch( new UpdateRole( this.selectedUserId, this.selectedRole ) ).subscribe( () => { } );
   }
 
-  deleteUser() {
-    this.selectedUserId = this.users[ this.selectedRow ].studentId;
-    this.store.dispatch( new DeleteUser( this.selectedUserId ) ).subscribe( () => { } );
-    this.popup.hide();
-  }
-
   confirmDeletion() {
 
     if (this.isShow) {
     this.toggleDisplay();
     }
 
-    setTimeout(() => {
-      this.popup.options = {
-        header: 'Deletion of ' + this.users[ this.selectedRow ].studentId + ' (' + this.users[ this.selectedRow ].fullName + ')',
-        confirmBtnContent: 'Yes',
-        cancleBtnContent: 'No',
-        confirmBtnClass: 'btn btn-default',
-        cancleBtnClass: 'btn btn-default',
-        animation: 'fadeInDown'
-    };
-      this.popup.show(this.popup.options);
-    }, 100);
+    setTimeout( () => {
+      this.dialogService.open(UserDeleteComponent, {
+        autoFocus: false,
+        closeOnNavigation: true,
+        data: {user: this.users[ this.selectedRow ]}
+      }); }, 200);
   }
 
 }
