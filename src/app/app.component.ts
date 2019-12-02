@@ -121,12 +121,6 @@ items = [
       }
     });
     
-    this.nbMenuService.onItemClick()
-    .pipe(
-      filter(({ tag }) => tag === 'my-context-menu'),
-      map(({ item: { title } }) => title),
-    )
-    .subscribe(title => this.window.alert(`${title} was clicked!`));
   }
 
   userHasAccess(link: string): Observable<boolean> {
