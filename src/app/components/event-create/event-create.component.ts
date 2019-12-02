@@ -1,7 +1,6 @@
 /**
  * @author Andreas Gøricke, s153804
  */
-
 import { Component, OnInit } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
 import { EventService } from '../../_services/event.service';
@@ -24,7 +23,6 @@ export class EventCreateComponent {
 
   constructor( private service: EventService, private toastrService: NbToastrService) { }
 
-
   submit() {
       const eventToCreate = {
         title: this.title,
@@ -46,6 +44,5 @@ export class EventCreateComponent {
       message,
       { position, status });
   }
-
 }
 

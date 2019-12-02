@@ -1,47 +1,38 @@
-
-
-
-
-
-    <div class="searchBar">
-     <nb-search type="rotate-layout"></nb-search>
-    </div>
-      
-        
-     
-  
-  
-        <nb-card *ngFor="let event of events$ | async"  class="eventCard">
-            <nb-card-body>
-                <nb-accordion>
-                    <nb-accordion-item >
-                     <nb-accordion-item-header>
-                          <table class="eventInfoTable">
-                            <tr>
-                              <th>
-                                <fa-icon [icon]="faCalendarAltReg" [className]="'calendar'"></fa-icon>  
-                              </th>
-                              <th>
-                                  <h6>{{ moment(event.date).format('DD MMM') }} </h6>
-                                  <h6>kl. {{ moment(event.date).format('HH:mm') }}</h6>
-                              </th>
-                              <th >
-                                  <h6 style="font-weight: normal;">{{ event.title }}</h6>
-                              </th>
-                            </tr>
-                          </table>
-                    </nb-accordion-item-header>.substr(5,5).replace('-','/')
-                     <nb-accordion-item-body>
-                       <table>
+<div class="searchBar">
+    <nb-search type="rotate-layout"></nb-search>
+</div>
+<app-event-create></app-event-create>
+<nb-card *ngFor="let event of events$ | async" class="eventCard">
+    <nb-card-body>
+        <nb-accordion>
+            <nb-accordion-item>
+                <nb-accordion-item-header>
+                    <table class="eventInfoTable">
                         <tr>
-                          {{ event.description }}
+                            <th>
+                                <fa-icon [icon]="faCalendarAltReg" [className]="'calendar'"></fa-icon>
+                            </th>
+                            <th>
+                                <h6>{{ moment(event.date).format('DD MMM') }} </h6>
+                                <h6>kl. {{ moment(event.date).format('HH:mm') }}</h6>
+                            </th>
+                            <th>
+                                <h6 style="font-weight: normal;">{{ event.title }}</h6>
+                            </th>
+                        </tr>
+                    </table>
+                </nb-accordion-item-header>.substr(5,5).replace('-','/')
+                <nb-accordion-item-body>
+                    <table>
+                        <tr>
+                            {{ event.description }}
                         </tr>
                         <tr>
-                          Varighed: ca {{ event.durationInHours }} timer.
+                            Varighed: ca {{ event.durationInHours }} timer.
                         </tr>
-                        </table>
-                     </nb-accordion-item-body>
-                    </nb-accordion-item>
-                   </nb-accordion>
-              </nb-card-body>
-        </nb-card>
+                    </table>
+                </nb-accordion-item-body>
+            </nb-accordion-item>
+        </nb-accordion>
+    </nb-card-body>
+</nb-card>

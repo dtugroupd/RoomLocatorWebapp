@@ -1,17 +1,24 @@
-
 <nb-card class="createEventCard">
     <nb-card-body>
-        <h4>Create Event</h4>
-        <div class="line"></div>
-        <h6>About</h6>
-        <input type="text" nbInput fullWidth placeholder="Title" [(ngModel)]="title" #titleModel="ngModel" required>
-        <textarea nbInput fullWidth placeholder="Description" [(ngModel)]="description" #descriptionModel="ngModel" required></textarea>
-        <input type="speakers" nbInput fullWidth placeholder="Fordragsholdere/Ansvarlige" [(ngModel)]="speakers" #speakersModel="ngModel" required>
-        <h6>Time</h6>
-        <input nbInput fullWidth placeholder="Pick Date" [nbDatepicker]="formpicker" [(ngModel)]="date" #dateModel="ngModel" required>
-        <nb-datepicker #formpicker></nb-datepicker>
-        <input type="time" nbInput fullWidth [(ngModel)]="time" #timeModel="ngModel" required>
-        <input type="number" nbInput fullWidth placeholder="Duration (hours)" [(ngModel)]="duration" #durationModel="ngModel">
-        <button nbButton outline (click)=submit()>Submit</button>
+        <form (ngSubmit)="submit()" #f="ngForm" novalidate>
+            <h4>Create Event</h4>
+            <div class="line"></div>
+            <div class="form-control">
+                <h6>About</h6>
+                <input type="text" nbInput fullWidth placeholder="Title" [(ngModel)]="title" #titleModel="ngModel" required>
+                <textarea nbInput fullWidth placeholder="Description" [(ngModel)]="description" #descriptionModel="ngModel" required></textarea>
+                <input type="speakers" nbInput fullWidth placeholder="Fordragsholdere/Ansvarlige" [(ngModel)]="speakers" #speakersModel="ngModel" required>
+            </div>
+            <div class="form-control">
+                <h6>Time</h6>
+                <input nbInput fullWidth placeholder="Pick Date" [nbDatepicker]="formpicker" [(ngModel)]="date" #dateModel="ngModel" required>
+                <nb-datepicker #formpicker></nb-datepicker>
+                <input type="time" nbInput fullWidth [(ngModel)]="time" #timeModel="ngModel" required>
+                <input type="number" nbInput fullWidth placeholder="Duration (hours)" [(ngModel)]="duration" #durationModel="ngModel">
+            </div>
+            <div class="form-control">
+                <button nbButton outline (click)=submit()>Submit</button>
+            </div>
+        </form>
     </nb-card-body>
 </nb-card>
