@@ -32,6 +32,14 @@ export class TokenState {
     }
 
     @Selector()
+    static userIsAdmin(state: TokenStateModel): boolean {
+        if (state.user && state.user.roles) {
+           return state.user.roles.filter(() => state.user.roles.includes('admin')).length !== 0;
+        }
+        return false;
+    }
+
+    @Selector()
     static isAuthenticated(state: TokenStateModel): boolean {
         const jwtHelper = new JwtHelperService();
 

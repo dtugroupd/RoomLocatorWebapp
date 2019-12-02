@@ -2,30 +2,41 @@
  * @author Andreas Gøricke, s153804
  */
 
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { faCalendarAlt as faCalendarAltReg} from '@fortawesome/free-regular-svg-icons';
-import { EventService } from '../../_services/event.service';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { faCalendarAlt as faCalendarAltReg, faEdit} from '@fortawesome/free-regular-svg-icons';
 import { Observable } from 'rxjs';
 import { EventState } from 'src/app/_states/event.state';
-import { Select, Store } from '@ngxs/store';
-import { GetEvents } from 'src/app/_actions/event.actions';
-import { Event } from '../../models/calendar/event.model'
+import { Select, Store, Actions, ofActionDispatched } from '@ngxs/store';
+import { GetEvents, AddEventSuccess, AddEventError, UpdateEventSuccess, UpdateEventError } from 'src/app/_actions/event.actions';
+import { Event } from '../../models/calendar/event.model';
 import * as moment from 'moment';
+import { NbToastrService, NbDialogService } from '@nebular/theme';
+import { EventCreateComponent } from '../event-create/event-create.component';
+import { EventUpdateComponent } from '../event-update/event-update.component';
+import { TokenState } from 'src/app/_states/token.state';
 
 @Component({
   selector: 'app-event-calendar',
   templateUrl: './event-calendar.component.html',
   styleUrls: ['./event-calendar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class EventCalendarComponent {
+export class EventCalendarComponent implements OnInit {
   moment = moment;
   faCalendarAltReg = faCalendarAltReg;
+  faEdit = faEdit;
   events: Event[];
-  constructor( private service: EventService, private store: Store) { }
+
+  constructor(
+    private store: Store,
+    private action$: Actions,
+    private toastrService: NbToastrService,
+    private dialogService: NbDialogService
+  ) {}
 
   @Select(EventState.getEvents) events$: Observable<Event[]>;
+  @Select(TokenState.userIsAdmin) userIsAdmin$: Observable<boolean>;
 
   ngOnInit() {
     this.store.dispatch(new GetEvents());
@@ -33,6 +44,57 @@ export class EventCalendarComponent {
     this.events$.subscribe(x => {
       this.events = x;
     });
+
+    this.action$.pipe(ofActionDispatched(AddEventSuccess)).subscribe(() => {
+      this.showSuccessToast('top-right', 'success', 'Dit event er oprettet.');
+    });
+
+    this.action$.pipe(ofActionDispatched(UpdateEventSuccess)).subscribe(() => {
+      this.showSuccessToast('top-right', 'success', 'Eventet er opdateret.');
+    });
+
+    this.action$.pipe(ofActionDispatched(AddEventError)).subscribe(() => {
+      this.showSuccessToast('top-right', 'danger', 'Dit event kunne ikke oprettes. Prøv igen.');
+    });
+
+    this.action$.pipe(ofActionDispatched(UpdateEventError)).subscribe(() => {
+      this.showSuccessToast('top-right', 'danger', 'Eventet kunne ikke opdateres. Prøv igen.');
+    });
   }
 
+  fitToLength(chars: number, text: string) {
+    if (text.length > chars) {
+      return text.substring(0, chars) + '...';
+    }
+
+    return text;
+  }
+  openCreateEventDialog() {
+    const settings = {
+      autoFocus: false,
+      closeOnBackdropClick: true,
+      closeOnEsc: true
+    };
+
+    this.dialogService.open(EventCreateComponent, settings);
+  }
+
+  openEditEventDialog(event: Event) {
+    const context = { event };
+    const settings = {
+      autoFocus: false,
+      closeOnBackdropClick: true,
+      closeOnEsc: true,
+      context
+    };
+    this.dialogService.open(EventUpdateComponent, settings);
+  }
+
+  showSuccessToast(position, status, message) {
+    this.toastrService.show(status, message, { position, status });
+  }
+
+  showErrorToast(position, status, message) {
+    this.toastrService.show(status, message, { position, status });
+  }
 }

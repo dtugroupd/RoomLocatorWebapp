@@ -1,7 +1,7 @@
 <div class="searchBar">
     <nb-search type="rotate-layout"></nb-search>
 </div>
-<app-event-create></app-event-create>
+<button *ngIf="userIsAdmin$ | async" nbButton (click)="openCreateEventDialog()">Create event</button>
 <nb-card *ngFor="let event of events$ | async" class="eventCard">
     <nb-card-body>
         <nb-accordion>
@@ -18,11 +18,17 @@
                             </th>
                             <th>
                                 <h6 style="font-weight: normal;">{{ event.title }}</h6>
+                                <div *ngIf="event.speakers" style="font-weight: normal">
+                                    Speakers: {{ fitToLength(25, event.speakers) }}
+                                </div>
                             </th>
                         </tr>
                     </table>
                 </nb-accordion-item-header>.substr(5,5).replace('-','/')
                 <nb-accordion-item-body>
+                    <nb-actions>
+                        <nb-action *ngIf="userIsAdmin$ | async" (click)="openEditEventDialog(event)" class="action"><fa-icon [icon]="faEdit"></fa-icon></nb-action>
+                    </nb-actions>
                     <table>
                         <tr>
                             {{ event.description }}

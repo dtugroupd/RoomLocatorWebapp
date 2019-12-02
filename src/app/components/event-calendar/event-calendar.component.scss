@@ -46,3 +46,21 @@
 .eventCard nb-accordion {
     box-shadow: none;
 }
+
+nb-actions {
+    justify-content: flex-end;
+}
+
+.action {
+    cursor: pointer;
+}
+
+.action fa-icon {
+    font-size: 18px;
+    transition: ease-in-out 100ms;
+}
+
+
+.action fa-icon:hover {
+    font-size: 20px;
+}
