@@ -73,7 +73,6 @@ export class AppComponent implements OnInit
 
   changeTheme(newTheme: string): void {
     this.selectedTheme = newTheme.toLowerCase();
-    console.log("Changing theme", newTheme)
     localStorage.setItem("theme", this.selectedTheme);
     this.themeService.changeTheme(this.selectedTheme);
   }

@@ -24,9 +24,7 @@ export class UserDisclaimerState {
 
     @Action(SetAcceptedDisclaimer)
     setAcceptedDisclaimer({ setState }: StateContext<UserDisclaimerStateModel>, { studentId }) {
-        console.log("Fetching accepted for user", studentId)
         return this.userService.hasAcceptedDisclaimer(studentId).pipe(tap((userDisclaimer: UserDisclaimer) => {
-            console.log("I received", userDisclaimer)
             setState({ hasAccepted: userDisclaimer.hasAcceptedDisclaimer})
         }));
     }

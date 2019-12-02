@@ -27,7 +27,6 @@ export class UserService extends BaseService {
   }
 
   hasAcceptedDisclaimer(studentId: string): Observable<UserDisclaimer> {
-    console.log("I will now get the things")
     return this.http.get<UserDisclaimer>(`${this.backendBaseUrl}/api/v1/user/${studentId}/disclaimer`);
   }
 }

@@ -25,7 +25,6 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.hasAcceptedDisclaimer$.subscribe(disclaimer => {
-      console.log("I got disclaimer", disclaimer)
       this.acceptedDisclaimer = disclaimer;
     });
   }
