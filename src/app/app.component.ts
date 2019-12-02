@@ -21,31 +21,32 @@ import { map, tap } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
-@Component({
+@Component( {
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  styleUrls: [ './app.component.scss' ],
   animations: [
-    trigger('toggleMobileMenu', [
-      state('show', style({
+    trigger( 'toggleMobileMenu', [
+      state( 'show', style( {
         width: '80%',
         opacity: 1,
-      })),
-      state('hide', style({
+      } ) ),
+      state( 'hide', style( {
         width: '0px',
         opacity: 0.0,
-      })),
-      transition('show => hide', [
-        animate('0.15s ease-in-out')
-      ]),
-      transition('hide => show', [
-        animate('0.15s ease-in-out')
-      ]),
-    ]),
+      } ) ),
+      transition( 'show => hide', [
+        animate( '0.15s ease-in-out' )
+      ] ),
+      transition( 'hide => show', [
+        animate( '0.15s ease-in-out' )
+      ] ),
+    ] ),
   ]
-})
+} )
 
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit
+{
   title = 'RoomLocatorWebapp';
   activeSection: LibrarySection;
   faPoll = faPoll;
@@ -79,13 +80,17 @@ export class AppComponent implements OnInit {
     {
       'title': 'Manage Surveys',
       'link': '/survey-management'
+    },
+    {
+      'title': 'Admin Page',
+      'link': '/admin'
     }
   ];
 
   ngOnInit() {
     this.activeSection$.subscribe(x => {
       this.activeSection = x;
-    });
+    } );
 
     this.store.dispatch(new GetSurveys());
     this.user$.subscribe(x => {
@@ -94,49 +99,61 @@ export class AppComponent implements OnInit {
       }
     });
 
-    this.router.events.subscribe(x => {
-      if (x instanceof NavigationEnd) {
-        switch (x.urlAfterRedirects) {
+    this.router.events.subscribe( x =>
+    {
+      if ( x instanceof NavigationEnd )
+      {
+        switch ( x.urlAfterRedirects )
+        {
           case '/mazemap':
-            this.store.dispatch(new SetActivateFeedbackAndStatus(true));
+            this.store.dispatch( new SetActivateFeedbackAndStatus( true ) );
             break;
           default:
             break;
         }
       }
-    });
+    } );
   }
 
-  userHasAccess(link: string): Observable<boolean> {
-    switch (link) {
+  userHasAccess ( link: string ): Observable<boolean>
+  {
+    switch ( link )
+    {
       case '/':
-        return new Observable((observer: any) => observer.next(true));
+        return new Observable( ( observer: any ) => observer.next( true ) );
       case '/mazemap':
-        return new Observable((observer: any) => observer.next(true));
+        return new Observable( ( observer: any ) => observer.next( true ) );
       case '/calendar':
-        return new Observable((observer: any) => observer.next(true));
+        return new Observable( ( observer: any ) => observer.next( true ) );
+      case '/admin':
+        return new Observable( ( observer: any ) => observer.next( true ) );
       case '/survey-management':
-        return this.userHasRole(['library', 'researcher']).pipe(tap(val => val));
+        return this.userHasRole( [ 'library', 'researcher' ] ).pipe( tap( val => val ) );
       default:
-        return new Observable((observer: any) => observer.next(false));
+        return new Observable( ( observer: any ) => observer.next( false ) );
     }
   }
 
-  userHasRole(roles: string[]): Observable<boolean> {
-    return this.user$.pipe(map(user => {
-      if (user && user.roles) {
-        return roles.filter(role => user.roles.includes(role)).length !== 0;
+  userHasRole ( roles: string[] ): Observable<boolean>
+  {
+    return this.user$.pipe( map( user =>
+    {
+      if ( user && user.roles )
+      {
+        return roles.filter( role => user.roles.includes( role ) ).length !== 0;
       }
 
       return false;
-    }));
+    } ) );
   }
 
-  toggleMobileMenu() {
+  toggleMobileMenu ()
+  {
     this.mobileMenuToggled = !this.mobileMenuToggled;
   }
 
-  hideMobileMenu() {
+  hideMobileMenu ()
+  {
     this.mobileMenuToggled = false;
   }
 }
