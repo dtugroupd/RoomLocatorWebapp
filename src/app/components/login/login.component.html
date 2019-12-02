@@ -7,7 +7,7 @@
         <nb-card-body>
             <div class="form-control">
                 <label for="username">DTU Username</label>
-                <input type="text" name="username" [(ngModel)]="username" nbInput required />
+                <input type="text" name="username" [(ngModel)]="username" on-focusout="usernameLostFocus()" nbInput autofocus required />
             </div>
 
             <br>
@@ -16,9 +16,18 @@
                 <label for="password">DTU Password</label>
                 <input type="password" name="password" [(ngModel)]="password" nbInput required />
             </div>
+
+            <div class="form-control">
+                <p>
+                    <strong>Disclaimer: </strong>This form uses <a href="https://cn.inside.dtu.dk/data/Documentation/Index.aspx" rel="noopener noreferrer" target="_blank">DTU CampusNet API</a> for signing in. No credentials are stored on the server (see
+                    the <a href="https://github.com/dtugroupd/RoomLocatorBackend/blob/master/RoomLocator/RoomLocator.Data/Services/CampusNetAuthService.cs#L67L76" rel="noopener noreferrer" target="_blank">source here</a>). We will store student id, full
+                    name, email and profile image on the server for better user experience. If you decide you no longer want us to store your details, you can always remove your data from your profile.
+                </p>
+                <nb-checkbox (checkedChange)="acceptDisclaimer($event)" [(checked)]="acceptedDisclaimer" [disabled]="acceptedDisclaimer == null">I Accept the Disclaimer</nb-checkbox>
+            </div>
         </nb-card-body>
         <nb-card-footer>
-                <button ngButton outline type="submit">Sign In</button>
+            <button nbButton outline type="submit" [disabled]="!acceptedDisclaimer">Sign In</button>
         </nb-card-footer>
     </form>
 </nb-card>

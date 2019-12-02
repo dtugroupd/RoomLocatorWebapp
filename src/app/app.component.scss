@@ -5,12 +5,13 @@
 .header-nav-button {
     background: none !important;
     border: none !important;
-    font-size:2em !important;
+    font-size: 2em !important;
 }
 
 .header-nav-button fa-icon {
     color: #0B8BED;
 }
+
 // .nb-theme-default nb-menu ul.menu-items {
 //     display: flex !important;
 //     flex-flow: row;
@@ -101,15 +102,12 @@
         flex-flow: row;
         justify-content: flex-start;
     }
-
     .user {
         display: block;
     }
-
     .burger-menu-button {
         display: none;
     }
-
     .mobile-menu {
         display: none;
     }
@@ -122,3 +120,6 @@ $nb-enable-css-custom-properties: true; // <-- enable css custom properties
     color: var(--color-primary-500)
 }
 
+.no-padding {
+    padding: 0 !important;
+}
