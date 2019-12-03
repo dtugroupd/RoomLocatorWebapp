@@ -19,11 +19,11 @@
 
 nb-action fa-icon {
     cursor: pointer;
-    color: #404040
+    color: var(--actions-icon-color)
 }
 
 nb-action fa-icon:hover {
-    color: black;
+    color: var(--actions-icon-hover-color)
 }
 
 nb-actions {
@@ -31,7 +31,6 @@ nb-actions {
 }
 
 .active {
-    background-color: #F8F8F8;
-    border: 1px solid #ddd;
+    background-color: var(--background-basic-color-2);
     margin-bottom: 40px;
 }
