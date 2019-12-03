@@ -35,6 +35,7 @@ import { AuthRouteGuard as authRouteGuard } from './_services/_guards/auth-guard
 import { TokenInterceptor } from './interceptors/tokenInterceptor';
 import { TokenState } from './_states/token.state';
 import { RouterModule, Routes } from '@angular/router';
+import { FeedbackState } from './_states/feedback.state';
 import { AccessDeniedComponent } from './components/access_denied/access-denied.component';
 import { AdminPageComponent } from './components/admin_page/admin-page.component';
 import { AdminState } from './_states/admin.state';
@@ -126,6 +127,7 @@ const appRoutes: Routes = [
     NgxsModule.forRoot([
       MazemapState,
       TokenState,
+      FeedbackState,
       AdminState,
       EventState,
       UserDisclaimerState,

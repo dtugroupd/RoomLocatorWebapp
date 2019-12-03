@@ -26,9 +26,9 @@
     <nb-layout-column (click)="hideMobileMenu()" [className]="(viewIsMazemap$ | async) ? 'no-padding' : ''">
         <div class="mobile-menu" [@toggleMobileMenu]="mobileMenuToggled ? 'show' : 'hide'">
             <div class="mobile-user-container">
-                <nb-user class="mobile-user" size="large" color="#cccccc" *ngIf="user$ | async" name="{{ (user$ | async).studentId }}"></nb-user>
+                <nb-user class="mobile-user" size="large" color="#cccccc" *ngIf="user$ | async" name="{{ (user$ | async).fullName }}" title="{{ (user$ | async).studentId }}" [picture]="base64Image"></nb-user>
             </div>
-            <div class="links">
+            <div class="links" *ngIf="mobileMenuToggled">
                 <div class="mobile-link" *ngFor="let item of menuItems" routerLink="{{ item.link }}" [ngClass]="(userHasAccess(item.link) | async) ? '' : 'hide'">
                     {{ item.title }}
                 </div>
