@@ -5,8 +5,8 @@
 <div id='map'></div>
 <div class="location-header" [@activeLocation]="isLocationActive ? 'show' : 'hide'">
     <div class="location-info">{{ (activeLocation$ | async)?.name }}</div>
-    <button nbButton (click)="toggleSectionLayers()"[disabled]="toggledSections" [ngClass]="toggledSections ? 'active' : ''">Sections</button>
-    <button nbButton (click)="toggleEventLayers()" [disabled]="toggledEvents" [ngClass]="toggledEvents ? 'active' : ''">Events</button>
+    <button nbButton (click)="toggleSectionLayers()"[disabled]="toggledSections" [ngClass]="toggledSections ? 'toggled' : ''">Sections</button>
+    <button nbButton (click)="toggleEventLayers()" [disabled]="toggledEvents" [ngClass]="toggledEvents ? 'toggled' : ''">Events</button>
 </div>
 <app-status-button-menu id="statusMenu" [@showHideStatusMenu]="showStatusMenu ? 'show' : 'hide'" *ngIf="activateFeedbackAndStatus"></app-status-button-menu>
 <app-status-button id="statusButton" (click)="toggleStatusMenu()" *ngIf="activateFeedbackAndStatus"></app-status-button>

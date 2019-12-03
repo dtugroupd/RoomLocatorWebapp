@@ -17,9 +17,9 @@
     padding-bottom: 0;
 }
 
-.active {
-    background-color: green !important;
-    color: #fff !important;
+.toggled {
+    background-color: var(--button-filled-success-background-color) !important;
+    color: var(--button-filled-success-text-color) !important;
 }
 
 #statusButton {

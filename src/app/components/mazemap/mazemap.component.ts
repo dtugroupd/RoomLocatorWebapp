@@ -232,6 +232,8 @@ export class MazemapComponent implements OnInit, OnDestroy {
           this.toggleLocationLayers(true);
           this.removeSectionLayers();
           this.hideEventMarkers();
+          this.toggledEvents = false;
+          this.toggledSections = true;
           this.store.dispatch(new ResetActiveLocation());
         }
       });
