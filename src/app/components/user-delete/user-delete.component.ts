@@ -13,6 +13,7 @@ import { DeleteUser } from 'src/app/_actions/admin.actions';
   styleUrls: ['./user-delete.component.scss']
 })
 export class UserDeleteComponent {
+  private users: any;
 
   constructor(
     public dialogRef: MatDialogRef<UserDeleteComponent>,
@@ -25,8 +26,10 @@ export class UserDeleteComponent {
     }
 
     deleteUser() {
-      this.store.dispatch( new DeleteUser( this.data.user.studentId ) );
-      this.dialogRef.close();
+      this.store.dispatch( new DeleteUser( this.data.user.studentId ) ).subscribe(x => {
+        this.users = x.users.users;
+      });
+      this.dialogRef.close(this.users);
     }
 
 }

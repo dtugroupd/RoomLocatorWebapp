@@ -5,11 +5,13 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { GetUsers, UpdateRole, DeleteUser } from 'src/app/_actions/admin.actions';
-import { MatTableDataSource, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatDialog, MatDialogRef } from '@angular/material';
 import { User } from 'src/app/models/login/user.model';
 import { TokenState } from 'src/app/_states/token.state';
 import { Observable } from 'rxjs';
 import { UserDeleteComponent } from '../user-delete/user-delete.component';
+import { AdminState } from 'src/app/_states/admin.state';
+import { tap } from 'rxjs/operators';
 
 
 export interface Role
@@ -29,6 +31,7 @@ export class AdminPageComponent implements OnInit
 
   @Select(TokenState.getUser) user$: Observable<User>;
 
+
   users: any;
   user: any;
 
@@ -40,7 +43,7 @@ export class AdminPageComponent implements OnInit
   dataSource: MatTableDataSource<User>;
   isShow = false;
   currentUser: User;
-  dialogRef: any;
+  dialogRef: MatDialogRef<UserDeleteComponent>;
 
 
   roles: Role[] = [
@@ -81,8 +84,6 @@ export class AdminPageComponent implements OnInit
         return exists;
 
       }
-
-
     }
     );
 
@@ -107,7 +108,9 @@ export class AdminPageComponent implements OnInit
 
   saveNewRole() {
     this.selectedUserId = this.users[ this.selectedRow ].studentId;
-    this.store.dispatch( new UpdateRole( this.selectedUserId, this.selectedRole ) );
+    this.store.dispatch( new UpdateRole( this.selectedUserId, this.selectedRole ) ).subscribe(x => {
+      this.dataSource.data = x.users.users;
+    });
   }
 
   confirmDeletion(u: User) {
@@ -116,10 +119,14 @@ export class AdminPageComponent implements OnInit
     this.toggleDisplay();
     }
 
-    this.dialogService.open(UserDeleteComponent, {
+    this.dialogRef = this.dialogService.open(UserDeleteComponent, {
       autoFocus: false,
       closeOnNavigation: true,
       data: {user: u}
+    });
+
+    this.dialogRef.afterClosed().subscribe(x => {
+      this.dataSource.data = x.users.users;
     });
   }
 
