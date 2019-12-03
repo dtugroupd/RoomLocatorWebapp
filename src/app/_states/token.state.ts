@@ -4,12 +4,13 @@
  */
 
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { Login, SetTokenAndUser } from '../_actions/token.actions';
+import { Login, SetTokenAndUser, Logout } from '../_actions/token.actions';
 import { UserService } from '../_services/user.service';
 import { User, LoginModel, AuthenticatedModel } from '../models/login/user.model';
 import { tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ErrorModel } from '../models/general/error.model';
+import { local } from 'd3';
 
 export class TokenStateModel {
     token?: string;
@@ -91,5 +92,11 @@ export class TokenState {
         }, x => {
             patchState({ loginLoading: false, error: x.error });
         }));
+    }
+
+    @Action(Logout)
+    logout(ctx: StateContext<TokenStateModel>) {
+       // localStorage.clear();
+        return ctx.setState({user: undefined, token: undefined, loginLoading: false, error: null});
     }
 }

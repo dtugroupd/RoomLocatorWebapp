@@ -22,7 +22,8 @@ import { map, tap, filter } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { GetCurrentFeedback } from './_actions/feedback.actions';
-import { SetTokenAndUser } from './_actions/token.actions';
+import { SetTokenAndUser, Logout } from './_actions/token.actions';
+import { Token } from '@angular/compiler';
 
 
 @Component({
@@ -58,6 +59,8 @@ export class AppComponent implements OnInit, OnDestroy
 {
   subscription: Subscription;
   browserRefresh: any;
+  currentUser: User;
+  currentToken: Token;
 
   constructor(private store: Store, private router: Router, private themeService: NbThemeService,
      private nbMenuService: NbMenuService, @Inject(NB_WINDOW) private window){
@@ -90,6 +93,7 @@ export class AppComponent implements OnInit, OnDestroy
 
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
   @Select(TokenState.getUser) user$: Observable<User>;
+  @Select(TokenState.getToken) token$: Observable<Token>;
   @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
   @Select(MazemapState.getActivateFeedbackAndStatus) viewIsMazemap$: Observable<boolean>;
 
@@ -139,6 +143,13 @@ items = [
       if (x) {
         this.store.dispatch(new GetCurrentFeedback(x.id));
         this.base64Image = `data:image/png;base64,${x.profileImage}`;
+        this.currentUser = x;
+      }
+    });
+
+    this.token$.subscribe(x => {
+      if (x) {
+        this.currentToken = x;
       }
     });
 
@@ -158,6 +169,25 @@ items = [
         }
       }
     });
+
+
+    this.nbMenuService.onItemClick()
+    .pipe(
+      filter(({ tag }) => tag === 'my-context-menu'),
+      map(({ item: { title } }) => title),
+    )
+    .subscribe(title => {
+
+      if(title === "Logout")
+      {
+      this.store.dispatch(new Logout).subscribe(() => {
+        console.log('DELETED');
+        localStorage.clear();
+      })
+      }
+    }
+      
+      );
   }
 
   

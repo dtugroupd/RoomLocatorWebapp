@@ -13,3 +13,7 @@ export class Login {
 export class SetTokenAndUser {
     static readonly type = '[Token] SetTokenAndUser';
 }
+
+export class Logout {
+    static readonly type = '[Token] Logout';
+}
