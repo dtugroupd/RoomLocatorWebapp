@@ -65,7 +65,8 @@
 }
 
 .location-info {
-    background-color: #fff;
+    color: var(--layout-text-color);
+    background-color: var(--background-basic-color-1);
     padding: 10px 20px 10px 20px;
     font-size: 16px;
     font-weight: 600;
