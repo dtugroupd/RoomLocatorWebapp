@@ -1,6 +1,3 @@
-<div class="searchBar">
-    <nb-search type="rotate-layout"></nb-search>
-</div>
 <button *ngIf="userIsAdmin$ | async" nbButton (click)="openCreateEventDialog()">Create event</button>
 <nb-card *ngFor="let event of events$ | async" class="eventCard">
     <nb-card-body>
