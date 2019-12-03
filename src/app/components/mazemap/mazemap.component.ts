@@ -16,7 +16,9 @@ import {
 import {
   toLatLng, getCenter, convertSectionsToLayers,
   markerOptions, convertLocationsToLayers,
+  getEventMarkerPopupHTML
 } from './mazemap-helper';
+import { DynamicComponentService } from 'src/app/_services/DynamicComponentService';
 
 declare let Mazemap: any;
 
@@ -126,7 +128,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
   >;
   @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private dynamicComponentService: DynamicComponentService) {
 
     this.store.dispatch(new GetLocations());
     this.activateFeedbackAndStatus$.subscribe(x => {
@@ -483,10 +485,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
 
       const popup = new Mazemap.Popup({
         closeOnClick: true,
-        offset: [0, -27]
-        }).setHTML(
-        `${e.title} ${e.description}`
-      );
+      }).setHTML(getEventMarkerPopupHTML(e));
 
       marker.setPopup(popup);
       this.eventMarkers.push(marker);

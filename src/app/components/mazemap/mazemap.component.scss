@@ -30,6 +30,11 @@
     padding-bottom: 0;
 }
 
+#eventMarkerFooter {
+    display: flex; 
+    justify-content: space-between
+}
+
 #statusMenu {
     position: fixed;
     z-index: 9;

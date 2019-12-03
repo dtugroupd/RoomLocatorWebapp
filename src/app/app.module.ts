@@ -49,7 +49,6 @@ import { UserDeleteComponent } from './components/user-delete/user-delete.compon
 import { UserDisclaimerState } from './_states/user.state';
 import { ShowFeedbackComponent } from './components/showFeedback/show-feedback.component';
 
-
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
 ];
@@ -130,7 +129,7 @@ const appRoutes: Routes = [
       FeedbackState,
       AdminState,
       EventState,
-      UserDisclaimerState,
+      UserDisclaimerState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot()

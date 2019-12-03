@@ -1,5 +1,7 @@
 import { Section } from 'src/app/models/mazemap/section.model';
 import { MapLocation } from 'src/app/models/mazemap/map-location.model';
+import { Event } from 'src/app/models/calendar/event.model';
+import * as moment from 'moment';
 
 // Convert sections from backend to layers readable by MazeMap
 export function convertSectionsToLayers(ls: Array<Section>) {
@@ -198,4 +200,48 @@ export function markerOptions(layer, zLevel?: number) {
         zLevel
       }
     };
+}
+
+export function getEventMarkerPopupHTML(e: Event): string {
+  return `
+      <div style="max-width: 250px; background-color: var(--background-basic-color-1); color: var(--text-basic-color)">
+          <p style="font-size: 16px; font-weight: bold">${e.title}
+            <br>
+            <span style="font-size: 14px; font-weight: normal">
+              ${e.speakers ? e.speakers : ''}
+            </span>
+          <p style="font-size: 12px">${e.description}</p>
+          <hr/>
+          <div id="eventMarkerFooter" style="display: flex; justify-content: flex-start">
+              <div style="margin-right: 20px;">
+                  <div style="font-weight: bold">
+                    Date
+                  </div>
+                  <div>
+                    ${moment(e.date).format('ddd, DD-MM-YYYY')}
+                  </div>
+              </div>
+              <div style="margin-right: 20px;">
+                  <div style="font-weight: bold">
+                    Time
+                  </div>
+                  <div>
+                    ${moment(e.date).format('HH:mm')}
+              </div>
+              </div>
+              <div>
+                <div style="font-weight: bold">
+                    Duration
+                </div>
+                <div>
+                    ${
+                      e.durationInHours
+                        ? e.durationInHours + ' h'
+                        : 'Not specified'
+                    }
+                </div>
+              </div>
+          </div>
+      </div>
+      `;
 }
