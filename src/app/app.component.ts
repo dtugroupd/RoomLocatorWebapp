@@ -6,7 +6,7 @@
  * @author Amal Qasim, s132957
  */
 
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { Store, Select } from '@ngxs/store';
 import { SetActivateFeedbackAndStatus } from './_actions/mazemap.actions';
@@ -56,10 +56,9 @@ import { SetTokenAndUser } from './_actions/token.actions';
 
 export class AppComponent implements OnInit, OnDestroy
 {
-
   subscription: Subscription;
   browserRefresh: any;
-  
+
   constructor(private store: Store, private router: Router, private themeService: NbThemeService,
      private nbMenuService: NbMenuService, @Inject(NB_WINDOW) private window){
     const preferredTheme = localStorage.getItem("theme");

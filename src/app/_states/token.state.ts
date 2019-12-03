@@ -60,9 +60,9 @@ export class TokenState {
     }
 
     @Action(SetTokenAndUser)
-    setTokenAndUser({ setState, patchState }: StateContext<TokenStateModel>) {
+    setTokenAndUser({ patchState, setState }: StateContext<TokenStateModel>) {
         const jwtHelper = new JwtHelperService();
-        let token = localStorage.getItem('token');
+        const token = localStorage.getItem('token');
         patchState({ loginLoading: true });
 
         if (!token) {

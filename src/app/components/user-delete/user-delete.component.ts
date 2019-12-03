@@ -2,10 +2,13 @@
  * @author Hadi Horani, s144885
  */
 
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Store } from '@ngxs/store';
+import { Component } from '@angular/core';
+import { Store, Select } from '@ngxs/store';
 import { DeleteUser } from 'src/app/_actions/admin.actions';
+import { NbDialogRef } from '@nebular/theme';
+import { User } from 'src/app/models/login/user.model';
+import { Observable } from 'rxjs';
+import { AdminState } from 'src/app/_states/admin.state';
 
 @Component({
   selector: 'app-user-delete',
@@ -13,20 +16,26 @@ import { DeleteUser } from 'src/app/_actions/admin.actions';
   styleUrls: ['./user-delete.component.scss']
 })
 export class UserDeleteComponent {
+  users: any;
+  user: User;
+  dialogClosed: boolean = false;
+
+  @Select(AdminState.getUsers) users$: Observable<User[]>;
 
   constructor(
-    public dialogRef: MatDialogRef<UserDeleteComponent>,
+    private dialogRef: NbDialogRef<UserDeleteComponent>,
     private store: Store,
-    @Inject(MAT_DIALOG_DATA) public data: any
-    ) { }
 
-    close() {
-      this.dialogRef.close();
-    }
+  ) { }
 
-    deleteUser() {
-      this.store.dispatch( new DeleteUser( this.data.user.studentId ) );
+  close() {
+    this.dialogRef.close();
+  }
+
+  deleteUser() {
+    this.store.dispatch(new DeleteUser(this.user.studentId)).subscribe(() => {
       this.dialogRef.close();
-    }
+    });
+  }
 
 }
