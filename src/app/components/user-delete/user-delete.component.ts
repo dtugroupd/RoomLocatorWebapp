@@ -25,7 +25,7 @@ export class UserDeleteComponent {
     }
 
     deleteUser() {
-      this.store.dispatch( new DeleteUser( this.data.user.studentId ) ).subscribe( () => { } );
+      this.store.dispatch( new DeleteUser( this.data.user.studentId ) );
       this.dialogRef.close();
     }
 
