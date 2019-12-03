@@ -1,8 +1,9 @@
 /**
  * @author Thomas Lien Christensen, s165242
+ * added function: Amal Qasim, s132957
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 import { Survey } from 'src/app/models/survey/survey.model';
 import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
 import { Select, Actions, ofActionDispatched } from '@ngxs/store';
@@ -14,6 +15,8 @@ import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { SurveyService } from 'src/app/_services/survey.service';
 import { AddSurveySuccess } from 'src/app/_actions/mazemap.actions';
+import { NbDialogService } from '@nebular/theme';
+import { ShowFeedbackComponent } from '../showFeedback/show-feedback.component';
 
 @Component({
   selector: 'app-survey-management',
@@ -21,7 +24,7 @@ import { AddSurveySuccess } from 'src/app/_actions/mazemap.actions';
   styleUrls: ['./survey-management.component.scss']
 })
 export class SurveyManagementComponent implements OnInit {
-  constructor(private service: SurveyService, private action$: Actions) {}
+  constructor(private service: SurveyService, private action$: Actions, private dialogService: NbDialogService) {}
 
   surveys: Survey[];
   unsortedSurveys: Survey[];
@@ -83,5 +86,13 @@ export class SurveyManagementComponent implements OnInit {
 
   downloadFile(id: number) {
     this.service.downloadSurveyAnswers(id);
+  }
+
+  open(survey: Survey) {
+
+    const surveyContext = {survey};
+    const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true, context: surveyContext };
+
+    this.dialogService.open(ShowFeedbackComponent, settings);
   }
 }
