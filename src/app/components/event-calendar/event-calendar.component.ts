@@ -48,12 +48,10 @@ export class EventCalendarComponent implements OnInit, OnDestroy {
     });
 
     this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(AddEventSuccess)).subscribe(() => {
-      console.log("Add success!!");
       this.showSuccessToast('top-right', 'success', 'Dit event er oprettet.');
     });
 
     this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(UpdateEventSuccess)).subscribe(() => {
-      console.log("Update success!!");
       this.showSuccessToast('top-right', 'success', 'Eventet er opdateret.');
     });
 

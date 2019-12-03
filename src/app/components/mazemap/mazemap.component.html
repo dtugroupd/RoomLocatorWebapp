@@ -8,6 +8,6 @@
     <button *ngIf="activateFeedbackAndStatus" nbButton (click)="toggleSectionLayers()"[disabled]="toggledSections" [ngClass]="toggledSections ? 'toggled' : ''">Sections</button>
     <button *ngIf="activateFeedbackAndStatus" nbButton (click)="toggleEventLayers()" [disabled]="toggledEvents" [ngClass]="toggledEvents ? 'toggled' : ''">Events</button>
 </div>
-<app-status-button-menu id="statusMenu" [@showHideStatusMenu]="showStatusMenu ? 'show' : 'hide'" *ngIf="activateFeedbackAndStatus"></app-status-button-menu>
-<app-status-button id="statusButton" (click)="toggleStatusMenu()" *ngIf="activateFeedbackAndStatus"></app-status-button>
+<app-status-button-menu id="statusMenu" [@showHideStatusMenu]="showStatusMenu ? 'show' : 'hide'" *ngIf="activateFeedbackAndStatus && activeLocation"></app-status-button-menu>
+<app-status-button id="statusButton" (click)="toggleStatusMenu()" *ngIf="activateFeedbackAndStatus && activeLocation"></app-status-button>
 <app-survey-feedback-button id="surveyPrompt" [@showHideSurveyButton]="promptFeedback ? 'show' : 'hide'" *ngIf="activateFeedbackAndStatus">Give feedback</app-survey-feedback-button>
