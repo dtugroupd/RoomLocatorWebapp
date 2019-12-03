@@ -11,13 +11,13 @@
 }
 
 .frown {
-    color: #ce5a57
+    color: var(--text-danger-color);
 }
 
 .meh {
-    color: #FFDF45
+    color: var(--text-warning-color);
 }
 
 .grin {
-    color: #A4D1A2
+    color: var(--text-success-color);
 }
