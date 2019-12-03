@@ -6,10 +6,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Store, Select } from '@ngxs/store';
-import { SetActivateFeedbackAndStatus, GetLocations } from './_actions/mazemap.actions';
+import { SetActivateFeedbackAndStatus } from './_actions/mazemap.actions';
 import { MazemapState } from './_states/mazemap.state';
 import { Observable } from 'rxjs';
-import { GetSurveys } from './_actions/mazemap.actions';
 import { Section } from './models/mazemap/section.model';
 import { NbMenuItem, NbThemeService } from '@nebular/theme';
 import { TokenState } from './_states/token.state';
@@ -17,7 +16,6 @@ import { User } from './models/login/user.model';
 import { map, tap } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { MapLocation } from './models/mazemap/map-location.model';
 
 @Component({
   selector: 'app-root',
@@ -40,36 +38,18 @@ import { MapLocation } from './models/mazemap/map-location.model';
         animate('0.15s ease-in-out')
       ]),
     ]),
-    trigger('activeLocation', [
-      state('show', style({
-        height: '40px',
-        opacity: 1,
-      })),
-      state('hide', style({
-        height: '0px',
-        opacity: 0.0,
-      })),
-      transition('show => hide', [
-        animate('0.15s ease-in-out')
-      ]),
-      transition('hide => show', [
-        animate('0.15s ease-in-out')
-      ]),
-    ]),
   ]
 })
 
 export class AppComponent implements OnInit {
   title = 'RoomLocatorWebapp';
   activeSection: Section;
-  activeLocation: MapLocation = null;
   mobileMenuToggled = false;
   isLocationActive = false;
   faBars = faBars;
   base64Image: string = "";
 
   @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
-  @Select(MazemapState.getActiveLocation) activeLocation$: Observable<MapLocation>;
   @Select(TokenState.getUser) user$: Observable<User>;
   @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
 
@@ -100,17 +80,7 @@ export class AppComponent implements OnInit {
     this.activeSection$.subscribe(x => {
       this.activeSection = x;
     });
-    this.activeLocation$.subscribe(x => {
-      this.activeLocation = x;
-      if (this.activeLocation) {
-        this.isLocationActive = true;
-      } else {
-        this.isLocationActive = false;
-      }
-    });
 
-    this.store.dispatch(new GetLocations());
-    this.store.dispatch(new GetSurveys());
     this.user$.subscribe(x => {
       if (x) {
         this.base64Image = `data:image/png;base64,${x.profileImage}`;

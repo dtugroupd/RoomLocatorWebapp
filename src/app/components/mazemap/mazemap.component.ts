@@ -127,6 +127,8 @@ export class MazemapComponent implements OnInit, OnDestroy {
   @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
 
   constructor(private store: Store) {
+
+    this.store.dispatch(new GetLocations());
     this.activateFeedbackAndStatus$.subscribe(x => {
       this.activateFeedbackAndStatus = x;
     });

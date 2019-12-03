@@ -14,7 +14,6 @@
             <div class="links" *ngIf="isAuthenticated$ | async">
                 <a *ngFor="let item of menuItems" routerLink="{{ item.link }}" [ngClass]="(userHasAccess(item.link) | async) ? '' : 'hide'">{{ item.title }}</a>
             </div>
-            <div class="location-info" [@activeLocation]="isLocationActive ? 'show' : 'hide'">{{ (activeLocation$ | async)?.name }}</div>
             <div class="link" *ngIf="!(isAuthenticated$ | async)">Not logged in</div>
         </nb-layout-column>
         <fa-icon class="burger-menu-button" [icon]="faBars" (click)="toggleMobileMenu()"></fa-icon>

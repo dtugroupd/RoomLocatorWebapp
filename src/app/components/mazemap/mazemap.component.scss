@@ -17,6 +17,11 @@
     padding-bottom: 0;
 }
 
+.active {
+    background-color: green !important;
+    color: #fff !important;
+}
+
 #statusButton {
     position: fixed;
     z-index: 9;
