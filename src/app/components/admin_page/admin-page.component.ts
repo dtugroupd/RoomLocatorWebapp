@@ -112,8 +112,9 @@ export class AdminPageComponent implements OnInit
     if (this.isShow) {
       this.toggleDisplay();
     }
-
-    const userContext = {u}
+    
+    const userContext = {user: u};
+    console.log(userContext)
     const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true, context: userContext };
 
     this.dialogService.open(UserDeleteComponent, settings).onClose.subscribe(x => {

@@ -17,6 +17,7 @@ import { User } from 'src/app/models/login/user.model';
 export class UserDeleteComponent {
   private users: any;
   user: User;
+  dialogClosed: boolean = false;
 
   constructor(
     private dialogRef: NbDialogRef<UserDeleteComponent>,
@@ -25,14 +26,20 @@ export class UserDeleteComponent {
     ) { }
 
     close() {
+      this.dialogClosed = false;
       this.dialogRef.close();
     }
 
     deleteUser() {
+      this.dialogClosed = true;
       this.store.dispatch( new DeleteUser( this.user.studentId ) ).subscribe(x => {
         this.users = x.users.users;
       });
-      this.dialogRef.close(this.users);
+      if (this.dialogClosed) {
+        this.dialogRef.close(this.users);
+      } else {
+        this.dialogRef.close();
+      }
     }
 
 }
