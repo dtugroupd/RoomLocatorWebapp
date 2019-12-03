@@ -15,21 +15,22 @@ import { Observable, Subscription } from 'rxjs';
 import { GetSurveys } from './_actions/mazemap.actions';
 import { LibrarySection } from './models/mazemap/library-section.model';
 import { faMap, faCalendarAlt, faPoll } from '@fortawesome/free-solid-svg-icons';
-import { NbMenuItem, NbThemeService,NB_WINDOW,NbMenuService } from '@nebular/theme';
+import { NbMenuItem, NbThemeService, NB_WINDOW, NbMenuService } from '@nebular/theme';
 import { TokenState } from './_states/token.state';
 import { User } from './models/login/user.model';
 import { map, tap, filter } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { GetCurrentFeedback } from './_actions/feedback.actions';
-import { SetTokenAndUser } from './_actions/token.actions';
+import { SetTokenAndUser, Logout } from './_actions/token.actions';
+import { Token } from '@angular/compiler';
 
 
-@Component({
+@Component( {
   selector: 'app-root, nb-context-menu-click',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  styles: [`
+  styleUrls: [ './app.component.scss' ],
+  styles: [ `
   :host nb-layout-header ::ng-deep nav {
     justify-content: flex-end;
   }
@@ -58,24 +59,31 @@ export class AppComponent implements OnInit, OnDestroy
 {
   subscription: Subscription;
   browserRefresh: any;
+  currentUser: User;
+  currentToken: Token;
 
-  constructor(private store: Store, private router: Router, private themeService: NbThemeService,
-     private nbMenuService: NbMenuService, @Inject(NB_WINDOW) private window){
-    const preferredTheme = localStorage.getItem("theme");
-    if (preferredTheme) {
+  constructor ( private store: Store, private router: Router, private themeService: NbThemeService,
+    private nbMenuService: NbMenuService, @Inject( NB_WINDOW ) private window )
+  {
+    const preferredTheme = localStorage.getItem( "theme" );
+    if ( preferredTheme )
+    {
       this.selectedTheme = preferredTheme;
-      this.themeService.changeTheme(preferredTheme);
+      this.themeService.changeTheme( preferredTheme );
     }
 
-    this.subscription = router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
+    this.subscription = router.events.subscribe( ( event ) =>
+    {
+      if ( event instanceof NavigationStart )
+      {
         this.browserRefresh = !router.navigated;
 
-        if (this.browserRefresh) {
-          this.store.dispatch(new SetTokenAndUser());
+        if ( this.browserRefresh )
+        {
+          this.store.dispatch( new SetTokenAndUser() );
         }
       }
-    });
+    } );
   }
   title = 'RoomLocatorWebapp';
   activeSection: LibrarySection;
@@ -88,12 +96,12 @@ export class AppComponent implements OnInit, OnDestroy
   selectedTheme = 'default';
   themes = [ "Default", "Dark", "Cosmic" ];
 
-  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
-  @Select(TokenState.getUser) user$: Observable<User>;
-  @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
-  @Select(MazemapState.getActivateFeedbackAndStatus) viewIsMazemap$: Observable<boolean>;
+  @Select( MazemapState.getActiveSection ) activeSection$: Observable<LibrarySection>;
+  @Select( TokenState.getUser ) user$: Observable<User>;
+  @Select( TokenState.isAuthenticated ) isAuthenticated$: Observable<boolean>;
+  @Select( MazemapState.getActivateFeedbackAndStatus ) viewIsMazemap$: Observable<boolean>;
 
-items = [
+  items = [
     { title: 'Profile' },
     { title: 'Logout' },
   ];
@@ -120,12 +128,13 @@ items = [
       'link': '/admin'
     }
   ];
-  
 
-  changeTheme(newTheme: string): void {
+
+  changeTheme ( newTheme: string ): void
+  {
     this.selectedTheme = newTheme.toLowerCase();
-    localStorage.setItem("theme", this.selectedTheme);
-    this.themeService.changeTheme(this.selectedTheme);
+    localStorage.setItem( "theme", this.selectedTheme );
+    this.themeService.changeTheme( this.selectedTheme );
   }
 
   ngOnInit ()
@@ -135,19 +144,19 @@ items = [
       this.activeSection = x;
     } );
 
-    this.user$.subscribe(x => {
-      if (x) {
-        this.store.dispatch(new GetCurrentFeedback(x.id));
-        this.base64Image = `data:image/png;base64,${x.profileImage}`;
-      }
-    });
-
-    this.store.dispatch(new GetSurveys());
-
-    this.router.events.subscribe( x =>
+    this.user$.subscribe( x =>
     {
-      if ( x instanceof NavigationEnd )
+      if ( x )
       {
+        this.store.dispatch( new GetCurrentFeedback( x.id ) );
+        this.base64Image = `data:image/png;base64,${ x.profileImage }`;
+      }
+    } );
+
+    this.store.dispatch( new GetSurveys() );
+
+    this.router.events.subscribe( x => {
+      if ( x instanceof NavigationEnd ) {
         switch ( x.urlAfterRedirects )
         {
           case '/mazemap':
@@ -157,11 +166,28 @@ items = [
             break;
         }
       }
-    });
+    } );
+
+
+    this.nbMenuService.onItemClick()
+      .pipe(
+        filter( ( { tag } ) => tag === 'my-context-menu' ),
+        map( ( { item: { title } } ) => title ),
+      )
+      .subscribe( title =>
+      {
+
+        if ( title === 'Logout' )
+        {
+          this.store.dispatch( new Logout() );
+        }
+      }
+      );
   }
 
-  
-  ngOnDestroy() {
+
+  ngOnDestroy ()
+  {
     this.subscription.unsubscribe();
   }
 
