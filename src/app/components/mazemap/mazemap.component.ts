@@ -183,6 +183,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
 
       marker.on('click', () => {
         this.setActiveLayer(layer);
+        this.openFeedbackPrompt();
       });
     });
 

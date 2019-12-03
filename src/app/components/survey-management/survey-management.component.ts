@@ -6,7 +6,7 @@
 import { Component, OnInit, Input} from '@angular/core';
 import { Survey } from 'src/app/models/survey/survey.model';
 import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
-import { Select, Actions, ofActionDispatched } from '@ngxs/store';
+import { Select, Actions, ofActionDispatched, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { MazemapState } from '../../_states/mazemap.state';
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
@@ -14,7 +14,7 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { SurveyService } from 'src/app/_services/survey.service';
-import { AddSurveySuccess } from 'src/app/_actions/mazemap.actions';
+import { AddSurveySuccess, GetSurveys } from 'src/app/_actions/mazemap.actions';
 import { NbDialogService } from '@nebular/theme';
 import { ShowFeedbackComponent } from '../showFeedback/show-feedback.component';
 
@@ -24,7 +24,7 @@ import { ShowFeedbackComponent } from '../showFeedback/show-feedback.component';
   styleUrls: ['./survey-management.component.scss']
 })
 export class SurveyManagementComponent implements OnInit {
-  constructor(private service: SurveyService, private action$: Actions, private dialogService: NbDialogService) {}
+  constructor(private service: SurveyService, private store: Store, private action$: Actions, private dialogService: NbDialogService) {}
 
   surveys: Survey[];
   unsortedSurveys: Survey[];
@@ -40,6 +40,7 @@ export class SurveyManagementComponent implements OnInit {
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
 
   ngOnInit() {
+    this.store.dispatch(new GetSurveys());
     this.surveys$.subscribe(x => {
       this.surveys = x;
       this.unsortedSurveys = Object.create(x);
