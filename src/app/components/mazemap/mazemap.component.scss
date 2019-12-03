@@ -36,6 +36,33 @@
     padding-bottom: 0;
 }
 
+.location-header {
+    position: absolute; 
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row wrap;
+    left: 10px; 
+    top: 86px; 
+    height: 40px;
+    max-height: 100px;
+    width: 350px;
+    z-index: 99; 
+}
+
+.location-toggles {
+    display: flex;
+    justify-content: space-around;
+}
+
+.location-info {
+    background-color: #fff;
+    padding: 10px 20px 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 4px;
+    box-shadow: 0 4px 2px -2px rgba(0,0,0,0.2);
+}
+
 @media only screen and (min-width: 360px) {
     #statusButton {
         right: 6%;

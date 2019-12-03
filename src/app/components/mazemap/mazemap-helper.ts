@@ -165,33 +165,37 @@ export function locationMarkerOptions() {
     default: {
       color: 'MazeBlue',
       size: 50,
-
     }
   };
 }
-export function layerMarkerOptions(layer) {
-    return  {
-        default:  {
-            color: 'MazeGreen',
-            size: 50,
-            offZOpacity: 0,
-            imgUrl: getMarkerIconUrl(layer.section),
-            imgScale: 0.5,
-            innerCircle: true,
-            innerCircleColor: 'white',
-            innerCircleScale: 0.7,
-            zLevel: layer.zLevel
-        },
-        funky: {
-            color: 'MazeYellow',
-            size: 35,
-            offZOpacity: 0,
-            imgUrl: getMarkerIconUrl(layer.section),
-            imgScale: 0.25,
-            innerCircle: true,
-            innerCircleColor: 'white',
-            innerCircleScale: 0.5,
-            zLevel: layer.zLevel
-        }
+export function markerOptions(layer, zLevel?: number) {
+    return {
+      default: {
+        color: 'MazeGreen',
+        size: 50,
+        offZOpacity: 0,
+        imgUrl: getMarkerIconUrl(layer.section),
+        imgScale: 0.5,
+        innerCircle: true,
+        innerCircleColor: 'white',
+        innerCircleScale: 0.7,
+        zLevel: layer.zLevel
+      },
+      funky: {
+        color: 'MazeYellow',
+        size: 35,
+        offZOpacity: 0,
+        imgUrl: getMarkerIconUrl(layer.section),
+        imgScale: 0.25,
+        innerCircle: true,
+        innerCircleColor: 'white',
+        innerCircleScale: 0.5,
+        zLevel: layer.zLevel
+      },
+      event: {
+        color: 'MazeBlue',
+        size: 35,
+        zLevel
+      }
     };
 }

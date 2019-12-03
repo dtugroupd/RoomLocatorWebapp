@@ -15,7 +15,7 @@ import {
 } from '../../_actions/mazemap.actions';
 import {
   toLatLng, getCenter, convertSectionsToLayers,
-  layerMarkerOptions, convertLocationsToLayers,
+  markerOptions, convertLocationsToLayers,
 } from './mazemap-helper';
 
 declare let Mazemap: any;
@@ -26,49 +26,84 @@ declare let Mazemap: any;
   styleUrls: ['./mazemap.component.scss'],
   animations: [
     trigger('showHideSurveyButton', [
-      state('show', style({
-        height: '45px',
-        opacity: 1,
-      })),
-      state('hide', style({
-        height: '0px',
-        opacity: 0.0,
-      })),
-      transition('show => hide', [
-        animate('0.15s ease-in-out')
-      ]),
-      transition('hide => show', [
-        animate('0.15s ease-in-out')
-      ]),
+      state(
+        'show',
+        style({
+          height: '45px',
+          opacity: 1
+        })
+      ),
+      state(
+        'hide',
+        style({
+          height: '0px',
+          opacity: 0.0
+        })
+      ),
+      transition('show => hide',
+        [animate('0.15s ease-in-out')]
+      ),
+      transition('hide => show',
+        [animate('0.15s ease-in-out')]
+      )
     ]),
     trigger('showHideStatusMenu', [
-      state('show', style({
-        height: '200px',
-        opacity: 1,
-      })),
-      state('hide', style({
-        height: '0px',
-        opacity: 0.0,
-      })),
-      transition('show => hide', [
-        animate('0.15s ease-in-out')
-      ]),
-      transition('hide => show', [
-        animate('0.15s ease-in-out')
-      ]),
+      state(
+        'show',
+        style({
+          height: '200px',
+          opacity: 1
+        })
+      ),
+      state(
+        'hide',
+        style({
+          height: '0px',
+          opacity: 0.0
+        })
+      ),
+      transition('show => hide',
+        [animate('0.15s ease-in-out')]
+      ),
+      transition('hide => show',
+        [animate('0.15s ease-in-out')]
+      )
+    ]),
+    trigger('activeLocation', [
+      state(
+        'show',
+        style({
+          height: '40px',
+          opacity: 1
+        })
+      ),
+      state(
+        'hide',
+        style({
+          height: '0px',
+          opacity: 0.0
+        })
+      ),
+      transition('show => hide',
+        [animate('0.15s ease-in-out')]
+      ),
+      transition('hide => show',
+        [animate('0.15s ease-in-out')]
+      )
     ])
   ]
 })
-
 export class MazemapComponent implements OnInit, OnDestroy {
-
   map: any;
   mapOptions: object;
   promptFeedback = false;
   showStatusMenu = false;
   activateFeedbackAndStatus = false;
+  isLocationActive = false;
+  toggledSections = true;
+  toggledEvents = false;
   lastHoveredLayer = null;
-  activeLocation: MapLocation  = null;
+  activeLocation: MapLocation = null;
   activeLayerId = null;
   activeLayerMarker = null;
   activeSection: Section = null;
@@ -80,11 +115,15 @@ export class MazemapComponent implements OnInit, OnDestroy {
   sections: Section[] = [];
   sectionLayers = [];
   sectionLayerMarkers = [];
+  eventMarkers = [];
   locationLayers = [];
 
-  @Select(MazemapState.getActivateFeedbackAndStatus) activateFeedbackAndStatus$: Observable<boolean>;
+  @Select(MazemapState.getActivateFeedbackAndStatus)
+  activateFeedbackAndStatus$: Observable<boolean>;
   @Select(MazemapState.getLocations) locations$: Observable<MapLocation[]>;
-  @Select(MazemapState.getActiveLocation) activeLocation$: Observable<MapLocation>;
+  @Select(MazemapState.getActiveLocation) activeLocation$: Observable<
+    MapLocation
+  >;
   @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
 
   constructor(private store: Store) {
@@ -103,13 +142,18 @@ export class MazemapComponent implements OnInit, OnDestroy {
       this.activeLocation = x;
 
       if (this.map && this.activeLocation) {
-        this.sectionLayers = convertSectionsToLayers(this.activeLocation.sections);
+        this.sectionLayers = convertSectionsToLayers(
+          this.activeLocation.sections
+          );
+        this.isLocationActive = true;
         this.initLayers();
         this.toggleLocationLayers(false);
         this.map.flyTo({
           center: { lng: x.longitude, lat: x.latitude },
-          zoom: x.zoom,
+          zoom: x.zoom
         });
+      } else {
+      this.isLocationActive = false;
       }
     });
 
@@ -120,7 +164,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
         this.closeFeedbackPrompt();
       }
     });
-    }
+  }
 
   ngOnInit() {
     this.store.dispatch(new GetLocations());
@@ -150,7 +194,6 @@ export class MazemapComponent implements OnInit, OnDestroy {
     this.map = new Mazemap.Map(this.mapOptions);
 
     this.map.on('load', () => {
-
       this.map.loadImage('../assets/mapIcons/skylab.png', (error, image) => {
         if (error) {
           throw error;
@@ -200,6 +243,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.store.dispatch(new SetActivateFeedbackAndStatus(false));
     this.store.dispatch(new SetActiveSection(null));
+    this.store.dispatch(new SetActiveLocation(null));
     this.removeSectionLayers();
     this.map.remove();
   }
@@ -236,25 +280,28 @@ export class MazemapComponent implements OnInit, OnDestroy {
   updateLayers() {
     const zLevel = this.map.getZLevel();
 
-    // Hide all currently visible layers
-    this.sectionLayers.forEach(l => {
-      if (this.map.getLayer(l.id)) {
-        const visibility = this.map.getLayoutProperty(l.id, 'visibility');
-        if (visibility === 'visible') {
-          this.map.setLayoutProperty(l.id, 'visibility', 'none');
+
+    if (this.toggledSections) {
+      // Hide all currently visible layers
+      this.sectionLayers.forEach(l => {
+        if (this.map.getLayer(l.id)) {
+          const visibility = this.map.getLayoutProperty(l.id, 'visibility');
+          if (visibility === 'visible') {
+            this.map.setLayoutProperty(l.id, 'visibility', 'none');
+          }
         }
-      }
-    });
+      });
 
-    const zLevelLayers = this.sectionLayers.filter(l => {
-      return l.zLevel === zLevel;
-    });
+      const zLevelLayers = this.sectionLayers.filter(l => {
+        return l.zLevel === zLevel;
+      });
 
-    // Make all layers for current zLevel visible
-    for (const layer of zLevelLayers) {
-      const visibility = this.map.getLayoutProperty(layer.id, 'visibility');
-      if (visibility === 'none') {
-        this.map.setLayoutProperty(layer.id, 'visibility', 'visible');
+      // Make all layers for current zLevel visible
+      for (const layer of zLevelLayers) {
+        const visibility = this.map.getLayoutProperty(layer.id, 'visibility');
+        if (visibility === 'none') {
+          this.map.setLayoutProperty(layer.id, 'visibility', 'visible');
+        }
       }
     }
   }
@@ -265,22 +312,19 @@ export class MazemapComponent implements OnInit, OnDestroy {
       this.sectionLayers.forEach(layer => {
         if (!this.map.getLayer(layer.id)) {
           this.map.addLayer(layer);
-          this.map.layerEventHandler.on('click', layer.id, (e: any, features: any) => {
-            this.setActiveLayer(layer);
-          });
+          this.map.layerEventHandler.on(
+            'click',
+            layer.id,
+            (e: any, features: any) => {
+              this.setActiveLayer(layer);
+            }
+          );
           this.map.layerEventHandler.on('mousemove', layer.id, () => {
             if (this.map.getLayer(layer.id)) {
               this.setLayerHoverState(layer.id);
             }
           });
-          const featureCoordinates = toLatLng(layer.source.data.geometry.coordinates[0]);
-          const center = getCenter(featureCoordinates);
-          const marker = new Mazemap.MazeMarker(layerMarkerOptions(layer).default).setLngLat(center).addTo(this.map);
-          marker.on('click', () => {
-            this.setActiveLayer(layer);
-          });
-
-          this.sectionLayerMarkers.push(marker);
+          this.initSectionMarker(layer);
         }
       });
 
@@ -298,6 +342,21 @@ export class MazemapComponent implements OnInit, OnDestroy {
     }
   }
 
+  initSectionMarker(layer: any) {
+    const featureCoordinates = toLatLng(
+      layer.source.data.geometry.coordinates[0]
+    );
+    const center = getCenter(featureCoordinates);
+    const marker = new Mazemap.MazeMarker(markerOptions(layer).default)
+      .setLngLat(center)
+      .addTo(this.map);
+    marker.on('click', () => {
+      this.setActiveLayer(layer);
+    });
+
+    this.sectionLayerMarkers.push(marker);
+  }
+
   removeSectionLayers() {
     if (this.sectionLayers.length > 0) {
       let i = 1;
@@ -305,7 +364,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
         if (this.map.getLayer(layer.id)) {
           this.map.layerEventHandler.off('mousemove', layer.id);
           this.map.layerEventHandler.off('click', layer.id);
-          this.map.on('mousemove', () => { });
+          this.map.on('mousemove', () => {});
           this.map.removeLayer(layer.id);
           if (this.map.getSource(layer.id)) {
             this.map.removeSource(layer.id);
@@ -327,15 +386,18 @@ export class MazemapComponent implements OnInit, OnDestroy {
   // Change layer style properties. Runs on layer 'mouseover' event.
   setLayerHoverState(layerId: number) {
     if (this.sectionLayers.length > 0) {
-
       if (layerId === this.lastHoveredLayer) {
         return;
       }
 
       if (this.lastHoveredLayer) {
         if (this.lastHoveredLayer !== this.activeLayerId) {
-        this.map.setPaintProperty(this.lastHoveredLayer, 'fill-color', this.defaultColor);
-      }
+          this.map.setPaintProperty(
+            this.lastHoveredLayer,
+            'fill-color',
+            this.defaultColor
+          );
+        }
       }
 
       if (layerId && this.activeLayerId !== layerId) {
@@ -346,38 +408,97 @@ export class MazemapComponent implements OnInit, OnDestroy {
     }
   }
 
-  setActiveLayer(layer: any)  {
-      if (!layer) {
-        if (this.activeLayerId) {
-          this.map.setPaintProperty(this.activeLayerId, 'fill-color', this.defaultColor);
-          this.activeLayerId = null;
-          this.store.dispatch(new SetActiveSection(null));
-          return;
-        }
-
-        return;
-      }
-
-      if (layer.id === this.activeLayerId) {
-        return;
-      }
-
+  setActiveLayer(layer: any) {
+    if (!layer) {
       if (this.activeLayerId) {
-        this.map.setPaintProperty(this.activeLayerId, 'fill-color', this.defaultColor);
+        this.map.setPaintProperty(
+          this.activeLayerId,
+          'fill-color',
+          this.defaultColor
+        );
+        this.activeLayerId = null;
         this.store.dispatch(new SetActiveSection(null));
+        return;
       }
 
-      if (layer.id) {
-        this.map.setPaintProperty(layer.id, 'fill-color', this.activeColor);
-        this.store.dispatch(new SetActiveSection(layer.section));
-        if (this.activeSection) {
-          this.openFeedbackPrompt();
-        }
-      }
+      return;
+    }
 
-      this.activeLayerId = layer.id;
+    if (layer.id === this.activeLayerId) {
+      return;
+    }
+
+    if (this.activeLayerId) {
+      this.map.setPaintProperty(
+        this.activeLayerId,
+        'fill-color',
+        this.defaultColor
+      );
+      this.store.dispatch(new SetActiveSection(null));
+    }
+
+    if (layer.id) {
+      this.map.setPaintProperty(layer.id, 'fill-color', this.activeColor);
+      this.store.dispatch(new SetActiveSection(layer.section));
+      if (this.activeSection) {
+        this.openFeedbackPrompt();
+      }
+    }
+
+    this.activeLayerId = layer.id;
   }
 
+  hideSectionLayers() {
+      this.sectionLayers.forEach(l => {
+        if (this.map.getLayer(l.id)) {
+          this.map.setLayoutProperty(l.id, 'visibility', 'none');
+        }
+      });
+
+      this.sectionLayerMarkers.forEach(x => {
+        x.off('click');
+        x.remove();
+      });
+  }
+
+  showSectionLayers() {
+     this.sectionLayers.forEach(l => {
+       if (this.map.getLayer(l.id)) {
+         this.map.setLayoutProperty(l.id, 'visibility', 'visible');
+         this.initSectionMarker(l);
+       }
+     });
+  }
+
+  showEventMarkers() {
+    this.activeLocation.events.forEach(e => {
+
+    })
+  }
+
+  hideEventMarkers() {
+
+  }
+  toggleEventLayers() {
+    this.toggledEvents = true;
+    this.toggledSections = false;
+    this.hideSectionLayers();
+    this.showEventMarkers();
+    this.updateLayers();
+    this.setActiveLayer(null);
+    this.closeFeedbackPrompt();
+  }
+
+  toggleSectionLayers() {
+    this.toggledSections = true;
+    this.toggledEvents = false;
+    this.showSectionLayers();
+    this.hideEventMarkers();
+    this.updateLayers();
+    if (this.activeSection) {
+      this.openFeedbackPrompt();
+    }
+  }
   openFeedbackPrompt() {
     this.promptFeedback = true;
   }
@@ -385,7 +506,6 @@ export class MazemapComponent implements OnInit, OnDestroy {
   closeFeedbackPrompt() {
     this.promptFeedback = false;
   }
-
 }
 
 

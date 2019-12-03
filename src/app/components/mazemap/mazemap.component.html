@@ -3,6 +3,11 @@
 -->
 
 <div id='map'></div>
+<div class="location-header" [@activeLocation]="isLocationActive ? 'show' : 'hide'">
+    <div class="location-info">{{ (activeLocation$ | async)?.name }}</div>
+    <button nbButton (click)="toggleSectionLayers()"[disabled]="toggledSections">Sections</button>
+    <button nbButton (click)="toggleEventLayers()" [disabled]="toggledEvents">Events</button>
+</div>
 <app-status-button-menu id="statusMenu" [@showHideStatusMenu]="showStatusMenu ? 'show' : 'hide'" *ngIf="activateFeedbackAndStatus"></app-status-button-menu>
 <app-status-button id="statusButton" (click)="toggleStatusMenu()" *ngIf="activateFeedbackAndStatus"></app-status-button>
 <app-survey-feedback-button id="surveyPrompt" [@showHideSurveyButton]="promptFeedback ? 'show' : 'hide'" *ngIf="activateFeedbackAndStatus">Give feedback</app-survey-feedback-button>
