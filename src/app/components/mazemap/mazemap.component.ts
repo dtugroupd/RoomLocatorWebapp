@@ -36,7 +36,7 @@ declare let Mazemap: any;
     ]),
     trigger('showHideStatusMenu', [
       state('show', style({
-        height: '200px',
+        height: '250px',
         opacity: 1,
       })),
       state('hide', style({

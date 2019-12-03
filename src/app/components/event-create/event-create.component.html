@@ -1,0 +1,45 @@
+<form name="form" (ngSubmit)="f.form.valid && submit()" #f="ngForm" novalidate>
+    <nb-card class="createEventCard">
+        <nb-card-body>
+                <h4>Create Event</h4>
+                <div class="line"></div>
+                <div class="form-control">
+                    <h6>About</h6>
+                    <input type="text" nbInput fullWidth placeholder="Title" [(ngModel)]="title" name="title" #titleModel="ngModel" required>
+                    <div *ngIf="titleModel.invalid && f.submitted" class="form-error-msg">
+                        <small *ngIf="titleModel.errors['required']">
+                            Title is required.
+                        </small>
+                    </div>
+                    <textarea nbInput fullWidth placeholder="Description" [(ngModel)]="description" name="description"></textarea>
+                    <small>(Optional)</small>
+                    <input type="speakers" nbInput fullWidth placeholder="Fordragsholdere/Ansvarlige" [(ngModel)]="speakers" name="speakers">
+                    <small>(Optional)</small>
+                </div>
+                <div class="form-control">
+                    <h6>Time</h6>
+                    <input nbInput fullWidth placeholder="Pick Date" [nbDatepicker]="formpicker" [(ngModel)]="date" name="date" #dateModel="ngModel" required>
+                    <div *ngIf="dateModel.invalid && f.submitted" class="form-error-msg">
+                        <small *ngIf="dateModel.errors['required']">
+                            Date is required.
+                        </small>
+                    </div>
+                    <nb-datepicker #formpicker name="datePicker"></nb-datepicker>
+                    <input type="time" nbInput fullWidth [(ngModel)]="time" #timeModel="ngModel" name="time" required>
+                    <div *ngIf="timeModel.invalid && f.submitted" class="form-error-msg">
+                        <small *ngIf="timeModel.errors['required']">
+                            Time is required.
+                        </small>
+                    </div>
+                    <input type="number" nbInput fullWidth placeholder="Duration (hours)" [(ngModel)]="duration" name="duration">
+                    <small>(Optional)</small>
+                </div>
+                <div class="form-control">
+                </div>
+            </nb-card-body>
+            <nb-card-footer class="card-footer">
+                <button nbButton outline status="warning" (click)="close()" type="button">Cancel</button>
+                <button nbButton outline>Submit</button>
+            </nb-card-footer>
+        </nb-card>
+</form>
