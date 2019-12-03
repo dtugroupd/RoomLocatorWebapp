@@ -3,9 +3,10 @@
  * @author Hadi Horani, s165242
  * @author Andreas Gøricke, s153804
  * @author Anders Wiberg Olsen, s165241
+ * @author Amal Qasim, s132957
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Store, Select } from '@ngxs/store';
 import { SetActivateFeedbackAndStatus } from './_actions/mazemap.actions';
@@ -14,17 +15,23 @@ import { Observable } from 'rxjs';
 import { GetSurveys } from './_actions/mazemap.actions';
 import { LibrarySection } from './models/mazemap/library-section.model';
 import { faMap, faCalendarAlt, faPoll } from '@fortawesome/free-solid-svg-icons';
-import { NbMenuItem, NbThemeService } from '@nebular/theme';
+import { NbMenuItem, NbThemeService,NB_WINDOW,NbMenuService } from '@nebular/theme';
 import { TokenState } from './_states/token.state';
 import { User } from './models/login/user.model';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, filter } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
-@Component( {
-  selector: 'app-root',
+
+@Component({
+  selector: 'app-root, nb-context-menu-click',
   templateUrl: './app.component.html',
-  styleUrls: [ './app.component.scss' ],
+  styleUrls: ['./app.component.scss'],
+  styles: [`
+  :host nb-layout-header ::ng-deep nav {
+    justify-content: flex-end;
+  }
+`],
   animations: [
     trigger( 'toggleMobileMenu', [
       state( 'show', style( {
@@ -48,7 +55,8 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 export class AppComponent implements OnInit
 {
 
-  constructor(private store: Store, private router: Router, private themeService: NbThemeService) {
+  constructor(private store: Store, private router: Router, private themeService: NbThemeService,
+     private nbMenuService: NbMenuService, @Inject(NB_WINDOW) private window){
     const preferredTheme = localStorage.getItem("theme");
     if (preferredTheme) {
       this.selectedTheme = preferredTheme;
@@ -70,6 +78,11 @@ export class AppComponent implements OnInit
   @Select(TokenState.getUser) user$: Observable<User>;
   @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
   @Select(MazemapState.getActivateFeedbackAndStatus) viewIsMazemap$: Observable<boolean>;
+
+items = [
+    { title: 'Profile' },
+    { title: 'Logout' },
+  ];
 
   menuItems: NbMenuItem[] = [
     {
@@ -93,6 +106,7 @@ export class AppComponent implements OnInit
       'link': '/admin'
     }
   ];
+  
 
   changeTheme(newTheme: string): void {
     this.selectedTheme = newTheme.toLowerCase();
@@ -129,8 +143,8 @@ export class AppComponent implements OnInit
             break;
         }
       }
-    } );
-  }
+    });
+    }
 
   userHasAccess ( link: string ): Observable<boolean>
   {
