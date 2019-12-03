@@ -1,150 +1,41 @@
-
-
-
-
-<nb-layout center>
-    <nb-layout-header>
-        <nb-search type="rotate-layout"></nb-search>
-        
-      </nb-layout-header>
-  
-    <nb-layout-column>
-      
-        <nb-card>
-            <nb-card-body>
-                <nb-accordion style="box-shadow: none;">
-                    <nb-accordion-item >
-                     <nb-accordion-item-header style="font-weight: normal;">
-                      
-                        <div class="calendarColumnContainer">
-                            <div style="font-size:42px;">
-                              <fa-icon [icon]="faCalendarAltReg" [className]="'calendar'"></fa-icon>
-                            </div>
-                            <div></div>
-                            <div>
-                              <div class="calendarContainer">
-                                <h6>OCT 30</h6>
-                                <h6>kl. 12:00</h6>
-                              </div>
-                            </div>
-                            <div style="width:20px;"></div>
-                            <div>
-                              <h6 style="font-weight: normal;">Cybersecurity</h6>
-                            </div>
-                      </div>
-                    
-                    </nb-accordion-item-header>
-                     <nb-accordion-item-body>
-                        Jakob Thorsgård fortæller om cybersecurity og bruger hans egne erfaringer til at forklare udfordringerne fagfolk kæmper med.<br>Varighed: ca 2 timer.
-                     </nb-accordion-item-body>
-                    </nb-accordion-item>
-                   </nb-accordion>
-              </nb-card-body>
-        </nb-card>
-        
-        
-        <nb-card>
-            <nb-card-body>
-                <nb-accordion style="box-shadow: none;">
-                    <nb-accordion-item >
-                     <nb-accordion-item-header style="font-weight: normal;">
-                      
-                        <div class="calendarColumnContainer">
-                            <div style="font-size:42px;">
-                              <fa-icon [icon]="faCalendarAltReg" [className]="'calendar'"></fa-icon>
-                            </div>
-                            <div></div>
-                            <div>
-                              <div class="calendarContainer">
-                                <h6>NOV 2</h6>
-                                <h6>kl. 15:00</h6>
-                              </div>
-                            </div>
-                            <div style="width:20px;"></div>
-                            <div>
-                              <h6 style="font-weight: normal;">Hackathon</h6>
-                            </div>
-                      </div>
-                    
-                    </nb-accordion-item-header>
-                     <nb-accordion-item-body>
-                        Jakob Thorsgård fortæller om cybersecurity og bruger hans egne erfaringer til at forklare udfordringerne fagfolk kæmper med.<br>Varighed: ca 2 timer.
-                     </nb-accordion-item-body>
-                    </nb-accordion-item>
-                   </nb-accordion>
-              </nb-card-body>
-        </nb-card>
-
-        <nb-card>
-            <nb-card-body>
-                <nb-accordion style="box-shadow: none;">
-                    <nb-accordion-item >
-                     <nb-accordion-item-header style="font-weight: normal;">
-                      
-                        <div class="calendarColumnContainer">
-                            <div style="font-size:42px;">
-                              <fa-icon [icon]="faCalendarAltReg" [className]="'calendar'"></fa-icon>
-                            </div>
-                            <div></div>
-                            <div>
-                              <div class="calendarContainer">
-                                <h6>NOV 11</h6>
-                                <h6>kl. 17:00</h6>
-                              </div>
-                            </div>
-                            <div style="width:20px;"></div>
-                            <div>
-                              <h6 style="font-weight: normal;">Ai og Machine <br> Learning</h6>
-                            </div>
-                      </div>
-                    
-                    </nb-accordion-item-header>
-                     <nb-accordion-item-body>
-                        Jakob Thorsgård fortæller om cybersecurity og bruger hans egne erfaringer til at forklare udfordringerne fagfolk kæmper med.<br>Varighed: ca 2 timer.
-                     </nb-accordion-item-body>
-                    </nb-accordion-item>
-                   </nb-accordion>
-              </nb-card-body>
-        </nb-card>
-
-        <nb-card>
-            <nb-card-body>
-                <nb-accordion style="box-shadow: none;">
-                    <nb-accordion-item >
-                     <nb-accordion-item-header style="font-weight: normal;">
-                      
-                        <div class="calendarColumnContainer">
-                            <div style="font-size:42px;">
-                              <fa-icon [icon]="faCalendarAltReg" [className]="'calendar'"></fa-icon>
-                            </div>
-                            <div></div>
-                            <div>
-                              <div class="calendarContainer">
-                                <h6>NOV 23</h6>
-                                <h6>kl. 17:00</h6>
-                              </div>
-                            </div>
-                            <div style="width:20px;"></div>
-                            <div>
-                              <h6 style="font-weight: normal;">Algorithms Expert</h6>
-                            </div>
-                      </div>
-                    
-                    </nb-accordion-item-header>
-                     <nb-accordion-item-body>
-                        Jakob Thorsgård fortæller om cybersecurity og bruger hans egne erfaringer til at forklare udfordringerne fagfolk kæmper med.<br>Varighed: ca 2 timer.
-                     </nb-accordion-item-body>
-                    </nb-accordion-item>
-                   </nb-accordion>
-              </nb-card-body>
-        </nb-card>
-
-
-    </nb-layout-column>
-  
-
-  </nb-layout>
-          
-    
- 
-
+<button *ngIf="userIsAdmin$ | async" nbButton (click)="openCreateEventDialog()">Create event</button>
+<nb-card *ngFor="let event of events$ | async" class="eventCard">
+    <nb-card-body>
+        <nb-accordion>
+            <nb-accordion-item>
+                <nb-accordion-item-header>
+                    <table class="eventInfoTable">
+                        <tr>
+                            <th>
+                                <fa-icon [icon]="faCalendarAltReg" [className]="'calendar'"></fa-icon>
+                            </th>
+                            <th>
+                                <h6>{{ moment(event.date).format('DD MMM') }} </h6>
+                                <h6>kl. {{ moment(event.date).format('HH:mm') }}</h6>
+                            </th>
+                            <th>
+                                <h6 style="font-weight: normal;">{{ event.title }}</h6>
+                                <div *ngIf="event.speakers" style="font-weight: normal">
+                                    Speakers: {{ fitToLength(25, event.speakers) }}
+                                </div>
+                            </th>
+                        </tr>
+                    </table>
+                </nb-accordion-item-header>.substr(5,5).replace('-','/')
+                <nb-accordion-item-body>
+                    <nb-actions>
+                        <nb-action *ngIf="userIsAdmin$ | async" (click)="openEditEventDialog(event)" class="action"><fa-icon [icon]="faEdit"></fa-icon></nb-action>
+                    </nb-actions>
+                    <table>
+                        <tr>
+                            {{ event.description }}
+                        </tr>
+                        <tr>
+                            Varighed: ca {{ event.durationInHours }} timer.
+                        </tr>
+                    </table>
+                </nb-accordion-item-body>
+            </nb-accordion-item>
+        </nb-accordion>
+    </nb-card-body>
+</nb-card>

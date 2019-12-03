@@ -1,10 +1,7 @@
-import { Moment } from 'moment';
-
-export interface Event {
-    id: string;
-    date: Moment;
+export interface EventToCreate {
     title: string;
     description: string;
+    date: string;
     durationInHours: number;
     durationApproximated: boolean;
     speakers: string;

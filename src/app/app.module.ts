@@ -9,7 +9,8 @@ import {
   NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
   NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
   NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule,
-  NbActionsModule, NbUserModule, NbSelectModule, NbCheckboxModule, NbSpinnerModule
+  NbActionsModule, NbUserModule, NbSelectModule, NbCheckboxModule, NbDatepickerModule,
+  NbSpinnerModule
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -41,6 +42,9 @@ import { AdminState } from './_states/admin.state';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { MatTableModule, MatInputModule, MatDialogModule } from '@angular/material';
 import { LoginComponent } from './components/login/login.component';
+import { EventCreateComponent } from './components/event-create/event-create.component';
+import { EventState } from './_states/event.state';
+import { EventUpdateComponent } from './components/event-update/event-update.component';
 import { UserDeleteComponent } from './components/user-delete/user-delete.component';
 import { UserDisclaimerState } from './_states/user.state';
 import { ShowFeedbackComponent } from './components/showFeedback/show-feedback.component';
@@ -65,8 +69,10 @@ const appRoutes: Routes = [
     StatusButtonMenuComponent,
     SurveyManagementComponent,
     AccessDeniedComponent,
+    EventCreateComponent,
     AdminPageComponent,
     LoginComponent,
+    EventUpdateComponent,
     UserDeleteComponent,
   ],
   entryComponents: [
@@ -78,22 +84,25 @@ const appRoutes: Routes = [
     ShowFeedbackComponent,
     MazemapComponent,
     AdminPageComponent,
+    EventUpdateComponent,
     UserDeleteComponent
   ],
   imports: [
-    RouterModule.forRoot(
-      appRoutes, { onSameUrlNavigation: 'reload', enableTracing: true },
-    ),
+    RouterModule.forRoot(appRoutes, {
+      onSameUrlNavigation: "reload",
+      enableTracing: true
+    }),
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
     FormsModule,
-    NbThemeModule.forRoot({ name: 'default' }),
+    NbThemeModule.forRoot({ name: "default" }),
     NbLayoutModule,
     NbEvaIconsModule,
     NbButtonModule,
+    NbDatepickerModule.forRoot(),
     NbAccordionModule,
     NbActionsModule,
     MatDialogModule,
@@ -120,21 +129,22 @@ const appRoutes: Routes = [
       TokenState,
       FeedbackState,
       AdminState,
+      EventState,
       UserDisclaimerState,
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
-    NgxsLoggerPluginModule.forRoot(),
+    NgxsLoggerPluginModule.forRoot()
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: TokenInterceptor,
-    multi: true,
-  }, DynamicComponentService, authRouteGuard],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+    DynamicComponentService,
+    authRouteGuard
+  ],
   bootstrap: [AppComponent],
-  exports: [
-    SurveyCreateActionComponent,
-    MatFormFieldModule,
-    MatInputModule
-  ]
+  exports: [SurveyCreateActionComponent, MatFormFieldModule, MatInputModule]
 })
-export class AppModule { }
+export class AppModule {}
