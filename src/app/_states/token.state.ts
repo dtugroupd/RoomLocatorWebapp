@@ -96,7 +96,7 @@ export class TokenState {
 
     @Action(Logout)
     logout(ctx: StateContext<TokenStateModel>) {
-       // localStorage.clear();
+        localStorage.clear();
         return ctx.setState({user: undefined, token: undefined, loginLoading: false, error: null});
     }
 }
