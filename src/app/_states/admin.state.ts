@@ -26,6 +26,11 @@ export class AdminState
 {
     constructor ( private adminService: AdminService ) { }
 
+    @Selector()
+    static getUsers(state: AdminStateModel) {
+        return state.users;
+    }
+    
     @Action( GetUsers )
     getUsers ( { getState, setState }: StateContext<AdminStateModel> )
     {

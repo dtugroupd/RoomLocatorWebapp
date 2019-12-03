@@ -11,6 +11,7 @@ import { TokenState } from 'src/app/_states/token.state';
 import { Observable } from 'rxjs';
 import { UserDeleteComponent } from '../user-delete/user-delete.component';
 import { NbDialogService } from '@nebular/theme';
+import { AdminState } from 'src/app/_states/admin.state';
 
 
 export interface Role
@@ -32,6 +33,7 @@ export class AdminPageComponent implements OnInit
 
 
   users: any;
+  stateUsers: any;
   user: any;
 
   selectedRow: number;
@@ -52,6 +54,9 @@ export class AdminPageComponent implements OnInit
   ];
 
   displayedColumns: string[] = [ 'userID', 'fullName', 'userRole', 'action' ];
+
+
+  @Select(AdminState.getUsers) users$: Observable<User[]>;
 
   constructor ( private store: Store, private dialogService: NbDialogService ) { }
 
@@ -83,6 +88,10 @@ export class AdminPageComponent implements OnInit
       this.currentUser = x;
     });
 
+    this.users$.subscribe(x => {
+      this.stateUsers = x;
+    });
+
     this.setClickedRow = function ( index )
     {
       this.selectedRow = index;
@@ -112,13 +121,12 @@ export class AdminPageComponent implements OnInit
     if (this.isShow) {
       this.toggleDisplay();
     }
-    
+
     const userContext = {user: u};
-    console.log(userContext)
     const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true, context: userContext };
 
-    this.dialogService.open(UserDeleteComponent, settings).onClose.subscribe(x => {
-      this.dataSource.data = x;
+    this.dialogService.open(UserDeleteComponent, settings).onClose.subscribe(() => {
+      this.dataSource.data = this.stateUsers;
     });
   }
 }
