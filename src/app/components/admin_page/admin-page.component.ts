@@ -63,12 +63,12 @@ export class AdminPageComponent implements OnInit
       this.users = x.users.users;
       this.dataSource = new MatTableDataSource( this.users );
 
-      this.dataSource.data.forEach(u => {
+     /* this.dataSource.data.forEach(u => {
         if (!u.fullName ) {
           const index = this.dataSource.data.indexOf(u);
           this.dataSource.data.splice(index, 1);
         }
-      });
+      }); */
 
       this.dataSource.filterPredicate = ( item, filter: string ) => {
         let exists = false;
