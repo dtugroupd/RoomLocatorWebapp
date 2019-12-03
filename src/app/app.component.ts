@@ -3,29 +3,37 @@
  * @author Hadi Horani, s165242
  * @author Andreas Gøricke, s153804
  * @author Anders Wiberg Olsen, s165241
+ * @author Amal Qasim, s132957
  */
 
-import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { Store, Select } from '@ngxs/store';
 import { SetActivateFeedbackAndStatus } from './_actions/mazemap.actions';
 import { MazemapState } from './_states/mazemap.state';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { GetSurveys } from './_actions/mazemap.actions';
 import { LibrarySection } from './models/mazemap/library-section.model';
 import { faMap, faCalendarAlt, faPoll } from '@fortawesome/free-solid-svg-icons';
-import { NbMenuItem, NbThemeService } from '@nebular/theme';
+import { NbMenuItem, NbThemeService,NB_WINDOW,NbMenuService } from '@nebular/theme';
 import { TokenState } from './_states/token.state';
 import { User } from './models/login/user.model';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, filter } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { GetCurrentFeedback } from './_actions/feedback.actions';
+import { SetTokenAndUser } from './_actions/token.actions';
 
-@Component( {
-  selector: 'app-root',
+
+@Component({
+  selector: 'app-root, nb-context-menu-click',
   templateUrl: './app.component.html',
-  styleUrls: [ './app.component.scss' ],
+  styleUrls: ['./app.component.scss'],
+  styles: [`
+  :host nb-layout-header ::ng-deep nav {
+    justify-content: flex-end;
+  }
+`],
   animations: [
     trigger( 'toggleMobileMenu', [
       state( 'show', style( {
@@ -46,8 +54,30 @@ import { GetCurrentFeedback } from './_actions/feedback.actions';
   ]
 } )
 
-export class AppComponent implements OnInit
+export class AppComponent implements OnInit, OnDestroy
 {
+
+  subscription: Subscription;
+  browserRefresh: any;
+  
+  constructor(private store: Store, private router: Router, private themeService: NbThemeService,
+     private nbMenuService: NbMenuService, @Inject(NB_WINDOW) private window){
+    const preferredTheme = localStorage.getItem("theme");
+    if (preferredTheme) {
+      this.selectedTheme = preferredTheme;
+      this.themeService.changeTheme(preferredTheme);
+    }
+
+    this.subscription = router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.browserRefresh = !router.navigated;
+
+        if (this.browserRefresh) {
+          this.store.dispatch(new SetTokenAndUser());
+        }
+      }
+    });
+  }
   title = 'RoomLocatorWebapp';
   activeSection: LibrarySection;
   faPoll = faPoll;
@@ -56,14 +86,18 @@ export class AppComponent implements OnInit
   mobileMenuToggled = false;
   faBars = faBars;
   base64Image: string = "";
+  selectedTheme = 'default';
+  themes = [ "Default", "Dark", "Cosmic" ];
 
   @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
   @Select(TokenState.getUser) user$: Observable<User>;
   @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
+  @Select(MazemapState.getActivateFeedbackAndStatus) viewIsMazemap$: Observable<boolean>;
 
-  constructor(private store: Store, private router: Router, private themeService: NbThemeService) {
-    // this.themeService.changeTheme('cosmic')
-  }
+items = [
+    { title: 'Profile' },
+    { title: 'Logout' },
+  ];
 
   menuItems: NbMenuItem[] = [
     {
@@ -87,24 +121,29 @@ export class AppComponent implements OnInit
       'link': '/admin'
     }
   ];
+  
 
-  ngOnInit() {
-    this.activeSection$.subscribe(x => {
+  changeTheme(newTheme: string): void {
+    this.selectedTheme = newTheme.toLowerCase();
+    localStorage.setItem("theme", this.selectedTheme);
+    this.themeService.changeTheme(this.selectedTheme);
+  }
+
+  ngOnInit ()
+  {
+    this.activeSection$.subscribe( x =>
+    {
       this.activeSection = x;
     } );
 
     this.user$.subscribe(x => {
       if (x) {
         this.store.dispatch(new GetCurrentFeedback(x.id));
+        this.base64Image = `data:image/png;base64,${x.profileImage}`;
       }
     });
 
     this.store.dispatch(new GetSurveys());
-    this.user$.subscribe(x => {
-      if (x) {
-        this.base64Image = `data:image/png;base64,${x.profileImage}`;
-      }
-    });
 
     this.router.events.subscribe( x =>
     {
@@ -119,7 +158,12 @@ export class AppComponent implements OnInit
             break;
         }
       }
-    } );
+    });
+  }
+
+  
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   userHasAccess ( link: string ): Observable<boolean>
@@ -133,7 +177,7 @@ export class AppComponent implements OnInit
       case '/calendar':
         return new Observable( ( observer: any ) => observer.next( true ) );
       case '/admin':
-        return new Observable( ( observer: any ) => observer.next( true ) );
+        return this.userHasRole( [ 'admin' ] ).pipe( tap( val => val ) );
       case '/survey-management':
         return this.userHasRole( [ 'library', 'researcher' ] ).pipe( tap( val => val ) );
       default:

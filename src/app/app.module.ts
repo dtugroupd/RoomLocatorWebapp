@@ -8,7 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
   NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
-  NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule, NbUserModule
+  NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule,
+  NbActionsModule, NbUserModule, NbSelectModule, NbCheckboxModule, NbSpinnerModule
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -38,8 +39,12 @@ import { AccessDeniedComponent } from './components/access_denied/access-denied.
 import { AdminPageComponent } from './components/admin_page/admin-page.component';
 import { AdminState } from './_states/admin.state';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
-import { MatTableModule, MatInputModule } from '@angular/material'
+import { MatTableModule, MatInputModule, MatDialogModule } from '@angular/material';
 import { LoginComponent } from './components/login/login.component';
+import { UserDeleteComponent } from './components/user-delete/user-delete.component';
+import { UserDisclaimerState } from './_states/user.state';
+import { ShowFeedbackComponent } from './components/showFeedback/show-feedback.component';
+
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
@@ -56,11 +61,13 @@ const appRoutes: Routes = [
     EventCalendarComponent,
     SurveyFeedbackButtonComponent,
     StatusButtonComponent,
+    ShowFeedbackComponent,
     StatusButtonMenuComponent,
     SurveyManagementComponent,
     AccessDeniedComponent,
     AdminPageComponent,
     LoginComponent,
+    UserDeleteComponent,
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -68,8 +75,10 @@ const appRoutes: Routes = [
     SurveyFeedbackSmileyRowComponent,
     SurveyFeedbackButtonComponent,
     SurveyCreateComponent,
+    ShowFeedbackComponent,
     MazemapComponent,
-    AdminPageComponent
+    AdminPageComponent,
+    UserDeleteComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -87,6 +96,7 @@ const appRoutes: Routes = [
     NbButtonModule,
     NbAccordionModule,
     NbActionsModule,
+    MatDialogModule,
     NbCardModule,
     MatTableModule,
     NbInputModule,
@@ -98,6 +108,9 @@ const appRoutes: Routes = [
     MatInputModule,
     NbContextMenuModule,
     NbMenuModule,
+    NbSelectModule,
+    NbCheckboxModule,
+    NbSpinnerModule,
     NbMenuModule.forRoot(),
     NbDialogModule.forRoot(),
     NbToastrModule.forRoot(),
@@ -106,7 +119,8 @@ const appRoutes: Routes = [
       MazemapState,
       TokenState,
       FeedbackState,
-      AdminState
+      AdminState,
+      UserDisclaimerState,
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot(),

@@ -2,11 +2,15 @@
  * @author Hadi Horani, s144885
  */
 
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Store, Select } from '@ngxs/store';
 import { GetUsers, UpdateRole, DeleteUser } from 'src/app/_actions/admin.actions';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 import { User } from 'src/app/models/login/user.model';
+import { TokenState } from 'src/app/_states/token.state';
+import { Observable } from 'rxjs';
+import { UserDeleteComponent } from '../user-delete/user-delete.component';
+
 
 export interface Role
 {
@@ -23,7 +27,11 @@ export interface Role
 export class AdminPageComponent implements OnInit
 {
 
+  @Select(TokenState.getUser) user$: Observable<User>;
+
   users: any;
+  user: any;
+
   selectedRow: number;
   setClickedRow: Function;
   selectedRole: string;
@@ -31,6 +39,8 @@ export class AdminPageComponent implements OnInit
   searchText;
   dataSource: MatTableDataSource<User>;
   isShow = false;
+  currentUser: User;
+  dialogRef: any;
 
 
   roles: Role[] = [
@@ -41,7 +51,7 @@ export class AdminPageComponent implements OnInit
 
   displayedColumns: string[] = [ 'userID', 'fullName', 'userRole', 'action' ];
 
-  constructor ( private store: Store ) { }
+  constructor ( private store: Store, private dialogService: MatDialog ) { }
 
   ngOnInit ()
   {
@@ -50,15 +60,22 @@ export class AdminPageComponent implements OnInit
       this.users = x.users.users;
       this.dataSource = new MatTableDataSource( this.users );
 
-      this.dataSource.filterPredicate = ( item, filter: string ) =>
-      {
+      this.dataSource.data.forEach(u => {
+        if (!u.fullName ) {
+          const index = this.dataSource.data.indexOf(u);
+          this.dataSource.data.splice(index, 1);
+        }
+      });
+
+      this.dataSource.filterPredicate = ( item, filter: string ) => {
         let exists = false;
         item.roles.forEach(x => {
-          if (x.includes(filter)) {
+          if (x.toLowerCase().includes(filter.toLowerCase())) { 
             exists = true;
           }
         });
-        if ( item.studentId.includes( filter) ) {
+        if ( item.studentId.toLowerCase().includes(filter.toLowerCase()) || item.fullName.toLowerCase().includes(filter.toLowerCase()) ) {
+
           return true;
         }
         return exists;
@@ -69,6 +86,10 @@ export class AdminPageComponent implements OnInit
     }
     );
 
+    this.user$.subscribe(x => {
+      this.currentUser = x;
+    });
+
     this.setClickedRow = function ( index )
     {
       this.selectedRow = index;
@@ -77,24 +98,29 @@ export class AdminPageComponent implements OnInit
 
   applyFilter ( filterValue: string )
   {
-    this.dataSource.filter = filterValue;
+    this.dataSource.filter = filterValue.toLowerCase();
   }
 
   toggleDisplay() {
     this.isShow = !this.isShow;
   }
 
-  saveNewRole ()
-  {
+  saveNewRole() {
     this.selectedUserId = this.users[ this.selectedRow ].studentId;
-    this.store.dispatch( new UpdateRole( this.selectedUserId, this.selectedRole ) ).subscribe( () => { } );
-
+    this.isShow = false;
+    this.store.dispatch( new UpdateRole( this.selectedUserId, this.selectedRole ) );
   }
 
-  deleteUser() {
-    this.isShow = !this.isShow;
-    this.selectedUserId = this.users[ this.selectedRow ].studentId;
-    this.store.dispatch( new DeleteUser( this.selectedUserId ) ).subscribe( () => { } );
-  }
+  confirmDeletion(u: User) {
 
+    if (this.isShow) {
+      this.toggleDisplay();
+    }
+
+    this.dialogService.open(UserDeleteComponent, {
+      autoFocus: false,
+      closeOnNavigation: true,
+      data: {user: u}
+    });
+  }
 }
