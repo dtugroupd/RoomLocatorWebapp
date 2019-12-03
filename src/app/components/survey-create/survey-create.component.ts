@@ -6,7 +6,6 @@ import { Component, OnInit } from '@angular/core';
 import { QuestionToCreate } from 'src/app/models/question/question-to-create.model';
 import { Section } from 'src/app/models/mazemap/section.model';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
-import { SurveyService } from '../../_services/survey.service';
 import { MazemapState } from '../../_states/mazemap.state';
 import { Observable } from 'rxjs';
 import { Select, Store, Actions, ofActionDispatched } from '@ngxs/store';

@@ -1,9 +1,8 @@
-import { User } from '../models/login/user.model';
-
 /**
  * @author Hadi Horani, s144885
  * @author Anders Wiberg Olsen, s165241
  */
+
 
 export class SetToken {
     static readonly type = '[Token] Set';
@@ -13,4 +12,9 @@ export class SetToken {
 
 export class GetUser {
     static readonly type = '[User] Get';
+}
+
+export class SetAcceptedDisclaimer {
+    constructor(public studentId: string) {}
+    static readonly type = '[User Disclaimer] Set Accept';
 }

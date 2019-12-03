@@ -1,0 +1,20 @@
+/**
+    Author: Anders Wiberg Olsen, s165241
+*/
+
+nb-card {
+    padding: 24px;
+    max-width: 400px;
+    margin: auto;
+    margin-top: 48px;
+}
+
+.form-control label {
+    display: block;
+}
+
+nb-card-footer {
+    padding: 24px 0 0 0;
+    display: flex;
+    justify-content: space-between;
+}

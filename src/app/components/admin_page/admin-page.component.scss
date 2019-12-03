@@ -1,0 +1,22 @@
+table {
+    width: 100%;
+    background-color: var(--background-basic-color-1);
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+#userSearch {
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+#userAdminRolePicker {
+    margin-top: 24px;
+}
+
+#userAdminRolePicker nb-select {
+    margin-right: 24px;
+}

@@ -3,16 +3,44 @@
     width: 100%;
 }
 
+.sensors-div {
+    border-bottom: 1px solid gainsboro;
+}
+
+.sensors-div p {
+    line-height: 0.3em;
+}
+
+.verygood {
+    color: var(--text-success-color);
+}
+
+.good {
+    color: var(--text-success-color);
+}
+
+.okay {
+    color: var(--text-warning-color);
+}
+
+.bad {
+    color: var(--text-danger-color);
+}
+
+.verybad {
+    color: var(--text-danger-color);
+}
+
 #statusSmileyButtonMenu:after {
     content: " ";
     position: absolute;
     right: 10px;
     bottom: -15px;
-    border-top: 15px solid #fff;
+    border-top: 15px solid var(--background-basic-color-1);
     border-right: 15px solid transparent;
     border-left: 15px solid transparent;
     border-bottom: none;
-  }
+}
 
 @media only screen and (min-width: 720px) {
     #statusSmileyButtonMenu:after {
@@ -20,11 +48,11 @@
         position: absolute;
         right: 20px;
         bottom: -15px;
-        border-top: 15px solid #fff;
+        border-top: 15px solid var(--background-basic-color-1);
         border-right: 15px solid transparent;
         border-left: 15px solid transparent;
         border-bottom: none;
-      }
+    }
 }
 
 @media only screen and (min-width: 1024px) and (min-height: 1024px) {
@@ -33,20 +61,20 @@
         position: absolute;
         right: 35px;
         bottom: -15px;
-        border-top: 15px solid #fff;
+        border-top: 15px solid var(--background-basic-color-1);
         border-right: 15px solid transparent;
         border-left: 15px solid transparent;
         border-bottom: none;
-      }
+    }
 }
 
 #statusSmileyButtonMenu nb-card-body {
-     padding-top: 0px !important;
-     padding-bottom: 0px !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
 }
 
 .thumb-active {
-    color: #3366ff;
+    color: var(--button-filled-primary-background-color);
 }
 
 .thumb-inactive {
@@ -55,15 +83,18 @@
 
 .thumbs {
     display: flex;
-    justify-content: space-around;
+    justify-content: right;
     margin-top: 20px;
-    width: 25%;
-    font-size: 30px;
+    width: 100%;
+    font-size: 26px;
+}
+
+.thumbs fa-icon {
+    padding: 5px;
 }
 
 @media only screen and (min-width: 360px) {
     .thumbs {
-        width: 30%;
-        font-size: 38px;
+        width: 15%;
     }
 }

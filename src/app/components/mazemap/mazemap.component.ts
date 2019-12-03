@@ -51,7 +51,7 @@ declare let Mazemap: any;
       state(
         'show',
         style({
-          height: '200px',
+          height: '250px',
           opacity: 1
         })
       ),
@@ -236,6 +236,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
       this.initLocationLayers();
     });
 
+    // TODO: REMOVE THIS
     this.map.on('click', (e: any) => {
       // console.log(e.lngLat);
       // console.log(this.map.getZoom());
@@ -475,12 +476,13 @@ export class MazemapComponent implements OnInit, OnDestroy {
   showEventMarkers() {
     this.activeLocation.events.forEach(e => {
 
-    })
+    });
   }
 
   hideEventMarkers() {
 
   }
+
   toggleEventLayers() {
     this.toggledEvents = true;
     this.toggledSections = false;
