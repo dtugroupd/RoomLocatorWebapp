@@ -35,6 +35,14 @@ export class TokenState {
     }
 
     @Selector()
+    static userIsAdmin(state: TokenStateModel): boolean {
+        if (state.user && state.user.roles) {
+            return state.user.roles.filter(() => state.user.roles.includes('admin')).length !== 0;
+        }
+        return false;
+    }
+
+    @Selector()
     static loginIsLoading(state: TokenStateModel): boolean {
         return state.loginLoading;
     }
@@ -66,7 +74,8 @@ export class TokenState {
         } else {
             patchState({token});
             return this.userService.fetchUser().pipe(tap((user: User) => {
-                setState({ user: user, token: token, loginLoading: false, error: null });
+
+                setState({ user, token, loginLoading: false, error: null });
             }, x => {
                 patchState({ loginLoading: false, error: x.error });
             }));

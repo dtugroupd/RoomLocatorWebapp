@@ -21,6 +21,7 @@ import { User } from './models/login/user.model';
 import { map, tap, filter } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { GetCurrentFeedback } from './_actions/feedback.actions';
 import { SetTokenAndUser } from './_actions/token.actions';
 
 
@@ -134,14 +135,14 @@ items = [
       this.activeSection = x;
     } );
 
-    this.store.dispatch( new GetSurveys() );
-    this.user$.subscribe( x =>
-    {
-      if ( x )
-      {
-        this.base64Image = `data:image/png;base64,${ x.profileImage }`;
+    this.user$.subscribe(x => {
+      if (x) {
+        this.store.dispatch(new GetCurrentFeedback(x.id));
+        this.base64Image = `data:image/png;base64,${x.profileImage}`;
       }
-    } );
+    });
+
+    this.store.dispatch(new GetSurveys());
 
     this.router.events.subscribe( x =>
     {
@@ -156,9 +157,7 @@ items = [
             break;
         }
       }
-    } );
-
-
+    });
   }
 
   

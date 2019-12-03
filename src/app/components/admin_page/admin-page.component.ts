@@ -103,11 +103,16 @@ export class AdminPageComponent implements OnInit
 
   saveNewRole() {
     this.selectedUserId = this.users[ this.selectedRow ].studentId;
+<<<<<<< HEAD
     this.store.dispatch( new UpdateRole( this.selectedUserId, this.selectedRole ) ).subscribe(x => {
       this.dataSource.data = x.users.users;
     });
     this.isShow = !this.isShow;
 
+=======
+    this.isShow = false;
+    this.store.dispatch( new UpdateRole( this.selectedUserId, this.selectedRole ) );
+>>>>>>> e97656ff798891890a4bbbd546520d6e7ce83175
   }
 
   confirmDeletion(u: User) {
