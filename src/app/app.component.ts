@@ -5,12 +5,12 @@
  * @author Anders Wiberg Olsen, s165241
  */
 
-import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { Store, Select } from '@ngxs/store';
 import { SetActivateFeedbackAndStatus } from './_actions/mazemap.actions';
 import { MazemapState } from './_states/mazemap.state';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { GetSurveys } from './_actions/mazemap.actions';
 import { LibrarySection } from './models/mazemap/library-section.model';
 import { faMap, faCalendarAlt, faPoll } from '@fortawesome/free-solid-svg-icons';
@@ -20,6 +20,7 @@ import { User } from './models/login/user.model';
 import { map, tap } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { SetTokenAndUser } from './_actions/token.actions';
 
 @Component( {
   selector: 'app-root',
@@ -45,15 +46,28 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   ]
 } )
 
-export class AppComponent implements OnInit
+export class AppComponent implements OnInit, OnDestroy
 {
 
+  subscription: Subscription;
+  browserRefresh: any;
+  
   constructor(private store: Store, private router: Router, private themeService: NbThemeService) {
     const preferredTheme = localStorage.getItem("theme");
     if (preferredTheme) {
       this.selectedTheme = preferredTheme;
       this.themeService.changeTheme(preferredTheme);
     }
+
+    this.subscription = router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.browserRefresh = !router.navigated;
+
+        if (this.browserRefresh) {
+          this.store.dispatch(new SetTokenAndUser());
+        }
+      }
+    });
   }
   title = 'RoomLocatorWebapp';
   activeSection: LibrarySection;
@@ -130,6 +144,13 @@ export class AppComponent implements OnInit
         }
       }
     } );
+
+
+  }
+
+  
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   userHasAccess ( link: string ): Observable<boolean>

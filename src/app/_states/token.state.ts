@@ -39,9 +39,9 @@ export class TokenState {
     }
 
     @Action(SetTokenAndUser)
-    setTokenAndUser({ setState }: StateContext<TokenStateModel>) {
+    setTokenAndUser({ setState, patchState }: StateContext<TokenStateModel>) {
         const jwtHelper = new JwtHelperService();
-        let token = localStorage.getItem('token');
+        const token = localStorage.getItem('token');
 
         if (!token) {
             return;
@@ -50,8 +50,9 @@ export class TokenState {
         if (token && jwtHelper.isTokenExpired(token)) {
             setState({ user: null });
         } else {
+            patchState({token});
             return this.userService.fetchUser().pipe(tap((user: User) => {
-                setState({ user: user, token: token });
+                setState({user, token });
             }));
         }
     }
@@ -59,6 +60,7 @@ export class TokenState {
     @Action(Login)
     login({ patchState }: StateContext<TokenStateModel>, login: LoginModel) {
         return this.userService.login(login).pipe(tap((auth: AuthenticatedModel) => {
+            localStorage.setItem('token', auth.token);
             patchState({ user: auth.user, token: auth.token });
         }));
     }
