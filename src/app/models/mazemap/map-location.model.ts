@@ -1,5 +1,5 @@
 import { Section } from './section.model';
-// import { Event } from '../../models/'
+import { Event } from '../../models/calendar/event.model';
 
 export interface MapLocation {
     id: string;

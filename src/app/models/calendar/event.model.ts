@@ -5,6 +5,9 @@ export interface Event {
     date: Moment;
     title: string;
     description: string;
+    longitude: number;
+    latitude: number;
+    zLevel: number;
     durationInHours: number;
     durationApproximated: boolean;
     speakers: string;

@@ -174,23 +174,23 @@ export function markerOptions(layer, zLevel?: number) {
         color: 'MazeGreen',
         size: 50,
         offZOpacity: 0,
-        imgUrl: getMarkerIconUrl(layer.section),
+        imgUrl: layer ? getMarkerIconUrl(layer.section) : null,
         imgScale: 0.5,
         innerCircle: true,
         innerCircleColor: 'white',
         innerCircleScale: 0.7,
-        zLevel: layer.zLevel
+        zLevel: layer ? layer.zLevel : null
       },
       funky: {
         color: 'MazeYellow',
         size: 35,
         offZOpacity: 0,
-        imgUrl: getMarkerIconUrl(layer.section),
+        imgUrl: layer ? getMarkerIconUrl(layer.section) : null,
         imgScale: 0.25,
         innerCircle: true,
         innerCircleColor: 'white',
         innerCircleScale: 0.5,
-        zLevel: layer.zLevel
+        zLevel: layer ? layer.zLevel : null
       },
       event: {
         color: 'MazeBlue',

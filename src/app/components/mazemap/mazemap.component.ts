@@ -229,6 +229,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
         } else if (this.map.getZoom() < 17.5 && this.activeLocation) {
           this.toggleLocationLayers(true);
           this.removeSectionLayers();
+          this.hideEventMarkers();
           this.store.dispatch(new ResetActiveLocation());
         }
       });
@@ -238,7 +239,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
 
     // TODO: REMOVE THIS
     this.map.on('click', (e: any) => {
-      // console.log(e.lngLat);
+      console.log(e.lngLat);  
       // console.log(this.map.getZoom());
     });
   }
@@ -350,6 +351,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
       layer.source.data.geometry.coordinates[0]
     );
     const center = getCenter(featureCoordinates);
+    console.log("CENTER: ", center);
     const marker = new Mazemap.MazeMarker(markerOptions(layer).default)
       .setLngLat(center)
       .addTo(this.map);
@@ -475,12 +477,27 @@ export class MazemapComponent implements OnInit, OnDestroy {
 
   showEventMarkers() {
     this.activeLocation.events.forEach(e => {
+      const marker = new Mazemap.MazeMarker(markerOptions(null, e.zLevel).event)
+        .setLngLat({lat: e.latitude, lng: e.longitude})
+        .addTo(this.map);
 
+      const popup = new Mazemap.Popup({
+        closeOnClick: true,
+        offset: [0, -27]
+        }).setHTML(
+        `${e.title} ${e.description}`
+      );
+
+      marker.setPopup(popup);
+      this.eventMarkers.push(marker);
     });
   }
 
   hideEventMarkers() {
-
+    this.eventMarkers.forEach(e => {
+      e.remove();
+    });
+    this.eventMarkers = [];
   }
 
   toggleEventLayers() {
