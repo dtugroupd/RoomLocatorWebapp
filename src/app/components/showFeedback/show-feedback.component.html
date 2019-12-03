@@ -3,14 +3,14 @@
    
    <nb-card-header>
      Feedback
-     <button type="button" style="float: right;" class="close" aria-label="Close" (click) = "close()" >
+     <button nbButton outline type="button" style="float: right;" class="close" aria-label="Close" (click) = "close()" >
         <span aria-hidden="true">&times;</span>
       </button>
    </nb-card-header>
 
   <nb-card-body>
 
-          <p *ngFor = "let surveyAnswer of survey.surveyAnswers" style = "border-bottom: double;">
+          <p nbInput *ngFor = "let surveyAnswer of survey.surveyAnswers">
              {{ surveyAnswer.comment }}
           </p>
 
@@ -19,7 +19,7 @@
   
 <nb-card-footer>
 
-        <button type="button" class="btn btn-outline-dark" (click) = "close()" >Close</button>
+        <button nbButton outline type="button" class="btn btn-outline-dark" (click) = "close()" >Close</button>
     
 </nb-card-footer>
  </nb-card>
