@@ -6,6 +6,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Store } from '@ngxs/store';
 import { DeleteUser } from 'src/app/_actions/admin.actions';
+import { NbDialogRef } from '@nebular/theme';
+import { User } from 'src/app/models/login/user.model';
 
 @Component({
   selector: 'app-user-delete',
@@ -14,11 +16,12 @@ import { DeleteUser } from 'src/app/_actions/admin.actions';
 })
 export class UserDeleteComponent {
   private users: any;
+  user: User;
 
   constructor(
-    public dialogRef: MatDialogRef<UserDeleteComponent>,
+    private dialogRef: NbDialogRef<UserDeleteComponent>,
     private store: Store,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    
     ) { }
 
     close() {
@@ -26,7 +29,7 @@ export class UserDeleteComponent {
     }
 
     deleteUser() {
-      this.store.dispatch( new DeleteUser( this.data.user.studentId ) ).subscribe(x => {
+      this.store.dispatch( new DeleteUser( this.user.studentId ) ).subscribe(x => {
         this.users = x.users.users;
       });
       this.dialogRef.close(this.users);

@@ -10,8 +10,7 @@ import { User } from 'src/app/models/login/user.model';
 import { TokenState } from 'src/app/_states/token.state';
 import { Observable } from 'rxjs';
 import { UserDeleteComponent } from '../user-delete/user-delete.component';
-import { AdminState } from 'src/app/_states/admin.state';
-import { tap } from 'rxjs/operators';
+import { NbDialogService } from '@nebular/theme';
 
 
 export interface Role
@@ -54,7 +53,7 @@ export class AdminPageComponent implements OnInit
 
   displayedColumns: string[] = [ 'userID', 'fullName', 'userRole', 'action' ];
 
-  constructor ( private store: Store, private dialogService: MatDialog ) { }
+  constructor ( private store: Store, private dialogService: NbDialogService ) { }
 
   ngOnInit ()
   {
@@ -114,14 +113,11 @@ export class AdminPageComponent implements OnInit
       this.toggleDisplay();
     }
 
-    this.dialogRef = this.dialogService.open(UserDeleteComponent, {
-      autoFocus: false,
-      closeOnNavigation: true,
-      data: {user: u}
-    });
+    const userContext = {u}
+    const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true, context: userContext };
 
-    this.dialogRef.afterClosed().subscribe(x => {
-      this.dataSource.data = x.users.users;
+    this.dialogService.open(UserDeleteComponent, settings).onClose.subscribe(x => {
+      this.dataSource.data = x;
     });
   }
 }
