@@ -6,12 +6,12 @@
  * @author Amal Qasim, s132957
  */
 
-import { Component, OnInit, Inject } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { Store, Select } from '@ngxs/store';
 import { SetActivateFeedbackAndStatus } from './_actions/mazemap.actions';
 import { MazemapState } from './_states/mazemap.state';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { GetSurveys } from './_actions/mazemap.actions';
 import { LibrarySection } from './models/mazemap/library-section.model';
 import { faMap, faCalendarAlt, faPoll } from '@fortawesome/free-solid-svg-icons';
@@ -21,6 +21,7 @@ import { User } from './models/login/user.model';
 import { map, tap, filter } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { SetTokenAndUser } from './_actions/token.actions';
 
 
 @Component({
@@ -52,9 +53,12 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   ]
 } )
 
-export class AppComponent implements OnInit
+export class AppComponent implements OnInit, OnDestroy
 {
 
+  subscription: Subscription;
+  browserRefresh: any;
+  
   constructor(private store: Store, private router: Router, private themeService: NbThemeService,
      private nbMenuService: NbMenuService, @Inject(NB_WINDOW) private window){
     const preferredTheme = localStorage.getItem("theme");
@@ -62,6 +66,16 @@ export class AppComponent implements OnInit
       this.selectedTheme = preferredTheme;
       this.themeService.changeTheme(preferredTheme);
     }
+
+    this.subscription = router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.browserRefresh = !router.navigated;
+
+        if (this.browserRefresh) {
+          this.store.dispatch(new SetTokenAndUser());
+        }
+      }
+    });
   }
   title = 'RoomLocatorWebapp';
   activeSection: LibrarySection;
@@ -144,7 +158,12 @@ items = [
         }
       }
     });
-    }
+  }
+
+  
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
   userHasAccess ( link: string ): Observable<boolean>
   {

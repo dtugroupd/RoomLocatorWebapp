@@ -12,5 +12,4 @@ export class Login {
 
 export class SetTokenAndUser {
     static readonly type = '[Token] SetTokenAndUser';
-    constructor() { }
 }
