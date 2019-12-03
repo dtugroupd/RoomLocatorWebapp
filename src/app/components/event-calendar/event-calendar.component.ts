@@ -3,7 +3,7 @@
  * @author Andreas Gøricke, s153804
  */
 
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 import { faCalendarAlt as faCalendarAltReg, faEdit} from '@fortawesome/free-regular-svg-icons';
 import { Observable } from 'rxjs';
 import { EventState } from 'src/app/_states/event.state';
@@ -15,6 +15,7 @@ import { NbToastrService, NbDialogService } from '@nebular/theme';
 import { EventCreateComponent } from '../event-create/event-create.component';
 import { EventUpdateComponent } from '../event-update/event-update.component';
 import { TokenState } from 'src/app/_states/token.state';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 
 @Component({
   selector: 'app-event-calendar',
@@ -23,7 +24,7 @@ import { TokenState } from 'src/app/_states/token.state';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class EventCalendarComponent implements OnInit {
+export class EventCalendarComponent implements OnInit, OnDestroy {
   moment = moment;
   faCalendarAltReg = faCalendarAltReg;
   faEdit = faEdit;
@@ -46,22 +47,26 @@ export class EventCalendarComponent implements OnInit {
       this.events = x;
     });
 
-    this.action$.pipe(ofActionDispatched(AddEventSuccess)).subscribe(() => {
+    this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(AddEventSuccess)).subscribe(() => {
+      console.log("Add success!!");
       this.showSuccessToast('top-right', 'success', 'Dit event er oprettet.');
     });
 
-    this.action$.pipe(ofActionDispatched(UpdateEventSuccess)).subscribe(() => {
+    this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(UpdateEventSuccess)).subscribe(() => {
+      console.log("Update success!!");
       this.showSuccessToast('top-right', 'success', 'Eventet er opdateret.');
     });
 
-    this.action$.pipe(ofActionDispatched(AddEventError)).subscribe(() => {
+    this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(AddEventError)).subscribe(() => {
       this.showSuccessToast('top-right', 'danger', 'Dit event kunne ikke oprettes. Prøv igen.');
     });
 
-    this.action$.pipe(ofActionDispatched(UpdateEventError)).subscribe(() => {
+    this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(UpdateEventError)).subscribe(() => {
       this.showSuccessToast('top-right', 'danger', 'Eventet kunne ikke opdateres. Prøv igen.');
     });
   }
+
+  ngOnDestroy() { }
 
   fitToLength(chars: number, text: string) {
     if (text.length > chars) {
