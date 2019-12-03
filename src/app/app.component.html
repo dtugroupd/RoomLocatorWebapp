@@ -17,7 +17,10 @@
         </nb-layout-column>
 
         <fa-icon class="burger-menu-button" [icon]="faBars" (click)="toggleMobileMenu()"></fa-icon>
-        <nb-user class="user" *ngIf="user$ | async" name="{{ (user$ | async).fullName }}" title="{{ (user$ | async).studentId }}" [picture]="base64Image" style="justify-content: flex-end;"></nb-user>
+        <nb-user class="user" *ngIf="user$ | async" name="{{ (user$ | async).fullName }}" title="{{ (user$ | async).studentId }}" [picture]="base64Image" 
+        style="justify-content: flex-end;" 
+         [nbContextMenu]="items"
+        nbContextMenuTag="my-context-menu"></nb-user>
     </nb-layout-header>
 
     <nb-layout-column (click)="hideMobileMenu()" [className]="(viewIsMazemap$ | async) ? 'no-padding' : ''">

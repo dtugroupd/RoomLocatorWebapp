@@ -63,13 +63,6 @@ export class AdminPageComponent implements OnInit
       this.users = x.users.users;
       this.dataSource = new MatTableDataSource( this.users );
 
-     /* this.dataSource.data.forEach(u => {
-        if (!u.fullName ) {
-          const index = this.dataSource.data.indexOf(u);
-          this.dataSource.data.splice(index, 1);
-        }
-      }); */
-
       this.dataSource.filterPredicate = ( item, filter: string ) => {
         let exists = false;
         item.roles.forEach(x => {
@@ -111,12 +104,14 @@ export class AdminPageComponent implements OnInit
     this.store.dispatch( new UpdateRole( this.selectedUserId, this.selectedRole ) ).subscribe(x => {
       this.dataSource.data = x.users.users;
     });
+    this.isShow = !this.isShow;
+
   }
 
   confirmDeletion(u: User) {
 
     if (this.isShow) {
-    this.toggleDisplay();
+      this.toggleDisplay();
     }
 
     this.dialogRef = this.dialogService.open(UserDeleteComponent, {
@@ -129,5 +124,4 @@ export class AdminPageComponent implements OnInit
       this.dataSource.data = x.users.users;
     });
   }
-
 }

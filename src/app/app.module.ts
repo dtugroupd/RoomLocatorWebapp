@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
   NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
-  NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule, NbUserModule, NbSelectModule, NbCheckboxModule
+  NbSearchModule, NbInputModule, NbMenuModule, NbContextMenuModule, NbActionsModule, NbUserModule, NbSelectModule, NbCheckboxModule, NbSpinnerModule
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -41,6 +41,8 @@ import { MatTableModule, MatInputModule, MatDialogModule } from '@angular/materi
 import { LoginComponent } from './components/login/login.component';
 import { UserDeleteComponent } from './components/user-delete/user-delete.component';
 import { UserDisclaimerState } from './_states/user.state';
+import { ShowFeedbackComponent } from './components/showFeedback/show-feedback.component';
+
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
@@ -57,6 +59,7 @@ const appRoutes: Routes = [
     EventCalendarComponent,
     SurveyFeedbackButtonComponent,
     StatusButtonComponent,
+    ShowFeedbackComponent,
     StatusButtonMenuComponent,
     SurveyManagementComponent,
     AccessDeniedComponent,
@@ -70,6 +73,7 @@ const appRoutes: Routes = [
     SurveyFeedbackSmileyRowComponent,
     SurveyFeedbackButtonComponent,
     SurveyCreateComponent,
+    ShowFeedbackComponent,
     MazemapComponent,
     AdminPageComponent,
     UserDeleteComponent
@@ -104,6 +108,7 @@ const appRoutes: Routes = [
     NbMenuModule,
     NbSelectModule,
     NbCheckboxModule,
+    NbSpinnerModule,
     NbMenuModule.forRoot(),
     NbDialogModule.forRoot(),
     NbToastrModule.forRoot(),
