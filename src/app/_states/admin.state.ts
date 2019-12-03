@@ -7,6 +7,7 @@ import { User } from '../models/login/user.model';
 import { tap } from 'rxjs/operators';
 import { GetUsers, UpdateRole, DeleteUser } from '../_actions/admin.actions';
 import { AdminService } from '../_services/admin.service';
+import { isNgTemplate } from '@angular/compiler';
 
 export class AdminStateModel
 {
@@ -25,6 +26,11 @@ export class AdminState
 {
     constructor ( private adminService: AdminService ) { }
 
+    @Selector()
+    static getUsers(state: AdminStateModel) {
+        return state.users;
+    }
+    
     @Action( GetUsers )
     getUsers ( { getState, setState }: StateContext<AdminStateModel> )
     {
@@ -44,21 +50,27 @@ export class AdminState
         return this.adminService.updatehUserRole( id, roleName ).pipe( tap( ( result ) =>
         {
             const s = getState();
+            const userList = [ ...s.users ];
+            const userIndex = userList.findIndex( item => item.studentId === id );
+            userList[ userIndex ] = result;
             setState( {
                 ...s,
-                user: result,
+                users: userList
             } );
         } ) );
     }
 
-    @Action(DeleteUser)
-    deleteUser({getState, setState}: StateContext<AdminStateModel>, {id}: DeleteUser) {
-        return this.adminService.deleteUser(id).pipe(tap((result) => {
-            const state = getState();
-            setState({
-                ...state,
-                user: result,
-            });
-        }));
+    @Action( DeleteUser )
+    deleteUser ( { getState, setState }: StateContext<AdminStateModel>, { id }: DeleteUser )
+    {
+        return this.adminService.deleteUser( id ).pipe( tap( () =>
+        {
+            const s = getState();
+            const filteredArray = s.users.filter(item => item.studentId !== id) ;
+            setState( {
+                ...s,
+                users: filteredArray
+            } );
+        } ) );
     }
 }
