@@ -44,8 +44,6 @@ export class AdminPageComponent implements OnInit
   dataSource: MatTableDataSource<User>;
   isShow = false;
   currentUser: User;
-  dialogRef: MatDialogRef<UserDeleteComponent>;
-
 
   roles: Role[] = [
     { name: 'admin', viewName: 'Admin' },
@@ -88,10 +86,6 @@ export class AdminPageComponent implements OnInit
       this.currentUser = x;
     });
 
-    this.users$.subscribe(x => {
-      this.stateUsers = x;
-    });
-
     this.setClickedRow = function ( index )
     {
       this.selectedRow = index;
@@ -118,6 +112,10 @@ export class AdminPageComponent implements OnInit
 
   confirmDeletion(u: User) {
 
+    this.users$.subscribe(x => {
+      this.stateUsers = x;
+    });
+
     if (this.isShow) {
       this.toggleDisplay();
     }
@@ -126,6 +124,7 @@ export class AdminPageComponent implements OnInit
     const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true, context: userContext };
 
     this.dialogService.open(UserDeleteComponent, settings).onClose.subscribe(() => {
+      console.log(this.stateUsers)
       this.dataSource.data = this.stateUsers;
     });
   }

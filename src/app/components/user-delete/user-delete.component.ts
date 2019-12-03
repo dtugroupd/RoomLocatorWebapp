@@ -2,8 +2,7 @@
  * @author Hadi Horani, s144885
  */
 
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { DeleteUser } from 'src/app/_actions/admin.actions';
 import { NbDialogRef } from '@nebular/theme';
@@ -34,9 +33,9 @@ export class UserDeleteComponent {
   }
 
   deleteUser() {
-    this.store.dispatch(new DeleteUser(this.user.studentId));
-
-    this.dialogRef.close();
+    this.store.dispatch(new DeleteUser(this.user.studentId)).subscribe(() => {
+      this.dialogRef.close();
+    });
   }
 
 }
