@@ -25,6 +25,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { GetCurrentFeedback } from './_actions/feedback.actions';
 import { SetTokenAndUser, Logout } from './_actions/token.actions';
 import { Token } from '@angular/compiler';
+import { UserDeleteComponent } from './components/user-delete/user-delete.component';
 
 
 @Component( {
@@ -128,10 +129,10 @@ export class AppComponent implements OnInit, OnDestroy
       'title': 'Admin Page',
       'link': '/admin'
     },
-    {
+/*     {
       'title': 'Profile',
       'link': '/userprofile'
-    }
+    } */
 
   ];
 
@@ -186,6 +187,10 @@ export class AppComponent implements OnInit, OnDestroy
         if ( title === 'Logout' )
         {
           this.store.dispatch( new Logout() );
+        } 
+
+        if (title === 'Profile'){
+          this.router.navigateByUrl('/userprofile');  
         }
       }
       );
