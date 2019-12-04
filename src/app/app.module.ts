@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { MazemapComponent } from './components/mazemap/mazemap.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import {
   NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
   NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
@@ -48,6 +49,7 @@ import { EventUpdateComponent } from './components/event-update/event-update.com
 import { UserDeleteComponent } from './components/user-delete/user-delete.component';
 import { UserDisclaimerState } from './_states/user.state';
 import { ShowFeedbackComponent } from './components/showFeedback/show-feedback.component';
+import { UserprofileComponent } from './components/userprofile/userprofile.component';
 
 
 const appRoutes: Routes = [
@@ -74,6 +76,7 @@ const appRoutes: Routes = [
     LoginComponent,
     EventUpdateComponent,
     UserDeleteComponent,
+    UserprofileComponent,
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -85,7 +88,9 @@ const appRoutes: Routes = [
     MazemapComponent,
     AdminPageComponent,
     EventUpdateComponent,
-    UserDeleteComponent
+    UserDeleteComponent,
+    UserprofileComponent,
+
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {

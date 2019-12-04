@@ -4,6 +4,7 @@
  * @author Andreas Gøricke, s153804
  * @author Anders Wiberg Olsen, s165241
  * @author Amal Qasim, s132957
+ * @author Hamed kadkhodaie, s083485
  */
 
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
@@ -126,7 +127,12 @@ export class AppComponent implements OnInit, OnDestroy
     {
       'title': 'Admin Page',
       'link': '/admin'
+    },
+    {
+      'title': 'Profile',
+      'link': '/userprofile'
     }
+
   ];
 
 
@@ -205,8 +211,11 @@ export class AppComponent implements OnInit, OnDestroy
         return this.userHasRole( [ 'admin' ] ).pipe( tap( val => val ) );
       case '/survey-management':
         return this.userHasRole( [ 'library', 'researcher' ] ).pipe( tap( val => val ) );
+      case '/userprofile':
+          return new Observable( ( observer: any ) => observer.next( true ) );
       default:
         return new Observable( ( observer: any ) => observer.next( false ) );
+        
     }
   }
 
