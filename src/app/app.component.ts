@@ -20,7 +20,11 @@ import { User, Role } from './models/login/user.model';
 import { map, tap } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { SetTokenAndUser } from './_actions/token.actions';
+import { GetCurrentFeedback } from './_actions/feedback.actions';
+import { SetTokenAndUser, Logout } from './_actions/token.actions';
+import { Token } from '@angular/compiler';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { SignalRServiceService } from './_services/signal-rservice.service';
 
 
 @Component({
@@ -33,32 +37,33 @@ import { SetTokenAndUser } from './_actions/token.actions';
   }
 `],
   animations: [
-    trigger( 'toggleMobileMenu', [
-      state( 'show', style( {
+    trigger('toggleMobileMenu', [
+      state('show', style({
         width: '80%',
         opacity: 1,
-      } ) ),
-      state( 'hide', style( {
+      })),
+      state('hide', style({
         width: '0px',
         opacity: 0.0,
-      } ) ),
-      transition( 'show => hide', [
-        animate( '0.15s ease-in-out' )
-      ] ),
-      transition( 'hide => show', [
-        animate( '0.15s ease-in-out' )
-      ] ),
-    ] ),
+      })),
+      transition('show => hide', [
+        animate('0.15s ease-in-out')
+      ]),
+      transition('hide => show', [
+        animate('0.15s ease-in-out')
+      ]),
+    ]),
   ]
-} )
+})
 
-export class AppComponent implements OnInit, OnDestroy
-{
+export class AppComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   browserRefresh: any;
+  currentUser: User;
+  currentToken: Token;
 
   constructor(private store: Store, private router: Router, private themeService: NbThemeService,
-     private nbMenuService: NbMenuService, @Inject(NB_WINDOW) private window){
+    private nbMenuService: NbMenuService, @Inject(NB_WINDOW) private window, private signalRService: SignalRServiceService) {
     const preferredTheme = localStorage.getItem("theme");
     if (preferredTheme) {
       this.selectedTheme = preferredTheme;
@@ -82,14 +87,15 @@ export class AppComponent implements OnInit, OnDestroy
   faBars = faBars;
   base64Image: string = "";
   selectedTheme = 'default';
-  themes = [ "Default", "Dark", "Cosmic" ];
+  themes = ["Default", "Dark", "Cosmic"];
 
   @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
   @Select(TokenState.getUser) user$: Observable<User>;
   @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
+  @Select(TokenState.getToken) token$: Observable<string>;
   @Select(MazemapState.getActivateFeedbackAndStatus) viewIsMazemap$: Observable<boolean>;
 
-items = [
+  items = [
     { title: 'Profile' },
     { title: 'Logout' },
   ];
@@ -124,12 +130,10 @@ items = [
     this.themeService.changeTheme(this.selectedTheme);
   }
 
-  ngOnInit ()
-  {
-    this.activeSection$.subscribe( x =>
-    {
+  ngOnInit() {
+    this.activeSection$.subscribe(x => {
       this.activeSection = x;
-    } );
+    });
 
     this.user$.subscribe(x => {
       if (x) {
@@ -139,23 +143,38 @@ items = [
 
     this.store.dispatch(new GetSurveys());
 
-    this.router.events.subscribe( x =>
-    {
-      if ( x instanceof NavigationEnd )
-      {
-        switch ( x.urlAfterRedirects )
-        {
+    this.router.events.subscribe(x => {
+      if (x instanceof NavigationEnd) {
+        switch (x.urlAfterRedirects) {
           case '/mazemap':
-            this.store.dispatch( new SetActivateFeedbackAndStatus( true ) );
+            this.store.dispatch(new SetActivateFeedbackAndStatus(true));
             break;
           default:
             break;
         }
       }
     });
+
+    this.nbMenuService.onItemClick()
+      .pipe(
+        filter(({ tag }) => tag === 'my-context-menu'),
+        map(({ item: { title } }) => title),
+      )
+      .subscribe(title => {
+
+        if (title === 'Logout') {
+          this.store.dispatch(new Logout());
+        }
+      });
+
+    this.token$.subscribe(token => {
+      if (!token) { return; }
+
+      this.signalRService.start(token);      
+    });
+    console.error("after the subbing")
   }
 
-  
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
@@ -178,31 +197,26 @@ items = [
       case '/survey-management':
         return this.userHasRole( [ 'researcher', 'admin' ] ).pipe( tap( val => val ) );
       default:
-        return new Observable( ( observer: any ) => observer.next( false ) );
+        return new Observable((observer: any) => observer.next(false));
     }
   }
 
-  userHasRole ( roles: string[] ): Observable<boolean>
-  {
-    return this.user$.pipe( map( user =>
-    {
-      if ( user && user.roles )
-      {
+  userHasRole(roles: string[]): Observable<boolean> {
+    return this.user$.pipe( map( user => {
+      if (user && user.roles) {
         const userRoleNames = user.roles.map(r => r.name);
         return roles.filter(role => userRoleNames.includes( role ) ).length !== 0;
       }
 
       return false;
-    } ) );
+    }));
   }
 
-  toggleMobileMenu ()
-  {
+  toggleMobileMenu() {
     this.mobileMenuToggled = !this.mobileMenuToggled;
   }
 
-  hideMobileMenu ()
-  {
+  hideMobileMenu() {
     this.mobileMenuToggled = false;
   }
 }

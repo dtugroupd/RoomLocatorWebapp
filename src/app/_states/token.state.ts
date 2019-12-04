@@ -4,12 +4,13 @@
  */
 
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { Login, SetTokenAndUser, SetIsLoading, LoginError, LoginSuccess } from '../_actions/token.actions';
+import { Login, SetTokenAndUser, SetIsLoading, LoginError, Logout, LoginSuccess } from '../_actions/token.actions';
 import { UserService } from '../_services/user.service';
 import { User, LoginModel, AuthenticatedModel, Role } from '../models/login/user.model';
 import { tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ErrorModel } from '../models/general/error.model';
+import { local } from 'd3';
 
 export class TokenStateModel {
     token?: string;
@@ -120,5 +121,11 @@ export class TokenState {
             error: payload
         });
         dispatch(new SetIsLoading(false));
+    }
+    
+    @Action(Logout)
+    logout(ctx: StateContext<TokenStateModel>) {
+        localStorage.removeItem('token');
+        return ctx.setState({user: undefined, token: undefined, loginLoading: false, error: null});
     }
 }

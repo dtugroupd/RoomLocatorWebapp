@@ -28,3 +28,7 @@ export class LoginError {
     static readonly type = '[Login] Error';
     constructor(public payload: ErrorModel) { }
 }
+
+export class Logout {
+    static readonly type = '[Token] Logout';
+}
