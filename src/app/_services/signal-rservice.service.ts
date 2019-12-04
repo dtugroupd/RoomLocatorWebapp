@@ -13,7 +13,7 @@ export class SignalRServiceService {
   public start(token: string) {
     this.connection = new HubConnectionBuilder()
       .configureLogging(LogLevel.Information)
-      .withUrl(`https://localhost:5001/api/connect`, { accessTokenFactory: () => token })
+      .withUrl(`https://localhost:5001/api/socket`, { accessTokenFactory: () => token })
       .withAutomaticReconnect()
       .build();
       this.connection.start().then(() => {
