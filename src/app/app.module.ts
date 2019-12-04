@@ -48,6 +48,7 @@ import { EventUpdateComponent } from './components/event-update/event-update.com
 import { UserDeleteComponent } from './components/user-delete/user-delete.component';
 import { UserDisclaimerState } from './_states/user.state';
 import { ShowFeedbackComponent } from './components/showFeedback/show-feedback.component';
+import { EventCreateMapPopupComponentComponent } from './components/event-create-map-popup-component/event-create-map-popup-component.component';
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
@@ -73,6 +74,7 @@ const appRoutes: Routes = [
     LoginComponent,
     EventUpdateComponent,
     UserDeleteComponent,
+    EventCreateMapPopupComponentComponent
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -84,7 +86,8 @@ const appRoutes: Routes = [
     MazemapComponent,
     AdminPageComponent,
     EventUpdateComponent,
-    UserDeleteComponent
+    UserDeleteComponent,
+    EventCreateMapPopupComponentComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {

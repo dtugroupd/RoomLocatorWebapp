@@ -124,7 +124,6 @@ export class AdminPageComponent implements OnInit
     const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true, context: userContext };
 
     this.dialogService.open(UserDeleteComponent, settings).onClose.subscribe(() => {
-      console.log(this.stateUsers)
       this.dataSource.data = this.stateUsers;
     });
   }

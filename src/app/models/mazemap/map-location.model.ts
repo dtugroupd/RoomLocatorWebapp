@@ -9,4 +9,5 @@ export interface MapLocation {
     latitude: number;
     sections: Section[];
     events: Event[];
+    coordinates: Coordinates[];
 }

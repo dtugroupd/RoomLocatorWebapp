@@ -4,21 +4,30 @@
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Section } from 'src/app/models/mazemap/section.model';
-import { Store, Select } from '@ngxs/store';
+import { Store, Select, Actions, ofActionDispatched } from '@ngxs/store';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MazemapState } from '../../_states/mazemap.state';
 import { Observable } from 'rxjs';
 import { MapLocation } from 'src/app/models/mazemap/map-location.model';
 import {
   SetActiveSection, SetActivateFeedbackAndStatus,
-  SetActiveLocation, ResetActiveLocation, GetLocations
+  SetActiveLocation, ResetActiveLocation, GetLocations, AddEventToLocation
 } from '../../_actions/mazemap.actions';
 import {
   toLatLng, getCenter, convertSectionsToLayers,
   markerOptions, convertLocationsToLayers,
-  getEventMarkerPopupHTML
+  getEventMarkerPopupHTML, inside
 } from './mazemap-helper';
+import * as pointInPolygon from 'point-in-polygon';
 import { DynamicComponentService } from 'src/app/_services/DynamicComponentService';
+import { TokenState } from 'src/app/_states/token.state';
+import { tap } from 'rxjs/operators';
+import { EventCreateComponent } from '../event-create/event-create.component';
+import { EventCreateMapPopupComponentComponent } from '../event-create-map-popup-component/event-create-map-popup-component.component';
+import { EventState } from 'src/app/_states/event.state';
+import { Event } from '../../models/calendar/event.model';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
+import { AddEventSuccess, ClearNewEvent } from 'src/app/_actions/event.actions';
 
 declare let Mazemap: any;
 
@@ -106,10 +115,12 @@ export class MazemapComponent implements OnInit, OnDestroy {
   toggledEvents = false;
   lastHoveredLayer = null;
   activeLocation: MapLocation = null;
+  activeLocationBounds = null;
   activeLayerId = null;
   activeLayerMarker = null;
   activeSection: Section = null;
   popup = null;
+  newEvent = null;
   defaultColor = 'rgba(220, 150, 120, 0.075)';
   hoverColor = 'rgba(220, 150, 120, 0.25)';
   activeColor = 'rgba(220, 150, 120, 0.75)';
@@ -120,19 +131,41 @@ export class MazemapComponent implements OnInit, OnDestroy {
   eventMarkers = [];
   locationLayers = [];
 
+  userIsAdmin = false;
+  userAdminLocations: string[] = [];
+
   @Select(MazemapState.getActivateFeedbackAndStatus)
   activateFeedbackAndStatus$: Observable<boolean>;
   @Select(MazemapState.getLocations) locations$: Observable<MapLocation[]>;
   @Select(MazemapState.getActiveLocation) activeLocation$: Observable<
     MapLocation
-  >;
+    >;
+  @Select(EventState.getNewEvent) newEvent$: Observable<Event>;
+  @Select(TokenState.userIsAdmin) userIsAdmin$: Observable<boolean>;
+  @Select(TokenState.getUserAdminLocations) userAdminLocations$: Observable<string[]>;
   @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private dynamicComponentService: DynamicComponentService, private action$: Actions) {
+
+    this.userIsAdmin$.subscribe(x => {
+      this.userIsAdmin = x;
+    });
+
+    this.userAdminLocations$.subscribe(x => {
+      this.userAdminLocations = x;
+    });
 
     this.store.dispatch(new GetLocations());
     this.activateFeedbackAndStatus$.subscribe(x => {
       this.activateFeedbackAndStatus = x;
+    });
+
+    this.newEvent$.subscribe(x => {
+      this.newEvent = x;
+    });
+
+    this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(AddEventSuccess)).subscribe(() => {
+      this.store.dispatch(new AddEventToLocation(this.newEvent));
     });
 
     this.locations$.subscribe(x => {
@@ -145,7 +178,12 @@ export class MazemapComponent implements OnInit, OnDestroy {
     this.activeLocation$.subscribe(x => {
       this.activeLocation = x;
 
-      if (this.map && this.activeLocation) {
+      if (this.newEvent) {
+        this.store.dispatch(new ClearNewEvent());
+        this.hideEventMarkers();
+        this.showEventMarkers();
+        this.popup.remove();
+      } else if (this.map && this.activeLocation) {
         this.sectionLayers = convertSectionsToLayers(
           this.activeLocation.sections
           );
@@ -241,10 +279,29 @@ export class MazemapComponent implements OnInit, OnDestroy {
       this.initLocationLayers();
     });
 
-    // TODO: REMOVE THIS
     this.map.on('click', (e: any) => {
-      console.log(e.lngLat);  
-      // console.log(this.map.getZoom());
+      if (this.activeLocation && this.toggledEvents) {
+        const userHasAccess = this.userIsAdmin ||
+          this.userAdminLocations.filter(x => x.includes(`admin::${this.activeLocation.name}`)).length > 0;
+        const point = [e.lngLat.lng, e.lngLat.lat];
+        const bounds = this.activeLocationBounds.data.geometry.coordinates;
+
+        if (userHasAccess && inside(point, bounds)) {
+        const popupContent = this.dynamicComponentService.injectComponent(
+          EventCreateMapPopupComponentComponent,
+          x => {
+            x.lngLat = e.lngLat;
+            x.location = this.activeLocation;
+            x.zLevel = this.map.getZLevel();
+          }
+        );
+
+        this.popup = new Mazemap.Popup({ closeOnClick: true })
+          .setLngLat(e.lngLat)
+          .setDOMContent(popupContent)
+          .addTo(this.map);
+        }
+      }
     });
   }
 
@@ -266,6 +323,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
         this.map.addLayer(l);
         this.map.layerEventHandler.on('click', l.id, () => {
           this.store.dispatch(new SetActiveLocation(l.id));
+          this.activeLocationBounds = l.bounds;
         });
       });
     }
@@ -355,7 +413,6 @@ export class MazemapComponent implements OnInit, OnDestroy {
       layer.source.data.geometry.coordinates[0]
     );
     const center = getCenter(featureCoordinates);
-    console.log("CENTER: ", center);
     const marker = new Mazemap.MazeMarker(markerOptions(layer).default)
       .setLngLat(center)
       .addTo(this.map);

@@ -1,5 +1,6 @@
 import { SurveyToCreate } from '../models/survey/survey-to-create.model';
 import { SurveyAnswerSubmition } from '../models/survey/survey-answer-submition.model';
+import { Event } from '../models/calendar/event.model';
 
 export class GetLocations {
     static readonly type = '[Locations] Get';
@@ -59,4 +60,9 @@ export class AddSurveyAnswerSuccess {
 
 export class AddSurveyAnswerError {
     static readonly type = '[Void Error]';
+}
+
+export class AddEventToLocation {
+    static readonly type = '[Location.Event] Add';
+    constructor(public payload: Event) { }
 }

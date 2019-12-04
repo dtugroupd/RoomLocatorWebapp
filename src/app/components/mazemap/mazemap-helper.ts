@@ -46,6 +46,43 @@ export function convertSectionsToLayers(ls: Array<Section>) {
     return sectionLayers;
 }
 
+export function getLocationBoundsAsGeoJSON(location: MapLocation) {
+  const coordinates = location.coordinates.map(l => {
+        return [l.longitude, l.latitude];
+  });
+
+  return {
+    type: 'geojson',
+    data: {
+      type: 'Feature',
+      geometry: {
+        type: 'Polygon',
+        coordinates
+      }
+    }
+  };
+}
+
+export function inside(point, vs) {
+  const x = point[0];
+  const y = point[1];
+  let isInside = false;
+
+  for (let i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+    const xi = vs[i][0];
+    const yi = vs[i][1];
+    const xj = vs[j][0];
+    const yj = vs[j][1];
+    const intersect = ((yi > y) !== (yj > y))
+          && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+    if (intersect) {
+      isInside = !isInside;
+    }
+  }
+
+  return isInside;
+}
+
 export function convertLocationsToLayers(ls: MapLocation[]) {
 
       const locationLayers = [];
@@ -55,6 +92,7 @@ export function convertLocationsToLayers(ls: MapLocation[]) {
           id: `${x.id}`,
           name: `${x.name}`,
           type: 'symbol',
+          bounds: getLocationBoundsAsGeoJSON(x),
           source: {
             type: 'geojson',
             data: {

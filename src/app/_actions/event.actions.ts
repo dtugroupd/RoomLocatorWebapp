@@ -35,3 +35,7 @@ export class UpdateEventSuccess {
 export class UpdateEventError {
   static readonly type = '[UpdateEvent] Error';
 }
+
+export class ClearNewEvent {
+    static readonly type = '[NewEvent] Clear';
+}

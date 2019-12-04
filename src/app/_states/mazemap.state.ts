@@ -5,9 +5,9 @@
 
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import {
-    GetLibrarySections, SetActiveSection, SetActivateFeedbackAndStatus,
+    SetActiveSection, SetActivateFeedbackAndStatus,
     GetSurveys, AddSurveyAnswer, AddSurvey, AddSurveySuccess, AddSurveyError,
-    AddSurveyAnswerError, AddSurveyAnswerSuccess, GetLocations, SetActiveLocation, ResetActiveLocation
+    AddSurveyAnswerError, AddSurveyAnswerSuccess, GetLocations, SetActiveLocation, ResetActiveLocation, AddEventToLocation
 } from '../_actions/mazemap.actions';
 import { MazemapService } from '../_services/mazemap.service';
 import { tap } from 'rxjs/operators';
@@ -38,7 +38,7 @@ export class MazemapStateModel {
 
 export class MazemapState {
 
-    constructor(private mazemapService: MazemapService, private surveyService: SurveyService) {}
+    constructor(private mazemapService: MazemapService, private surveyService: SurveyService) { }
 
     @Selector()
     static getLocations(state: MazemapStateModel) {
@@ -94,14 +94,14 @@ export class MazemapState {
     }
 
     @Action(SetActiveSection)
-    setActiveSection({patchState}: StateContext<MazemapStateModel>, payload: SetActiveSection) {
+    setActiveSection({ patchState }: StateContext<MazemapStateModel>, payload: SetActiveSection) {
         patchState({
             activeSection: payload.section
         });
     }
 
     @Action(SetActivateFeedbackAndStatus)
-    setActivateFeedbackAndStatus({patchState}: StateContext<MazemapStateModel>, payload: SetActivateFeedbackAndStatus) {
+    setActivateFeedbackAndStatus({ patchState }: StateContext<MazemapStateModel>, payload: SetActivateFeedbackAndStatus) {
         patchState({
             activateFeedbackAndStatus: payload.activate
         });
@@ -121,22 +121,22 @@ export class MazemapState {
         const state = getState();
         return this.surveyService.createSurvey(payload).subscribe(
             res => {
-                    setState(
-                        patch({
-                            surveys: append([res])
-                        }),
-                    );
-                    const newActiveLocation = state.activeLocation;
-                    newActiveLocation.sections.find(x => x.id === payload.sectionId).survey = res;
-                    patchState({
-                       activeLocation: newActiveLocation
-                    });
-                    const newActiveSection = state.activeSection;
-                    newActiveSection.survey = res;
-                    patchState({
-                        activeSection: newActiveSection
-                    });
-                    dispatch(new AddSurveySuccess());
+                setState(
+                    patch({
+                        surveys: append([res])
+                    }),
+                );
+                const newActiveLocation = state.activeLocation;
+                newActiveLocation.sections.find(x => x.id === payload.sectionId).survey = res;
+                patchState({
+                    activeLocation: newActiveLocation
+                });
+                const newActiveSection = state.activeSection;
+                newActiveSection.survey = res;
+                patchState({
+                    activeSection: newActiveSection
+                });
+                dispatch(new AddSurveySuccess());
             },
             () => dispatch(new AddSurveyError())
         );
@@ -163,5 +163,20 @@ export class MazemapState {
                 dispatch(new AddSurveyAnswerError());
             }
         );
+    }
+
+    @Action(AddEventToLocation)
+    addEventToLocation({ setState, getState }: StateContext<MazemapStateModel>, { payload }: AddEventToLocation) {
+        const state = getState();
+        if (state.activeLocation.id === payload.locationId) {
+            setState(
+                patch({
+                    activeLocation:
+                        patch({
+                            events: append([payload])
+                        })
+                })
+            );
+        }
     }
 }

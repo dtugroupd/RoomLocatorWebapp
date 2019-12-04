@@ -43,6 +43,13 @@ export class TokenState {
     }
 
     @Selector()
+    static getUserAdminLocations(state: TokenStateModel): string[] {
+        if (state.user && state.user.roles) {
+            return state.user.roles.filter(x => x.includes('admin::'));
+        }
+    }
+
+    @Selector()
     static loginIsLoading(state: TokenStateModel): boolean {
         return state.loginLoading;
     }

@@ -4,6 +4,7 @@ export interface Event {
     id: string;
     date: Moment;
     title: string;
+    locationId: string;
     description: string;
     longitude: number;
     latitude: number;
