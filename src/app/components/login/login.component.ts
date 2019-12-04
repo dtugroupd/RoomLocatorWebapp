@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { Login } from 'src/app/_actions/token.actions';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Store, Select, Actions, ofActionDispatched } from '@ngxs/store';
+import { Login, LoginSuccess, SetIsLoading, LoginError } from 'src/app/_actions/token.actions';
 import { LoginModel, UserDisclaimer } from 'src/app/models/login/user.model';
 import { SetAcceptedDisclaimer } from 'src/app/_actions/user.actions';
 import { UserDisclaimerState } from 'src/app/_states/user.state';
@@ -9,6 +9,7 @@ import { tap } from 'rxjs/operators';
 import { TokenState } from 'src/app/_states/token.state';
 import { ErrorModel } from 'src/app/models/general/error.model';
 import { NbToastrService } from '@nebular/theme';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 
 /**
  * @author Anders Wiberg Olsen, s165241
@@ -18,7 +19,7 @@ import { NbToastrService } from '@nebular/theme';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   @Select(UserDisclaimerState.hasAcceptedDisclaimer) hasAcceptedDisclaimer$: Observable<boolean>;
   @Select(UserDisclaimerState.disclaimerIsLoading) disclaimerLoading$: Observable<boolean>;
   @Select(TokenState.loginIsLoading) loginLoading$: Observable<boolean>;
@@ -31,18 +32,20 @@ export class LoginComponent implements OnInit {
   disclaimerLoading = false;
   loginLoading = false;
 
-  constructor(private store: Store, private toastrService: NbToastrService) { }
+  constructor(private store: Store, private toastrService: NbToastrService, private action$: Actions) { }
 
   ngOnInit() {
+    this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(LoginError)).subscribe(({payload}) => {
+      this.toastrService.danger(payload.message, payload.title);
+    });
+
     this.hasAcceptedDisclaimer$.subscribe(disclaimer => {
       this.acceptedDisclaimer = disclaimer;
     });
-    this.loginError$.subscribe(error => {
-      if(error){
-        this.toastrService.danger(error.message, error.title);
-      }
-    });
+
   }
+
+  ngOnDestroy() { }
 
   acceptDisclaimer(accepted: boolean) {
     this.acceptedDisclaimer = accepted;

@@ -78,6 +78,10 @@
     border-bottom: 1px solid var(--divider-color);
 }
 
+.popup-custom {
+    background-color: var(--background-basic-color-1);
+}
+
 .mobile-link:hover {
     background: var(--background-basic-color-4);
     cursor: pointer;

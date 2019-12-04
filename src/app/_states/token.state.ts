@@ -4,7 +4,7 @@
  */
 
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { Login, SetTokenAndUser } from '../_actions/token.actions';
+import { Login, SetTokenAndUser, SetIsLoading, LoginError, LoginSuccess } from '../_actions/token.actions';
 import { UserService } from '../_services/user.service';
 import { User, LoginModel, AuthenticatedModel } from '../models/login/user.model';
 import { tap } from 'rxjs/operators';
@@ -70,7 +70,6 @@ export class TokenState {
     setTokenAndUser({ patchState, setState }: StateContext<TokenStateModel>) {
         const jwtHelper = new JwtHelperService();
         const token = localStorage.getItem('token');
-        patchState({ loginLoading: true });
 
         if (!token) {
             return;
@@ -90,13 +89,34 @@ export class TokenState {
     }
 
     @Action(Login)
-    login({ setState, patchState }: StateContext<TokenStateModel>, login: LoginModel) {
-        patchState({ loginLoading: true });
+    login({ patchState, dispatch }: StateContext<TokenStateModel>, login: LoginModel) {
+        dispatch(new SetIsLoading(true));
         return this.userService.login(login).pipe(tap((auth: AuthenticatedModel) => {
+            dispatch(new LoginSuccess());
             localStorage.setItem('token', auth.token);
-            setState({ user: auth.user, token: auth.token, loginLoading: false, error: null });
+            patchState({ user: auth.user, token: auth.token, error: null });
         }, x => {
-            patchState({ loginLoading: false, error: x.error });
+            dispatch(new LoginError(x.error));
         }));
+    }
+
+    @Action(SetIsLoading)
+    setIsLoading({ patchState }: StateContext<TokenStateModel>, { payload }: SetIsLoading) {
+        patchState({
+            loginLoading: payload
+        });
+    }
+
+    @Action(LoginSuccess)
+    loginSuccess({ dispatch }: StateContext<TokenStateModel>) {
+        dispatch(new SetIsLoading(false));
+    }
+
+    @Action(LoginError)
+    loginError({ patchState, dispatch }: StateContext<TokenStateModel>, { payload }: LoginError) {
+        patchState({
+            error: payload
+        });
+        dispatch(new SetIsLoading(false));
     }
 }

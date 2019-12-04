@@ -120,6 +120,7 @@ export class MazemapComponent implements OnInit, OnDestroy {
   activeLayerMarker = null;
   activeSection: Section = null;
   popup = null;
+  eventPopup = null;
   newEvent = null;
   defaultColor = 'rgba(220, 150, 120, 0.075)';
   hoverColor = 'rgba(220, 150, 120, 0.25)';
@@ -280,6 +281,14 @@ export class MazemapComponent implements OnInit, OnDestroy {
     });
 
     this.map.on('click', (e: any) => {
+      this.eventPopup = null;
+    });
+
+    this.map.on('contextmenu', (e: any) => {
+      if (this.popup) {
+        this.popup.remove();
+      }
+      
       if (this.activeLocation && this.toggledEvents) {
         const userHasAccess = this.userIsAdmin ||
           this.userAdminLocations.filter(x => x.includes(`admin::${this.activeLocation.name}`)).length > 0;
@@ -287,19 +296,19 @@ export class MazemapComponent implements OnInit, OnDestroy {
         const bounds = this.activeLocationBounds.data.geometry.coordinates;
 
         if (userHasAccess && inside(point, bounds)) {
-        const popupContent = this.dynamicComponentService.injectComponent(
-          EventCreateMapPopupComponentComponent,
-          x => {
-            x.lngLat = e.lngLat;
-            x.location = this.activeLocation;
-            x.zLevel = this.map.getZLevel();
-          }
-        );
+          const popupContent = this.dynamicComponentService.injectComponent(
+            EventCreateMapPopupComponentComponent,
+            x => {
+              x.lngLat = e.lngLat;
+              x.location = this.activeLocation;
+              x.zLevel = this.map.getZLevel();
+            }
+          );
 
-        this.popup = new Mazemap.Popup({ closeOnClick: true })
-          .setLngLat(e.lngLat)
-          .setDOMContent(popupContent)
-          .addTo(this.map);
+          this.popup = new Mazemap.Popup({ closeOnClick: true, className: 'popup-custom' })
+            .setLngLat(e.lngLat)
+            .setDOMContent(popupContent)
+            .addTo(this.map);
         }
       }
     });
@@ -544,7 +553,26 @@ export class MazemapComponent implements OnInit, OnDestroy {
 
       const popup = new Mazemap.Popup({
         closeOnClick: true,
+        className: 'popup-custom'
       }).setHTML(getEventMarkerPopupHTML(e));
+
+      marker.on('click', () => {
+
+        if (this.eventPopup) {
+          const latIsEqual = popup._lngLat.lat === this.eventPopup._lngLat.lat;
+          const lngIsEqual = popup._lngLat.lng === this.eventPopup._lngLat.lng;
+          const isSamePopup = latIsEqual && lngIsEqual;
+          if (!isSamePopup) {
+            this.eventPopup.remove();
+          }
+        }
+
+        if (this.popup) {
+          this.popup.remove();
+        }
+
+        this.eventPopup = popup;
+      });
 
       marker.setPopup(popup);
       this.eventMarkers.push(marker);

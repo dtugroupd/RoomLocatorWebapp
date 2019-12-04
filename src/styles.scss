@@ -6,3 +6,30 @@
   @include nb-theme-global();
 };
 /* You can add global styles to this file, and also import other style files */
+
+.popup-custom .mapboxgl-popup-content {
+    background-color: var(--background-basic-color-1);
+}
+
+.popup-custom .mapboxgl-popup-content .mapboxgl-popup-close-button  {
+    font-size: 20px;
+    padding: 10px;
+    color: var(--actions-icon-color)
+}
+
+.popup-custom .mapboxgl-popup-content .mapboxgl-popup-close-button:hover  {
+    color: var(--actions-icon-hover-color)
+}
+
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip{
+    border-bottom-color: var(--background-basic-color-1);
+}
+.mapboxgl-popup-anchor-right .mapboxgl-popup-tip  {
+    border-left-color: var(--background-basic-color-1);
+}
+.mapboxgl-popup-anchor-bottom  .mapboxgl-popup-tip {
+    border-top-color: var(--background-basic-color-1);
+}
+.mapboxgl-popup-anchor-left .mapboxgl-popup-tip  {
+    border-right-color: var(--background-basic-color-1);
+}
