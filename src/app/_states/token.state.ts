@@ -11,6 +11,7 @@ import { tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ErrorModel } from '../models/general/error.model';
 import { local } from 'd3';
+import { DeleteMe } from '../_actions/user.actions';
 
 export class TokenStateModel {
     token?: string;
@@ -99,4 +100,19 @@ export class TokenState {
         localStorage.clear();
         return ctx.setState({user: undefined, token: undefined, loginLoading: false, error: null});
     }
+
+    @Action( DeleteMe )
+    deleteMe ( { getState, setState }: StateContext<TokenStateModel> )
+    {
+        return this.userService.deleteMe().pipe( tap( (result) =>
+        {
+            const s = getState();
+            
+            setState( {
+                ...s,
+                user:result
+            } );
+        } ) );
+    }
+
 }

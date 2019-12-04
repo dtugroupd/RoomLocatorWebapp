@@ -23,9 +23,7 @@
   -->
 
 <html>
-  
-
- 
+   
 <body>
   <div>
       <nb-layout-header>DTU Profile</nb-layout-header>
@@ -35,25 +33,25 @@
 <div>
 
   First name:<br>
-  <p nbInput type="text" name="firstname" value=""></p>
+  <p nbInput type="text" name=firstname value=""></p>
+  {{user.firstName}}
   <br>
 
   Last name:<br>
-  <p nbInput type="text" name="lastname" value=""></p>
+  <nb-user nbInput type="text" name="{{ (user$ | async).fullName }}" > </nb-user>
+  
   <br>
 
   studienr:<br>
   <p nbInput type="text" name="studienr" value=""></p>
+  {{user.studentId}}
   <br>
   
-  <br>
-  <button nbButton type="button" onclick="alert('Are you sure you want to delete your profile')">Delete my profile</button> 
+  <button nbButton type="button" (click)="confirmDeletion(user)">Delete my profile</button> 
 
 </div>
 
-
 </body>
-
 
 </html>
 
