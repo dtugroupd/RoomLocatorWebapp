@@ -87,7 +87,8 @@ const appRoutes: Routes = [
     AdminPageComponent,
     EventUpdateComponent,
     UserDeleteComponent,
-    EventCreateMapPopupComponentComponent
+    EventCreateMapPopupComponentComponent,
+    EventCreateComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {

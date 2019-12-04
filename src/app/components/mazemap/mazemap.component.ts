@@ -237,19 +237,20 @@ export class MazemapComponent implements OnInit, OnDestroy {
     this.map = new Mazemap.Map(this.mapOptions);
 
     this.map.on('load', () => {
-      this.map.loadImage('../assets/mapIcons/skylab.png', (error, image) => {
-        if (error) {
-          throw error;
-        }
-        this.map.addImage('rocket', image);
-      });
-
-      this.map.loadImage('../assets/mapIcons/books.png', (error, image) => {
-        if (error) {
-          throw error;
-        }
-        this.map.addImage('library', image);
-      });
+      if (this.map) {
+        this.map.loadImage('../assets/mapIcons/skylab.png', (error, image) => {
+          if (error) {
+            throw error;
+          }
+          this.map.addImage('rocket', image);
+        });
+        this.map.loadImage('../assets/mapIcons/books.png', (error, image) => {
+          if (error) {
+            throw error;
+          }
+          this.map.addImage('library', image);
+        });
+      }
 
       this.map.on('zlevel', () => {
         if (this.sectionLayers.length > 0) {
