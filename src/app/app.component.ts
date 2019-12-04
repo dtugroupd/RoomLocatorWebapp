@@ -17,7 +17,7 @@ import { GetSurveys } from './_actions/mazemap.actions';
 import { NbMenuItem, NbThemeService,NB_WINDOW,NbMenuService } from '@nebular/theme';
 import { TokenState } from './_states/token.state';
 import { User, Role } from './models/login/user.model';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, filter } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { GetCurrentFeedback } from './_actions/feedback.actions';
