@@ -27,6 +27,7 @@ export interface User {
 
 export interface Role {
     name: string;
+    locationName: string;
     locationId: string;
 }
 export interface UserDisclaimer {

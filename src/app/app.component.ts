@@ -160,18 +160,21 @@ items = [
     this.subscription.unsubscribe();
   }
 
-  userHasAccess ( link: string ): Observable<boolean>
-  {
-    switch ( link )
-    {
+  userHasAccess(link: string): Observable<boolean> {
+    switch (link) {
       case '/':
-        return new Observable( ( observer: any ) => observer.next( true ) );
+        return new Observable((observer: any) => observer.next(true));
       case '/mazemap':
-        return new Observable( ( observer: any ) => observer.next( true ) );
+        return new Observable((observer: any) => observer.next(true));
       case '/calendar':
-        return new Observable( ( observer: any ) => observer.next( true ) );
+        return new Observable((observer: any) => observer.next(true));
       case '/admin':
-        return this.userHasRole( [ 'admin' ] ).pipe( tap( val => val ) );
+        return this.user$.pipe(map(user => {
+          if (user) {
+            return user.isGeneralAdmin;
+          }
+          return false;
+        }));
       case '/survey-management':
         return this.userHasRole( [ 'researcher', 'admin' ] ).pipe( tap( val => val ) );
       default:

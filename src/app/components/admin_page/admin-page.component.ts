@@ -39,9 +39,9 @@ export class AdminPageComponent implements OnInit
   currentUser: User;
 
   roles: Role[] = [
-    { name: 'admin', locationId: null },
-    { name: 'researcher', locationId: null },
-    { name: 'student', locationId: null }
+    { name: 'admin', locationName: null, locationId: null },
+    { name: 'researcher', locationName: null, locationId: null },
+    { name: 'student', locationName: null, locationId: null }
   ];
 
   displayedColumns: string[] = [ 'userID', 'fullName', 'userRole', 'action' ];
@@ -103,7 +103,7 @@ export class AdminPageComponent implements OnInit
   }
 
   getUserRoles(user: User) {
-    return user.roles.map(x => [x.name]);
+    return user.roles.map(x => x.locationName ? [x.name + ':' + x.locationName] : x.name);
   }
 
   confirmDeletion(u: User) {
