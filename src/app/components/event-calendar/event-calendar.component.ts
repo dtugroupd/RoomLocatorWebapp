@@ -4,7 +4,8 @@
  */
 
 import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
-import { faCalendarAlt as faCalendarAltReg, faEdit} from '@fortawesome/free-regular-svg-icons';
+import { faCalendarAlt as faCalendarAltReg, faEdit, faClock } from '@fortawesome/free-regular-svg-icons';
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
 import { EventState } from 'src/app/_states/event.state';
 import { Select, Store, Actions, ofActionDispatched } from '@ngxs/store';
@@ -28,6 +29,8 @@ export class EventCalendarComponent implements OnInit, OnDestroy {
   moment = moment;
   faCalendarAltReg = faCalendarAltReg;
   faEdit = faEdit;
+  faMarker = faMapMarkerAlt;
+  faClock = faClock;
   events: Event[];
 
   constructor(

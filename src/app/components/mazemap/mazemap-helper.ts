@@ -242,8 +242,7 @@ export function markerOptions(layer, zLevel?: number) {
 
 export function getEventMarkerPopupHTML(e: Event): string {
   return `
-      <div style="max-width: 250px; background-color: var(--background-basic-color-1);
-      color: var(--text-basic-color); padding: 20px; border-radius: 4px;">
+      <div>
           <p style="font-size: 16px; font-weight: bold">${e.title}
             <br>
             <span style="font-size: 14px; font-weight: normal">

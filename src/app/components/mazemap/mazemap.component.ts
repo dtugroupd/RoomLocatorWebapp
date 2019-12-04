@@ -286,10 +286,14 @@ export class MazemapComponent implements OnInit, OnDestroy {
     });
 
     this.map.on('contextmenu', (e: any) => {
+      if (this.eventPopup) {
+        this.eventPopup.remove();
+      }
+
       if (this.popup) {
         this.popup.remove();
       }
-      
+
       if (this.activeLocation && this.toggledEvents) {
         const userHasAccess = this.userIsAdmin ||
           this.userAdminLocations.filter(x => x.includes(`admin::${this.activeLocation.name}`)).length > 0;

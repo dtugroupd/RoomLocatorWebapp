@@ -23,17 +23,22 @@
                     </table>
                 </nb-accordion-item-header>.substr(5,5).replace('-','/')
                 <nb-accordion-item-body>
-                    <nb-actions>
-                        <nb-action *ngIf="userIsAdmin$ | async" (click)="openEditEventDialog(event)" class="action"><fa-icon [icon]="faEdit"></fa-icon></nb-action>
-                    </nb-actions>
-                    <table>
-                        <tr>
-                            {{ event.description }}
-                        </tr>
-                        <tr>
-                            Varighed: ca {{ event.durationInHours }} timer.
-                        </tr>
-                    </table>
+                    <p>
+                        {{ event.description }}
+                    </p>
+                   <div style="display: flex; justify-content: space-between;">
+                        <div class="extra-event-info">
+                            <div *ngIf="event.durationInHours">
+                                <fa-icon [icon]="faClock"></fa-icon> {{ event.durationInHours }}h
+                            </div>
+                            <div>
+                                <fa-icon [icon]="faMarker"></fa-icon> {{ event.locationName }}
+                            </div>
+                        </div>
+                        <nb-action *ngIf="userIsAdmin$ | async" (click)="openEditEventDialog(event)" class="action">
+                            <fa-icon [icon]="faEdit"></fa-icon>
+                        </nb-action>
+                   </div>
                 </nb-accordion-item-body>
             </nb-accordion-item>
         </nb-accordion>

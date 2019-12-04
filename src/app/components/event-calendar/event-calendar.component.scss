@@ -24,6 +24,7 @@
     font-size: 2.8em;
 }
 
+
 .eventInfoTable th:nth-child(1) {
     width: 3em;
 }
@@ -63,4 +64,13 @@ nb-actions {
 
 .action fa-icon:hover {
     font-size: 20px;
+}
+
+.extra-event-info {
+    display: flex; 
+    justify-content: flex-start;
+}
+
+.extra-event-info div {
+    margin-right: 15px;
 }
