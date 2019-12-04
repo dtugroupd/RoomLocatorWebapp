@@ -6,7 +6,7 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { Login, SetTokenAndUser, SetIsLoading, LoginError, LoginSuccess } from '../_actions/token.actions';
 import { UserService } from '../_services/user.service';
-import { User, LoginModel, AuthenticatedModel } from '../models/login/user.model';
+import { User, LoginModel, AuthenticatedModel, Role } from '../models/login/user.model';
 import { tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ErrorModel } from '../models/general/error.model';
@@ -37,15 +37,17 @@ export class TokenState {
     @Selector()
     static userIsAdmin(state: TokenStateModel): boolean {
         if (state.user && state.user.roles) {
-            return state.user.roles.filter(() => state.user.roles.includes('admin')).length !== 0;
+            return state.user.roles
+                .map(role => role.name)
+                .filter(name => name === 'admin').length !== 0;
         }
         return false;
     }
 
     @Selector()
-    static getUserAdminLocations(state: TokenStateModel): string[] {
+    static getUserAdminLocations(state: TokenStateModel): Role[] {
         if (state.user && state.user.roles) {
-            return state.user.roles.filter(x => x.includes('admin::'));
+            return state.user.roles.filter(role => role.locationId && role.name === 'admin');
         }
     }
 

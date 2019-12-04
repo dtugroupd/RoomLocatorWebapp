@@ -26,7 +26,7 @@ const routes: Routes = [
     component: AdminPageComponent,
     canActivate: [AuthRouteGuard],
     data: {
-      expectedRoles: 'admin'
+      expectedRoles: [{ name: 'admin', locationId: null }]
     }
   },
   {
@@ -39,16 +39,11 @@ const routes: Routes = [
     canActivate: [AuthRouteGuard]
   },
   {
-    path: 'calendar-management',
-    component: EventCreateComponent,
-    canActivate: [AuthRouteGuard]
-  },
-  {
     path: 'survey-management',
     component: SurveyManagementComponent,
     canActivate: [AuthRouteGuard],
     data: {
-      expectedRoles: 'researcher'
+      expectedRoles: [{ name: 'researcher' }]
     }
   },
   {

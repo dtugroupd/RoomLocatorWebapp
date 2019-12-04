@@ -28,7 +28,7 @@
                 User Role
             </th>
             <th mat-header-cell *matHeaderCellDef>User Role</th>
-            <td mat-cell *matCellDef="let user"> {{user.roles.join(", " )}} </td>
+            <td mat-cell *matCellDef="let user"> {{getUserRoles(user)}} </td>
         </ng-container>
 
         <ng-container matColumnDef="action">
@@ -49,7 +49,7 @@
     <div *ngIf="isShow" id="userAdminRolePicker">
         <p>Choose the new role</p>
         <nb-select placeholder="Select a role" [(selected)]="selectedRole">
-            <nb-option *ngFor="let role of roles" [value]="role.name">{{role.viewName}}</nb-option>
+            <nb-option *ngFor="let role of roles" [value]="role.name">{{role.name}}</nb-option>
         </nb-select>
         <button nbButton outline status="success" type="button" (click)="saveNewRole()" *ngIf="selectedRole != null">Save</button>
     </div>

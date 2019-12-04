@@ -25,24 +25,31 @@ export class AuthRouteGuard implements CanActivate {
   }
 
   userIsInRole(route: ActivatedRouteSnapshot): Observable<boolean> | boolean {
-    const expectedRolesString = route.data.expectedRoles;
+    const expectedRoles = route.data.expectedRoles;
 
-    if (!expectedRolesString) {
-      return true;
-    }
-
-    const expectedRoles = expectedRolesString.split(/[ ,]+/);
-
-    if (expectedRoles.length === 0) {
+    if (!expectedRoles) {
       return true;
     }
 
     return this.user$.pipe(map(user => {
 
-      if (expectedRoles.filter(e => user.roles.includes(e)).length === 0) {
+      const userRoleNames = user.roles.map(r => r.name);
+      if (expectedRoles.map(r => r.name).filter(e => userRoleNames.includes(e)).length === 0) {
         this.router.navigate(["/access-denied"]);
         return false;
       } else {
+        let requiresGeneralAdmin = false;
+        expectedRoles.forEach(x => {
+          if (x.name === 'admin' && x.locationId === null) {
+            requiresGeneralAdmin = true;
+          }
+        });
+
+        if (!user.isGeneralAdmin && requiresGeneralAdmin) {
+          this.router.navigate(["/access-denied"]);
+          return false;
+        }
+
         return true;
       }
     }));

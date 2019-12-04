@@ -20,10 +20,15 @@ export interface User {
     firstName: string;
     lastName: string;
     fullName: string;
-    roles: string[];
+    roles: Role[];
     profileImage: string;
+    isGeneralAdmin: boolean;
 }
 
+export interface Role {
+    name: string;
+    locationId: string;
+}
 export interface UserDisclaimer {
     hasAcceptedDisclaimer?: boolean;
 }

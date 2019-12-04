@@ -16,7 +16,7 @@ import { Observable, Subscription } from 'rxjs';
 import { GetSurveys } from './_actions/mazemap.actions';
 import { NbMenuItem, NbThemeService,NB_WINDOW,NbMenuService } from '@nebular/theme';
 import { TokenState } from './_states/token.state';
-import { User } from './models/login/user.model';
+import { User, Role } from './models/login/user.model';
 import { map, tap } from 'rxjs/operators';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -173,7 +173,7 @@ items = [
       case '/admin':
         return this.userHasRole( [ 'admin' ] ).pipe( tap( val => val ) );
       case '/survey-management':
-        return this.userHasRole( [ 'library', 'researcher' ] ).pipe( tap( val => val ) );
+        return this.userHasRole( [ 'researcher', 'admin' ] ).pipe( tap( val => val ) );
       default:
         return new Observable( ( observer: any ) => observer.next( false ) );
     }
@@ -185,7 +185,8 @@ items = [
     {
       if ( user && user.roles )
       {
-        return roles.filter( role => user.roles.includes( role ) ).length !== 0;
+        const userRoleNames = user.roles.map(r => r.name);
+        return roles.filter(role => userRoleNames.includes( role ) ).length !== 0;
       }
 
       return false;

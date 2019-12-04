@@ -6,19 +6,12 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { GetUsers, UpdateRole, DeleteUser } from 'src/app/_actions/admin.actions';
 import { MatTableDataSource, MatDialog, MatDialogRef } from '@angular/material';
-import { User } from 'src/app/models/login/user.model';
+import { User, Role } from 'src/app/models/login/user.model';
 import { TokenState } from 'src/app/_states/token.state';
 import { Observable } from 'rxjs';
 import { UserDeleteComponent } from '../user-delete/user-delete.component';
 import { NbDialogService } from '@nebular/theme';
 import { AdminState } from 'src/app/_states/admin.state';
-
-
-export interface Role
-{
-  name: string;
-  viewName: string;
-}
 
 
 @Component( {
@@ -46,9 +39,9 @@ export class AdminPageComponent implements OnInit
   currentUser: User;
 
   roles: Role[] = [
-    { name: 'admin', viewName: 'Admin' },
-    { name: 'researcher', viewName: 'Researcher' },
-    { name: 'student', viewName: 'Student' }
+    { name: 'admin', locationId: null },
+    { name: 'researcher', locationId: null },
+    { name: 'student', locationId: null }
   ];
 
   displayedColumns: string[] = [ 'userID', 'fullName', 'userRole', 'action' ];
@@ -68,7 +61,7 @@ export class AdminPageComponent implements OnInit
       this.dataSource.filterPredicate = ( item, filter: string ) => {
         let exists = false;
         item.roles.forEach(x => {
-          if (x.toLowerCase().includes(filter.toLowerCase())) { 
+          if (x.name.toLowerCase().includes(filter.toLowerCase())) { 
             exists = true;
           }
         });
@@ -107,7 +100,10 @@ export class AdminPageComponent implements OnInit
       this.dataSource.data = x.users.users;
     });
     this.isShow = !this.isShow;
+  }
 
+  getUserRoles(user: User) {
+    return user.roles.map(x => [x.name]);
   }
 
   confirmDeletion(u: User) {
