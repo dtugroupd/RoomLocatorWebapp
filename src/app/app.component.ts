@@ -128,11 +128,7 @@ export class AppComponent implements OnInit, OnDestroy
     {
       'title': 'Admin Page',
       'link': '/admin'
-    },
-/*     {
-      'title': 'Profile',
-      'link': '/userprofile'
-    } */
+    }
 
   ];
 
