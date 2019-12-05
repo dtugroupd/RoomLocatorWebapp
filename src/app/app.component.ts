@@ -175,7 +175,7 @@ export class AppComponent implements OnInit, OnDestroy {
         } 
 
         if (title === 'Profile'){
-          this.router.navigateByUrl('/userprofile');  
+          this.router.navigate(['/userprofile']);  
         }
       });
 
