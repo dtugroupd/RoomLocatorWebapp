@@ -17,6 +17,8 @@ import { EventCreateComponent } from '../event-create/event-create.component';
 import { EventUpdateComponent } from '../event-update/event-update.component';
 import { TokenState } from 'src/app/_states/token.state';
 import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
+import { Role, User } from 'src/app/models/login/user.model';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-event-calendar',
@@ -33,6 +35,9 @@ export class EventCalendarComponent implements OnInit, OnDestroy {
   faClock = faClock;
   events: Event[];
 
+  user: User = null;
+  userAdminLocations: Role[] = null;
+
   constructor(
     private store: Store,
     private action$: Actions,
@@ -42,12 +47,22 @@ export class EventCalendarComponent implements OnInit, OnDestroy {
 
   @Select(EventState.getEvents) events$: Observable<Event[]>;
   @Select(TokenState.userIsAdmin) userIsAdmin$: Observable<boolean>;
+  @Select(TokenState.getUser) user$: Observable<User>;
+  @Select(TokenState.getUserAdminLocations) userAdminLocations$: Observable<Role[]>
 
   ngOnInit() {
     this.store.dispatch(new GetEvents());
 
     this.events$.subscribe(x => {
       this.events = x;
+    });
+
+    this.user$.subscribe(x => {
+      this.user = x;
+    });
+
+    this.userAdminLocations$.subscribe(x => {
+      this.userAdminLocations = x;
     });
 
     this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(AddEventSuccess)).subscribe(() => {
@@ -95,6 +110,20 @@ export class EventCalendarComponent implements OnInit, OnDestroy {
       context
     };
     this.dialogService.open(EventUpdateComponent, settings);
+  }
+
+  userHasAdminPermissions(locationId: string) {
+    let adminPermissionLocation: string[];
+
+    if (this.userAdminLocations) {
+      adminPermissionLocation = this.userAdminLocations.map(x => x.locationId);
+    }
+
+    if (this.user) {
+      return this.user.isGeneralAdmin || adminPermissionLocation.includes(locationId);
+    }
+
+    return false;
   }
 
   showSuccessToast(position, status, message) {

@@ -1,4 +1,3 @@
-<button *ngIf="userIsAdmin$ | async" nbButton (click)="openCreateEventDialog()">Create event</button>
 <nb-card *ngFor="let event of events$ | async" class="eventCard">
     <nb-card-body>
         <nb-accordion>
@@ -35,7 +34,7 @@
                                 <fa-icon [icon]="faMarker"></fa-icon> {{ event.locationName }}
                             </div>
                         </div>
-                        <nb-action *ngIf="userIsAdmin$ | async" (click)="openEditEventDialog(event)" class="action">
+                        <nb-action *ngIf="userHasAdminPermissions(event.locationId)" (click)="openEditEventDialog(event)" class="action">
                             <fa-icon [icon]="faEdit"></fa-icon>
                         </nb-action>
                    </div>
