@@ -4,18 +4,21 @@
  * @author Hamed kadkhodaie, s083485
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { faThumbsUp as thumbsUpPressed, faThumbsDown as thumbsDownPressed } from '@fortawesome/free-solid-svg-icons';
 import { faThumbsUp as thumbsUp, faThumbsDown as thumbsDown } from '@fortawesome/free-regular-svg-icons';
 import { Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { Feedback } from 'src/app/models/feedback/feedback.model';
 import { FeedbackState } from 'src/app/_states/feedback.state';
-import { AddFeedback, ChangeFeedback } from 'src/app/_actions/feedback.actions';
+import { AddFeedback, ChangeFeedback, GetCurrentFeedback } from 'src/app/_actions/feedback.actions';
 import { TokenState } from 'src/app/_states/token.state';
 import { User } from 'src/app/models/login/user.model';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { ScadadataService } from '../../_services/scadadata.service';
+import { MazemapState } from 'src/app/_states/mazemap.state';
+import { MapLocation } from 'src/app/models/mazemap/map-location.model';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 
 @Component({
   selector: 'app-status-button-menu',
@@ -50,7 +53,7 @@ import { ScadadataService } from '../../_services/scadadata.service';
     ])
   ]
 })
-export class StatusButtonMenuComponent implements OnInit {
+export class StatusButtonMenuComponent implements OnInit, OnDestroy {
 
   thumbsUp = thumbsUp;
   thumbsDown = thumbsDown;
@@ -59,6 +62,7 @@ export class StatusButtonMenuComponent implements OnInit {
   feedback = null;
   vote = null;
   user: User = null;
+  activeLocation: MapLocation = null;
 
   likeState = 'unliked';
   dislikeState = 'undisliked';
@@ -71,11 +75,25 @@ export class StatusButtonMenuComponent implements OnInit {
   availableSeats = '';
 
   @Select(FeedbackState.getFeedback) currentFeedback$: Observable<Feedback>;
+  @Select(MazemapState.getActiveLocation) activeLocation$: Observable<MapLocation>;
   @Select(TokenState.getUser) user$: Observable<User>;
 
   constructor(private store: Store, private service: ScadadataService) { }
 
   ngOnInit() {
+    this.user$.subscribe(u => {
+      this.user = u;
+    });
+
+    this.activeLocation$.pipe(untilComponentDestroyed(this)).subscribe(x => {
+      this.activeLocation = x;
+      if (x) {
+        if (this.user) {
+          this.store.dispatch(new GetCurrentFeedback({ userId: this.user.id, locationId: this.activeLocation.id }));
+        }
+      }
+    });
+
     this.service.getStatus().subscribe(res => {
 
       res.details.forEach(element => {
@@ -114,17 +132,15 @@ export class StatusButtonMenuComponent implements OnInit {
       }
     });
 
-    this.user$.subscribe(u => {
-      this.user = u;
-    });
-
   }
+
+  ngOnDestroy() {}
 
   upVote() {
     if (this.feedback) {
       this.store.dispatch(new ChangeFeedback(true));
     } else {
-      this.store.dispatch(new AddFeedback({ userId: this.user.id, vote: true }));
+      this.store.dispatch(new AddFeedback({ userId: this.user.id, vote: true, locationId: this.activeLocation.id }));
     }
   }
 
@@ -132,7 +148,7 @@ export class StatusButtonMenuComponent implements OnInit {
     if (this.feedback) {
       this.store.dispatch(new ChangeFeedback(false));
     } else {
-      this.store.dispatch(new AddFeedback({ userId: this.user.id, vote: false }));
+      this.store.dispatch(new AddFeedback({ userId: this.user.id, vote: false, locationId: this.activeLocation.id }));
     }
   }
 

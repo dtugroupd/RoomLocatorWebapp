@@ -5,7 +5,7 @@
 
 import { Component, OnInit, Input} from '@angular/core';
 import { Survey } from 'src/app/models/survey/survey.model';
-import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
+import { Section } from 'src/app/models/mazemap/section.model';
 import { Select, Actions, ofActionDispatched, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { MazemapState } from '../../_states/mazemap.state';
@@ -14,9 +14,10 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { SurveyService } from 'src/app/_services/survey.service';
-import { AddSurveySuccess, GetSurveys } from 'src/app/_actions/mazemap.actions';
+import { AddSurveySuccess, GetSurveys, GetLocations } from 'src/app/_actions/mazemap.actions';
 import { NbDialogService } from '@nebular/theme';
 import { ShowFeedbackComponent } from '../showFeedback/show-feedback.component';
+import { MapLocation } from 'src/app/models/mazemap/map-location.model';
 
 @Component({
   selector: 'app-survey-management',
@@ -28,7 +29,7 @@ export class SurveyManagementComponent implements OnInit {
 
   surveys: Survey[];
   unsortedSurveys: Survey[];
-  activeSection: LibrarySection;
+  activeSection: Section;
   faPlusSquare = faPlusSquare;
   faDownload = faDownload;
   faComments = faComments;
@@ -36,12 +37,13 @@ export class SurveyManagementComponent implements OnInit {
 
   activeStyle = {'background-color': '#ddd'};
 
-  @Select(MazemapState.getSurveys) surveys$: Observable<Survey[]>;
-  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
+  @Select(MazemapState.getActiveSurveys) activeSurveys$: Observable<Survey[]>;
+  @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
+  @Select(MazemapState.getActiveLocation) activeLocation$: Observable<MapLocation>;
 
   ngOnInit() {
-    this.store.dispatch(new GetSurveys());
-    this.surveys$.subscribe(x => {
+    // this.store.dispatch(new GetSurveys());
+    this.activeSurveys$.subscribe(x => {
       this.surveys = x;
       this.unsortedSurveys = Object.create(x);
     });

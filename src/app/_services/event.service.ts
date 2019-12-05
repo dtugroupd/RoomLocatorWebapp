@@ -5,7 +5,7 @@
 
 import { Injectable } from '@angular/core';
 import { EventToCreate } from '../models/calendar/event-to-create.model';
-import { Event } from '../models/calendar/event.model';
+import { Event, EventToDelete } from '../models/calendar/event.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { EventToUpdate } from '../models/calendar/event-to-update.model';
@@ -32,6 +32,10 @@ createEvent(event: EventToCreate) {
 
   updateEvent(event: EventToUpdate) {
     return this.http.put<Event>(`${this.backendBaseUrl}/api/v1/event/update`, event);
+  }
+
+  deleteEvent(eventId: string) {
+    return this.http.delete<any>(`${this.backendBaseUrl}/api/v1/event/${eventId}`);
   }
 
   getAll() {

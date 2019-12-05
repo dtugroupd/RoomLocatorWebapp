@@ -1,8 +1,11 @@
-import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
+import { Section } from 'src/app/models/mazemap/section.model';
+import { MapLocation } from 'src/app/models/mazemap/map-location.model';
+import { Event } from 'src/app/models/calendar/event.model';
+import * as moment from 'moment';
 
 // Convert sections from backend to layers readable by MazeMap
-export function convertLibrarySectionsToLayers(ls: Array<LibrarySection>) {
-    const librarySectionLayers = [];
+export function convertSectionsToLayers(ls: Array<Section>) {
+    const sectionLayers = [];
 
     ls.forEach(x => {
         const coordinates = x.coordinates.map(c => {
@@ -37,12 +40,98 @@ export function convertLibrarySectionsToLayers(ls: Array<LibrarySection>) {
         }
         };
 
-        librarySectionLayers.push(lsLayer);
+        sectionLayers.push(lsLayer);
     });
 
-    return librarySectionLayers;
+    return sectionLayers;
 }
 
+export function getLocationBoundsAsGeoJSON(location: MapLocation) {
+  const coordinates = location.coordinates.map(l => {
+        return [l.longitude, l.latitude];
+  });
+
+  return {
+    type: 'geojson',
+    data: {
+      type: 'Feature',
+      geometry: {
+        type: 'Polygon',
+        coordinates
+      }
+    }
+  };
+}
+
+export function inside(point, vs) {
+  const x = point[0];
+  const y = point[1];
+  let isInside = false;
+
+  for (let i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+    const xi = vs[i][0];
+    const yi = vs[i][1];
+    const xj = vs[j][0];
+    const yj = vs[j][1];
+    const intersect = ((yi > y) !== (yj > y))
+          && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+    if (intersect) {
+      isInside = !isInside;
+    }
+  }
+
+  return isInside;
+}
+
+export function convertLocationsToLayers(ls: MapLocation[]) {
+
+      const locationLayers = [];
+
+      ls.forEach(x => {
+        const lsLayer = {
+          id: `${x.id}`,
+          name: `${x.name}`,
+          type: 'symbol',
+          bounds: getLocationBoundsAsGeoJSON(x),
+          source: {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              properties: {
+                description: '\n\n\n' + x.name,
+                id: x.id
+              },
+              geometry: {
+                type: 'Point',
+                coordinates: [x.longitude, x.latitude]
+              }
+            }
+          },
+          layout: {
+            visibility: 'visible',
+            'text-field': ['get', 'description'],
+            'text-justify': 'right',
+            'icon-image': getLocationIcon(x.name),
+            'icon-size': 1.5
+          },
+        };
+
+        locationLayers.push(lsLayer);
+      });
+
+      return locationLayers;
+}
+
+export function getLocationIcon(name: string) {
+  switch (name) {
+    case 'Bibliotek':
+      return 'library';
+    case 'Skylab':
+      return 'rocket';
+    default:
+      return 'marker';
+  }
+}
 export function getCenter(coordinates) {
     const pts = coordinates;
     const off = pts[0];
@@ -79,7 +168,7 @@ const latLng = coordinates.map(c => {
 return latLng;
 }
 
-export function getMarkerIconUrl(section: LibrarySection) {
+export function getMarkerIconUrl(section: Section) {
     let iconUrl: string;
 
     switch (section.type) {
@@ -111,29 +200,86 @@ export function getMarkerIconUrl(section: LibrarySection) {
     return iconUrl;
 }
 
-export function layerMarkerOptions(layer) {
-    return  {
-        default:  {
-            color: 'MazeGreen',
-            size: 50,
-            offZOpacity: 0,
-            imgUrl: getMarkerIconUrl(layer.section),
-            imgScale: 0.5,
-            innerCircle: true,
-            innerCircleColor: 'white',
-            innerCircleScale: 0.7,
-            zLevel: layer.zLevel
-        },
-        funky: {
-            color: 'MazeYellow',
-            size: 35,
-            offZOpacity: 0,
-            imgUrl: getMarkerIconUrl(layer.section),
-            imgScale: 0.25,
-            innerCircle: true,
-            innerCircleColor: 'white',
-            innerCircleScale: 0.5,
-            zLevel: layer.zLevel
-        }
+export function locationMarkerOptions() {
+  return {
+    default: {
+      color: 'MazeBlue',
+      size: 50,
+    }
+  };
+}
+export function markerOptions(layer, zLevel?: number) {
+    return {
+      default: {
+        color: 'MazeGreen',
+        size: 50,
+        offZOpacity: 0,
+        imgUrl: layer ? getMarkerIconUrl(layer.section) : null,
+        imgScale: 0.5,
+        innerCircle: true,
+        innerCircleColor: 'white',
+        innerCircleScale: 0.7,
+        zLevel: layer ? layer.zLevel : null
+      },
+      funky: {
+        color: 'MazeYellow',
+        size: 35,
+        offZOpacity: 0,
+        imgUrl: layer ? getMarkerIconUrl(layer.section) : null,
+        imgScale: 0.25,
+        innerCircle: true,
+        innerCircleColor: 'white',
+        innerCircleScale: 0.5,
+        zLevel: layer ? layer.zLevel : null
+      },
+      event: {
+        color: 'MazeBlue',
+        size: 35,
+        zLevel
+      }
     };
+}
+
+export function getEventMarkerPopupHTML(e: Event): string {
+  return `
+      <div>
+          <p style="font-size: 16px; font-weight: bold">${e.title}
+            <br>
+            <span style="font-size: 14px; font-weight: normal">
+              ${e.speakers ? e.speakers : ''}
+            </span>
+          <p style="font-size: 12px">${e.description}</p>
+          <hr/>
+          <div id="eventMarkerFooter" style="display: flex; justify-content: flex-start">
+              <div style="margin-right: 20px;">
+                  <div style="font-weight: bold">
+                    Date
+                  </div>
+                  <div>
+                    ${moment(e.date).format('ddd, DD-MM-YYYY')}
+                  </div>
+              </div>
+              <div style="margin-right: 20px;">
+                  <div style="font-weight: bold">
+                    Time
+                  </div>
+                  <div>
+                    ${moment(e.date).format('HH:mm')}
+              </div>
+              </div>
+              <div>
+                <div style="font-weight: bold">
+                    Duration
+                </div>
+                <div>
+                    ${
+                      e.durationInHours
+                        ? e.durationInHours + ' h'
+                        : 'Not specified'
+                    }
+                </div>
+              </div>
+          </div>
+      </div>
+      `;
 }

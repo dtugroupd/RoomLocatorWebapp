@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { MazemapComponent } from './components/mazemap/mazemap.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import {
   NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
   NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
@@ -48,6 +49,9 @@ import { EventUpdateComponent } from './components/event-update/event-update.com
 import { UserDeleteComponent } from './components/user-delete/user-delete.component';
 import { UserDisclaimerState } from './_states/user.state';
 import { ShowFeedbackComponent } from './components/showFeedback/show-feedback.component';
+import { EventCreateMapPopupComponentComponent } from './components/event-create-map-popup-component/event-create-map-popup-component.component';
+import { UserProfileComponent } from './components/userprofile/userprofile.component';
+import { UserDeleteMeComponent } from './components/user-delete-me/user-delete-me.component';
 
 
 const appRoutes: Routes = [
@@ -74,6 +78,9 @@ const appRoutes: Routes = [
     LoginComponent,
     EventUpdateComponent,
     UserDeleteComponent,
+    EventCreateMapPopupComponentComponent,
+    UserProfileComponent,
+    UserDeleteMeComponent
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -85,7 +92,10 @@ const appRoutes: Routes = [
     MazemapComponent,
     AdminPageComponent,
     EventUpdateComponent,
-    UserDeleteComponent
+    UserDeleteComponent,
+    EventCreateMapPopupComponentComponent,
+    EventCreateComponent,
+    UserDeleteMeComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {
@@ -130,7 +140,7 @@ const appRoutes: Routes = [
       FeedbackState,
       AdminState,
       EventState,
-      UserDisclaimerState,
+      UserDisclaimerState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot()

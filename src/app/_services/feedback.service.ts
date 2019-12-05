@@ -5,7 +5,7 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Feedback, FeedbackToCreate, FeedbackToUpdate } from '../models/feedback/feedback.model';
+import { Feedback, FeedbackToCreate, FeedbackToUpdate, GetFeedbackInputModel } from '../models/feedback/feedback.model';
 import { BaseService } from './base.service';
 
 
@@ -26,8 +26,9 @@ export class FeedbackService extends BaseService {
     return this.http.put<Feedback>(`${this.backendBaseUrl}/api/v1/feedback/update`, feedback);
   }
 
-  getCurrentFeedback(userId: string) {
-    return this.http.get<Feedback>(`${this.backendBaseUrl}/api/v1/feedback/getCurrentUserFeedback`, { params: { userId } });
+  getCurrentFeedback(feedbackToGet: GetFeedbackInputModel) {
+    return this.http.get<Feedback>(`${this.backendBaseUrl}/api/v1/feedback/getCurrentUserFeedback`,
+      { params: { userId: feedbackToGet.userId, locationId: feedbackToGet.locationId } });
   }
 }
 

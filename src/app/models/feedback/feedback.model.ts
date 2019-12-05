@@ -6,16 +6,23 @@
 export interface FeedbackToCreate {
     userId: string;
     vote: boolean;
+    locationId: string;
 }
 
 export interface FeedbackToUpdate {
     id: string;
     vote: boolean;
+    locationId: string;
 }
 
 export interface Feedback {
     id: string;
     vote: boolean;
     timeStamp: string;
+    locationId: string;
 }
 
+export interface GetFeedbackInputModel {
+    userId: string;
+    locationId: string;
+}

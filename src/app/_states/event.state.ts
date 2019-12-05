@@ -1,5 +1,6 @@
 /**
  * @author Andreas Gøricke, s153804
+ * @author Anders Wiberg Olsen, s165241
  */
 
 
@@ -10,17 +11,23 @@ import { EventService } from '../_services/event.service';
 import { Event } from '../models/calendar/event.model';
 import {
     GetEvents, AddEvent, AddEventSuccess, AddEventError, UpdateEvent, UpdateEventSuccess,
-    UpdateEventError
+    UpdateEventError,
+    ClearNewEvent,
+    DeleteEvent,
+    DeleteEventSuccess,
+    DeleteEventError
 } from '../_actions/event.actions';
 
 export class EventStateModel {
     events: Event[];
+    newEvent: Event;
 }
 
 @State<EventStateModel>({
     name: 'Event',
     defaults: {
         events: [],
+        newEvent: null
     }
 })
 
@@ -33,11 +40,15 @@ export class EventState {
         return state.events;
     }
 
+    @Selector()
+    static getNewEvent(state: EventStateModel) {
+        return state.newEvent;
+    }
 
     @Action(GetEvents)
-    getEvents({ setState }: StateContext<EventStateModel>) {
+    getEvents({ patchState }: StateContext<EventStateModel>) {
         return this.eventService.getAll().pipe(tap((result) => {
-            setState({
+            patchState({
                 events : result
             });
         }));
@@ -50,6 +61,11 @@ export class EventState {
                 setState(
                     patch({
                         events: append([result])
+                    })
+                );
+                setState(
+                    patch({
+                        newEvent: result
                     })
                 );
                 dispatch(new AddEventSuccess());
@@ -74,6 +90,28 @@ export class EventState {
             },
             () => dispatch(new UpdateEventError())
         );
+    }
+
+    @Action(ClearNewEvent)
+    clearNewEvent({ patchState }: StateContext<EventStateModel>) {
+        patchState({
+            newEvent: null
+        });
+    }
+
+    @Action(DeleteEvent)
+    deleteEvent({ dispatch }: StateContext<EventStateModel>, { payload }: DeleteEvent) {
+        this.eventService.deleteEvent(payload).subscribe(x => {
+            dispatch(new DeleteEventSuccess());
+        },
+            () => {
+                dispatch(new DeleteEventError());
+        });
+    }
+
+    @Action(DeleteEventSuccess)
+    deleteEventSuccess({ dispatch }: StateContext<EventStateModel>) {
+        dispatch(new GetEvents());
     }
 
 }

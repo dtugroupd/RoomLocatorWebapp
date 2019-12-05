@@ -50,7 +50,7 @@ export class FeedbackState {
     @Action(ChangeFeedback)
     changeFeedback({ getState, setState }: StateContext<FeedbackStateModel>, { payload }: ChangeFeedback) {
         const state = getState();
-        const feedbackToUpdate = { id: state.feedback.id, vote: payload };
+        const feedbackToUpdate = { id: state.feedback.id, vote: payload, locationId: state.feedback.locationId };
         return this.feedbackService.changeFeedback(feedbackToUpdate).pipe(tap((result) => {
             setState({
                 feedback: result

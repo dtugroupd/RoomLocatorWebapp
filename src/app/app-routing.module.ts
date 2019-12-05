@@ -9,6 +9,7 @@ import { AuthRouteGuard } from './_services/_guards/auth-guard.service';
 import { AccessDeniedComponent } from './components/access_denied/access-denied.component';
 import { AdminPageComponent } from './components/admin_page/admin-page.component';
 import { LoginComponent } from './components/login/login.component';
+import { UserProfileComponent } from './components/userprofile/userprofile.component';
 
 
 const routes: Routes = [
@@ -17,7 +18,7 @@ const routes: Routes = [
     component: ValidateComponent,
   },
   {
-    path: 'mazemap',
+    path: '',
     component: MazemapComponent,
     canActivate: [AuthRouteGuard]
   },
@@ -26,7 +27,7 @@ const routes: Routes = [
     component: AdminPageComponent,
     canActivate: [AuthRouteGuard],
     data: {
-      expectedRoles: 'admin'
+      expectedRoles: [{ name: 'admin', locationId: null }]
     }
   },
   {
@@ -39,21 +40,21 @@ const routes: Routes = [
     canActivate: [AuthRouteGuard]
   },
   {
-    path: 'calendar-management',
-    component: EventCreateComponent,
-    canActivate: [AuthRouteGuard]
-  },
-  {
     path: 'survey-management',
     component: SurveyManagementComponent,
     canActivate: [AuthRouteGuard],
     data: {
-      expectedRoles: 'researcher'
+      expectedRoles: [{ name: 'researcher' }]
     }
   },
   {
     path: 'access-denied',
     component: AccessDeniedComponent,
+  },
+  {
+    path: 'userprofile',
+    component: UserProfileComponent,
+    canActivate: [AuthRouteGuard]
   },
 
 ]

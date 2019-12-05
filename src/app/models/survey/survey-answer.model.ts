@@ -1,8 +1,8 @@
 import { QuestionAnswer } from '../question/question-answer.model';
 
 export interface SurveyAnswer {
-    id: number;
-    surveyId: number;
+    id: string;
+    surveyId: string;
     comment: string;
     questionAnswers: QuestionAnswer[];
 }

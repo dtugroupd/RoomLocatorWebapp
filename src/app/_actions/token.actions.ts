@@ -1,4 +1,5 @@
 import { LoginModel } from '../models/login/user.model';
+import { ErrorModel } from '../models/general/error.model';
 
 /**
  * @author Hadi Horani, s144885
@@ -12,6 +13,20 @@ export class Login {
 
 export class SetTokenAndUser {
     static readonly type = '[Token] SetTokenAndUser';
+}
+
+export class SetIsLoading {
+    static readonly type = '[IsLoading] Set';
+    constructor(public payload: boolean) { }
+}
+
+export class LoginSuccess {
+    static readonly type = '[Login] Success';
+}
+
+export class LoginError {
+    static readonly type = '[Login] Error';
+    constructor(public payload: ErrorModel) { }
 }
 
 export class Logout {

@@ -4,9 +4,10 @@
  */
 
 import { Injectable } from '@angular/core';
-import { LibrarySection } from '../models/mazemap/library-section.model';
+import { Section } from '../models/mazemap/section.model';
 import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base.service';
+import { MapLocation } from '../models/mazemap/map-location.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,11 @@ export class MazemapService extends BaseService {
     super(http);
   }
 
-  fetchLibrarySections() {
-    return this.http.get<LibrarySection[]>(`${this.backendBaseUrl}/api/v1/mazemap/librarysections`);
+  getLocations() {
+    return this.http.get<MapLocation[]>(`${this.backendBaseUrl}/api/v1/location`);
+  }
+
+  getLocation(payload: string) {
+    return this.http.get<MapLocation>(`${this.backendBaseUrl}/api/v1/location/${payload}`);
   }
 }

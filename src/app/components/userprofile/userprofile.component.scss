@@ -1,0 +1,69 @@
+
+@import '../../../../node_modules/@nebular/theme/styles/core/mixins';
+
+:host {
+  display: flex;
+
+  .user-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .user-picture {
+    position: relative;
+    flex-shrink: 0;
+
+    &.image {
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    &.initials {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .profile {
+    width: 100%;
+    height: 100%;
+  }
+
+  .user-name,
+  .user-title {
+    @include nb-rtl(text-align, right);
+  }
+
+  .info-container {
+    @include nb-ltr(margin-left, 0.5rem);
+    @include nb-rtl(margin-right, 0.5rem);
+  }
+  .button {
+    background-color: #1c87c9;
+    border: none;
+    color: white;
+    padding: 20px 34px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+    }
+
+    a.button {
+      -webkit-appearance: button;
+      -moz-appearance: button;
+      appearance: button;
+  
+      text-decoration: none;
+      color: initial;
+  }
+
+}
+
+.profileImage {
+  height: 200px;
+}

@@ -29,4 +29,12 @@ export class UserService extends BaseService {
   hasAcceptedDisclaimer(studentId: string): Observable<UserDisclaimer> {
     return this.http.get<UserDisclaimer>(`${this.backendBaseUrl}/api/v1/user/${studentId}/disclaimer`);
   }
+
+  deleteUser(id: string) {
+    return this.http.delete<User>(`${this.backendBaseUrl}/api/v1/user/id?studentId=${id}`);
+  }
+
+  deleteMe() {
+    return this.http.delete<User>(`${this.backendBaseUrl}/api/v1/user/me`);
+  }
 }

@@ -5,6 +5,7 @@
 
 import { EventToCreate } from '../models/calendar/event-to-create.model';
 import { EventToUpdate } from '../models/calendar/event-to-update.model';
+import { EventToDelete } from '../models/calendar/event.model';
 
 export class GetEvents {
     static readonly type = '[Event] Get';
@@ -34,4 +35,21 @@ export class UpdateEventSuccess {
 
 export class UpdateEventError {
   static readonly type = '[UpdateEvent] Error';
+}
+
+export class ClearNewEvent {
+    static readonly type = '[NewEvent] Clear';
+}
+
+export class DeleteEvent {
+    static readonly type = '[Event] Delete';
+    constructor(public payload: string) { }
+}
+
+export class DeleteEventSuccess {
+    static readonly type = '[EventDelete] Success';
+}
+
+export class DeleteEventError {
+    static readonly type = '[EventDelete] Error';
 }

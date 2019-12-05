@@ -20,3 +20,12 @@ table {
 #userAdminRolePicker nb-select {
     margin-right: 24px;
 }
+
+.profileImage {
+    height: 45px;
+    transition: 100ms ease-in-out;
+}
+
+.profileImage:hover {
+    transform: scale(2);
+}

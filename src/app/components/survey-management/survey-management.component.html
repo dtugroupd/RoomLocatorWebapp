@@ -8,14 +8,15 @@
     </div>
     <div style="width: 50%; padding: 20px;">
         <div class="flex flex-align-vertical">
-            <h4>All surveys</h4>
+            <h6 *ngIf="!(activeLocation$ | async)">Choose a location to start managing surveys</h6>
+            <h6 *ngIf="activeLocation$ | async">Surveys at {{ (activeLocation$ | async).name }}</h6>
             <app-survey-create-action *ngIf="activeSection"></app-survey-create-action>
         </div>
-        <div style="max-height: 70vh; overflow: auto;">
+        <div *ngIf="activeLocation$ | async" style="max-height: 70vh; overflow: auto;">
             <nb-accordion id="accordion">
                 <nb-accordion-item info *ngFor="let survey of surveys, let i = index" [ngClass]="{'active': isActive(i)}" [expanded]="isActive(i)">
                     <nb-accordion-item-header style="margin-bottom: 0px !important;">
-                            {{ survey.id }}. {{ survey.title }}
+                            {{ survey.title }}
                         </nb-accordion-item-header>
                         <nb-accordion-item-body>
                             <div style="width: 100%; margin-bottom: 20px;">

@@ -3,18 +3,22 @@
  * @author Andreas Gøricke, s153804
  */
 
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { faCalendarAlt as faCalendarAltReg, faEdit} from '@fortawesome/free-regular-svg-icons';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
+import { faCalendarAlt as faCalendarAltReg, faEdit, faClock } from '@fortawesome/free-regular-svg-icons';
+import { faMapMarkerAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
 import { EventState } from 'src/app/_states/event.state';
 import { Select, Store, Actions, ofActionDispatched } from '@ngxs/store';
-import { GetEvents, AddEventSuccess, AddEventError, UpdateEventSuccess, UpdateEventError } from 'src/app/_actions/event.actions';
+import { GetEvents, AddEventSuccess, AddEventError, UpdateEventSuccess, UpdateEventError, DeleteEvent, DeleteEventSuccess, DeleteEventError } from 'src/app/_actions/event.actions';
 import { Event } from '../../models/calendar/event.model';
 import * as moment from 'moment';
 import { NbToastrService, NbDialogService } from '@nebular/theme';
 import { EventCreateComponent } from '../event-create/event-create.component';
 import { EventUpdateComponent } from '../event-update/event-update.component';
 import { TokenState } from 'src/app/_states/token.state';
+import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
+import { Role, User } from 'src/app/models/login/user.model';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-event-calendar',
@@ -23,11 +27,17 @@ import { TokenState } from 'src/app/_states/token.state';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class EventCalendarComponent implements OnInit {
+export class EventCalendarComponent implements OnInit, OnDestroy {
   moment = moment;
   faCalendarAltReg = faCalendarAltReg;
   faEdit = faEdit;
+  faMarker = faMapMarkerAlt;
+  faClock = faClock;
+  faTrash = faTrash;
   events: Event[];
+
+  user: User = null;
+  userAdminLocations: Role[] = null;
 
   constructor(
     private store: Store,
@@ -38,6 +48,8 @@ export class EventCalendarComponent implements OnInit {
 
   @Select(EventState.getEvents) events$: Observable<Event[]>;
   @Select(TokenState.userIsAdmin) userIsAdmin$: Observable<boolean>;
+  @Select(TokenState.getUser) user$: Observable<User>;
+  @Select(TokenState.getUserAdminLocations) userAdminLocations$: Observable<Role[]>
 
   ngOnInit() {
     this.store.dispatch(new GetEvents());
@@ -46,22 +58,40 @@ export class EventCalendarComponent implements OnInit {
       this.events = x;
     });
 
-    this.action$.pipe(ofActionDispatched(AddEventSuccess)).subscribe(() => {
-      this.showSuccessToast('top-right', 'success', 'Dit event er oprettet.');
+    this.user$.subscribe(x => {
+      this.user = x;
     });
 
-    this.action$.pipe(ofActionDispatched(UpdateEventSuccess)).subscribe(() => {
-      this.showSuccessToast('top-right', 'success', 'Eventet er opdateret.');
+    this.userAdminLocations$.subscribe(x => {
+      this.userAdminLocations = x;
     });
 
-    this.action$.pipe(ofActionDispatched(AddEventError)).subscribe(() => {
-      this.showSuccessToast('top-right', 'danger', 'Dit event kunne ikke oprettes. Prøv igen.');
+    this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(AddEventSuccess)).subscribe(() => {
+      this.showToast('top-right', 'success', 'The event has been created.');
     });
 
-    this.action$.pipe(ofActionDispatched(UpdateEventError)).subscribe(() => {
-      this.showSuccessToast('top-right', 'danger', 'Eventet kunne ikke opdateres. Prøv igen.');
+    this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(UpdateEventSuccess)).subscribe(() => {
+      this.showToast('top-right', 'success', 'Saved changes.');
+    });
+
+    this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(AddEventError)).subscribe(() => {
+      this.showToast('top-right', 'danger', 'The event could not be created.');
+    });
+
+    this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(UpdateEventError)).subscribe(() => {
+      this.showToast('top-right', 'danger', 'Could not save changes.');
+    });
+
+    this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(DeleteEventSuccess)).subscribe(() => {
+      this.showToast('top-right', 'success', 'The event has been deleted.');
+    });
+
+    this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(DeleteEventError)).subscribe(() => {
+      this.showToast('top-right', 'danger', 'The event could not be deleted.');
     });
   }
+
+  ngOnDestroy() { }
 
   fitToLength(chars: number, text: string) {
     if (text.length > chars) {
@@ -91,11 +121,26 @@ export class EventCalendarComponent implements OnInit {
     this.dialogService.open(EventUpdateComponent, settings);
   }
 
-  showSuccessToast(position, status, message) {
+  userHasAdminPermissions(locationId: string) {
+    let adminPermissionLocation: string[];
+
+    if (this.userAdminLocations) {
+      adminPermissionLocation = this.userAdminLocations.map(x => x.locationId);
+    }
+
+    if (this.user) {
+      return this.user.isGeneralAdmin || adminPermissionLocation.includes(locationId);
+    }
+
+    return false;
+  }
+
+  deleteEvent(event: Event) {
+    this.store.dispatch(new DeleteEvent(event.id));
+  }
+
+  showToast(position, status, message) {
     this.toastrService.show(status, message, { position, status });
   }
 
-  showErrorToast(position, status, message) {
-    this.toastrService.show(status, message, { position, status });
-  }
 }

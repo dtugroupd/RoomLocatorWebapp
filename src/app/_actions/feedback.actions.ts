@@ -3,7 +3,7 @@
  * @author Thomas Lien Christensen, s165242
  */
 
-import { FeedbackToCreate } from '../models/feedback/feedback.model';
+import { FeedbackToCreate, GetFeedbackInputModel } from '../models/feedback/feedback.model';
 
 export class AddFeedback {
     static readonly type = '[Feedback] Add';
@@ -17,5 +17,5 @@ export class ChangeFeedback {
 
 export class GetCurrentFeedback {
     static readonly type = '[Feedback] Get';
-    constructor(public payload: string) { }
+    constructor(public payload: GetFeedbackInputModel) { }
 }

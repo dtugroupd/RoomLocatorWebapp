@@ -4,7 +4,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { QuestionToCreate } from 'src/app/models/question/question-to-create.model';
-import { LibrarySection } from 'src/app/models/mazemap/library-section.model';
+import { Section } from 'src/app/models/mazemap/section.model';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
 import { MazemapState } from '../../_states/mazemap.state';
 import { Observable } from 'rxjs';
@@ -19,13 +19,13 @@ import { AddSurvey, AddSurveySuccess, AddSurveyError } from 'src/app/_actions/ma
 
 export class SurveyCreateComponent implements OnInit {
 
-  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
+  @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
 
   title = '';
   description = '';
 
   questions: QuestionToCreate[];
-  activeSection: LibrarySection;
+  activeSection: Section;
 
   constructor(private dialogRef: NbDialogRef<any>, private toastrService: NbToastrService, private store: Store, private action$: Actions) {
     this.questions = [{text: ''}, {text: ''}];

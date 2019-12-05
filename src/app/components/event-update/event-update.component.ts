@@ -32,6 +32,10 @@ export class EventUpdateComponent implements OnInit {
   submit() {
     const eventToUpdate = {
       id: this.event.id,
+      locationId: this.event.locationId,
+      longitude: this.event.longitude,
+      latitude: this.event.latitude,
+      zLevel: this.event.zLevel,
       title: this.event.title,
       description: this.event.description,
       date: moment(this.event.date).format('YYYY-MM-DD') + 'T' + this.time + ':00',
