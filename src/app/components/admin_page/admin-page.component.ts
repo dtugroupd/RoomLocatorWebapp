@@ -44,7 +44,7 @@ export class AdminPageComponent implements OnInit
     { name: 'student', locationName: null, locationId: null }
   ];
 
-  displayedColumns: string[] = [ 'userID', 'fullName', 'userRole', 'action' ];
+  displayedColumns: string[] = [ 'image', 'userID', 'fullName', 'userRole', 'action' ];
 
 
   @Select(AdminState.getUsers) users$: Observable<User[]>;
@@ -103,7 +103,6 @@ export class AdminPageComponent implements OnInit
   }
 
   getUserRoles(user: User) {
-    console.log(user.roles);
     return user.roles.map(x => x.locationName ? [x.name + ':' + x.locationName] : x.name);
   }
 
