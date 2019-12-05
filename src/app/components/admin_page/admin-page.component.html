@@ -7,7 +7,7 @@
 
     <input nbInput matInput fullWidth (keyup)="applyFilter($event.target.value)" placeholder="Filter" id="userSearch">
     <br>
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table mat-table [dataSource]="users$" class="mat-elevation-z8">
 
         <ng-container matColumnDef="userID">
             <th class="header" mat-header-cell *matHeaderCellDef>
@@ -25,14 +25,14 @@
         </ng-container>
         <ng-container matColumnDef="userRole">
             <th class="header" mat-header-cell *matHeaderCellDef>
-                User Role
+                Roles
             </th>
             <th mat-header-cell *matHeaderCellDef>User Role</th>
             <td mat-cell *matCellDef="let user"> {{getUserRoles(user)}} </td>
         </ng-container>
 
         <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <th mat-header-cell *matHeaderCellDef> Actions</th>
             <td mat-cell *matCellDef="let user" class="action-link">
                 <button nbButton outline (click)="toggleDisplay()">Edit</button> |
                 <button nbButton outline status="danger" *ngIf="currentUser.studentId != user.studentId" (click)="confirmDeletion(user)">Delete</button>

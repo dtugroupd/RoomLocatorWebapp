@@ -26,7 +26,7 @@
                     <p>
                         {{ event.description }}
                     </p>
-                   <div style="display: flex; justify-content: space-between;">
+                    <div style="display: flex; justify-content: space-between;">
                         <div class="extra-event-info">
                             <div *ngIf="event.durationInHours">
                                 <fa-icon [icon]="faClock"></fa-icon> {{ event.durationInHours }}h
@@ -38,7 +38,7 @@
                         <nb-action *ngIf="userIsAdmin$ | async" (click)="openEditEventDialog(event)" class="action">
                             <fa-icon [icon]="faEdit"></fa-icon>
                         </nb-action>
-                   </div>
+                    </div>
                 </nb-accordion-item-body>
             </nb-accordion-item>
         </nb-accordion>

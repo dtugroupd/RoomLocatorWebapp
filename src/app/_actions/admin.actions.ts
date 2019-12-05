@@ -9,6 +9,11 @@ export class GetUsers {
     static readonly type = '[Users] Get';
 }
 
+export class GetUsersSuccess {
+    static readonly type = '[Users] Get Success';
+    constructor(public users: User[]) {}
+}
+
 export class UpdateRole {
     static readonly type = '[Role] Update';
     constructor(public id: string, public roleName: string) {}
