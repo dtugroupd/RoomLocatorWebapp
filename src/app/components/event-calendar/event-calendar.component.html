@@ -34,9 +34,14 @@
                                 <fa-icon [icon]="faMarker"></fa-icon> {{ event.locationName }}
                             </div>
                         </div>
-                        <nb-action *ngIf="userHasAdminPermissions(event.locationId)" (click)="openEditEventDialog(event)" class="action">
-                            <fa-icon [icon]="faEdit"></fa-icon>
-                        </nb-action>
+                        <nb-actions>
+                            <nb-action *ngIf="userHasAdminPermissions(event.locationId)" (click)="openEditEventDialog(event)" class="action">
+                                <fa-icon [icon]="faEdit"></fa-icon>
+                            </nb-action>
+                            <nb-action *ngIf="userHasAdminPermissions(event.locationId)" (click)="deleteEvent(event)" class="action">
+                                <fa-icon [icon]="faTrash"></fa-icon>
+                            </nb-action>
+                        </nb-actions>
                     </div>
                 </nb-accordion-item-body>
             </nb-accordion-item>

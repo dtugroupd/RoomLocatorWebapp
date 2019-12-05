@@ -34,8 +34,8 @@ createEvent(event: EventToCreate) {
     return this.http.put<Event>(`${this.backendBaseUrl}/api/v1/event/update`, event);
   }
 
-  deleteEvent(event: EventToDelete) {
-    return this.http.delete<any>(`${this.backendBaseUrl}/api/v1/event/${event.id}`);
+  deleteEvent(eventId: string) {
+    return this.http.delete<any>(`${this.backendBaseUrl}/api/v1/event/${eventId}`);
   }
 
   getAll() {

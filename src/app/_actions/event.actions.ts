@@ -43,7 +43,7 @@ export class ClearNewEvent {
 
 export class DeleteEvent {
     static readonly type = '[Event] Delete';
-    constructor(public payload: EventToDelete) { }
+    constructor(public payload: string) { }
 }
 
 export class DeleteEventSuccess {

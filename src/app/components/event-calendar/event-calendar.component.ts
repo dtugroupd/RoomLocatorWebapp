@@ -5,11 +5,11 @@
 
 import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 import { faCalendarAlt as faCalendarAltReg, faEdit, faClock } from '@fortawesome/free-regular-svg-icons';
-import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { faMapMarkerAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
 import { EventState } from 'src/app/_states/event.state';
 import { Select, Store, Actions, ofActionDispatched } from '@ngxs/store';
-import { GetEvents, AddEventSuccess, AddEventError, UpdateEventSuccess, UpdateEventError } from 'src/app/_actions/event.actions';
+import { GetEvents, AddEventSuccess, AddEventError, UpdateEventSuccess, UpdateEventError, DeleteEvent, DeleteEventSuccess, DeleteEventError } from 'src/app/_actions/event.actions';
 import { Event } from '../../models/calendar/event.model';
 import * as moment from 'moment';
 import { NbToastrService, NbDialogService } from '@nebular/theme';
@@ -33,6 +33,7 @@ export class EventCalendarComponent implements OnInit, OnDestroy {
   faEdit = faEdit;
   faMarker = faMapMarkerAlt;
   faClock = faClock;
+  faTrash = faTrash;
   events: Event[];
 
   user: User = null;
@@ -66,19 +67,27 @@ export class EventCalendarComponent implements OnInit, OnDestroy {
     });
 
     this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(AddEventSuccess)).subscribe(() => {
-      this.showSuccessToast('top-right', 'success', 'Dit event er oprettet.');
+      this.showToast('top-right', 'success', 'The event has been created.');
     });
 
     this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(UpdateEventSuccess)).subscribe(() => {
-      this.showSuccessToast('top-right', 'success', 'Eventet er opdateret.');
+      this.showToast('top-right', 'success', 'Saved changes.');
     });
 
     this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(AddEventError)).subscribe(() => {
-      this.showSuccessToast('top-right', 'danger', 'Dit event kunne ikke oprettes. Prøv igen.');
+      this.showToast('top-right', 'danger', 'The event could not be created.');
     });
 
     this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(UpdateEventError)).subscribe(() => {
-      this.showSuccessToast('top-right', 'danger', 'Eventet kunne ikke opdateres. Prøv igen.');
+      this.showToast('top-right', 'danger', 'Could not save changes.');
+    });
+
+    this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(DeleteEventSuccess)).subscribe(() => {
+      this.showToast('top-right', 'success', 'The event has been deleted.');
+    });
+
+    this.action$.pipe(untilComponentDestroyed(this), ofActionDispatched(DeleteEventError)).subscribe(() => {
+      this.showToast('top-right', 'danger', 'The event could not be deleted.');
     });
   }
 
@@ -126,11 +135,12 @@ export class EventCalendarComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  showSuccessToast(position, status, message) {
+  deleteEvent(event: Event) {
+    this.store.dispatch(new DeleteEvent(event.id));
+  }
+
+  showToast(position, status, message) {
     this.toastrService.show(status, message, { position, status });
   }
 
-  showErrorToast(position, status, message) {
-    this.toastrService.show(status, message, { position, status });
-  }
 }
