@@ -14,3 +14,8 @@ export interface Event {
     durationApproximated: boolean;
     speakers: string;
 }
+
+export interface EventToDelete {
+    id: string;
+    locationId: string;
+}

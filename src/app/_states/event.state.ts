@@ -11,7 +11,10 @@ import { Event } from '../models/calendar/event.model';
 import {
     GetEvents, AddEvent, AddEventSuccess, AddEventError, UpdateEvent, UpdateEventSuccess,
     UpdateEventError,
-    ClearNewEvent
+    ClearNewEvent,
+    DeleteEvent,
+    DeleteEventSuccess,
+    DeleteEventError
 } from '../_actions/event.actions';
 
 export class EventStateModel {
@@ -93,6 +96,21 @@ export class EventState {
         patchState({
             newEvent: null
         });
+    }
+
+    @Action(DeleteEvent)
+    deleteEvent({ dispatch }: StateContext<EventStateModel>, { payload }: DeleteEvent) {
+        this.eventService.deleteEvent(payload).subscribe(x => {
+            dispatch(new DeleteEventSuccess());
+        },
+            () => {
+                dispatch(new DeleteEventError());
+        });
+    }
+
+    @Action(DeleteEventSuccess)
+    deleteEventSuccess({ dispatch }: StateContext<EventStateModel>) {
+        dispatch(new GetEvents());
     }
 
 }
