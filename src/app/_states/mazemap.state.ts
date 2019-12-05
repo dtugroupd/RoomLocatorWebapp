@@ -3,29 +3,39 @@
  * @author Hadi Horani, s144885
  */
 
-import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
+import { State, Action, StateContext, Selector, Store } from "@ngxs/store";
 import {
-    SetActiveSection, SetActivateFeedbackAndStatus,
-    GetSurveys, AddSurveyAnswer, AddSurvey, AddSurveySuccess, AddSurveyError,
-    AddSurveyAnswerError, AddSurveyAnswerSuccess, GetLocations, SetActiveLocation, ResetActiveLocation, AddEventToLocation
-} from '../_actions/mazemap.actions';
-import { MazemapService } from '../_services/mazemap.service';
-import { tap } from 'rxjs/operators';
-import { SurveyService } from '../_services/survey.service';
-import { Survey } from '../models/survey/survey.model';
-import { patch, updateItem, append } from '@ngxs/store/operators';
-import { Section } from '../models/mazemap/section.model';
-import { MapLocation } from '../models/mazemap/map-location.model';
-import { Router } from '@angular/router';
-import { TokenStateModel, TokenState } from './token.state';
+  SetActiveSection,
+  SetActivateFeedbackAndStatus,
+  GetSurveys,
+  AddSurveyAnswer,
+  AddSurvey,
+  AddSurveySuccess,
+  AddSurveyError,
+  AddSurveyAnswerError,
+  AddSurveyAnswerSuccess,
+  GetLocations,
+  SetActiveLocation,
+  ResetActiveLocation,
+  AddEventToLocation
+} from "../_actions/mazemap.actions";
+import { MazemapService } from "../_services/mazemap.service";
+import { tap } from "rxjs/operators";
+import { SurveyService } from "../_services/survey.service";
+import { Survey } from "../models/survey/survey.model";
+import { patch, updateItem, append } from "@ngxs/store/operators";
+import { Section } from "../models/mazemap/section.model";
+import { MapLocation } from "../models/mazemap/map-location.model";
+import { Router } from "@angular/router";
+import { TokenStateModel, TokenState } from "./token.state";
 
 export class MazemapStateModel {
-    locations: MapLocation[];
-    activeLocation: MapLocation;
-    activeSurveys: Survey[];
-    activeSection: Section;
-    activateFeedbackAndStatus: boolean;
-    surveys: Survey[];
+  locations: MapLocation[];
+  activeLocation: MapLocation;
+  activeSurveys: Survey[];
+  activeSection: Section;
+  activateFeedbackAndStatus: boolean;
+  surveys: Survey[];
 }
 
 @State<MazemapStateModel>({
@@ -87,22 +97,39 @@ export class MazemapState {
           const researcherUserLocations = this.store.selectSnapshot(
             TokenState.getUserResearcherLocations
           );
+          const adminUserLocations = this.store.selectSnapshot(
+            TokenState.getUserAdminLocations
+          );
+
           let isGeneralAdmin = false;
           let isGeneralResearcher = false;
           let researcherLocations = [];
+          let adminLocations = [];
 
           if (user) {
-              isGeneralAdmin = user.isGeneralAdmin;
-              isGeneralResearcher = user.isGeneralResearcher;
+            isGeneralAdmin = user.isGeneralAdmin;
+            isGeneralResearcher = user.isGeneralResearcher;
           }
 
-          if (researcherUserLocations && !isGeneralAdmin && !isGeneralResearcher) {
-            researcherLocations = researcherUserLocations.map(
-              r => r.locationId
-            );
-            locations = locations.filter(l =>
-              researcherLocations.includes(l.id)
-            );
+          if (!isGeneralAdmin && !isGeneralResearcher) {
+            if (researcherUserLocations) {
+              const researcherLocationIds = researcherUserLocations.map(
+                r => r.locationId
+              );
+              researcherLocations = locations.filter(l =>
+                researcherLocationIds.includes(l.id)
+              );
+            }
+
+            if (adminUserLocations) {
+              const adminLocationIds = adminUserLocations.map(
+                r => r.locationId
+              );
+              adminLocations = locations.filter(l =>
+                adminLocationIds.includes(l.id)
+              );
+            }
+            locations = researcherLocations.concat(adminLocations);
           }
         }
         patchState({
@@ -123,22 +150,21 @@ export class MazemapState {
           activeLocation: res
         });
 
-
         if (res) {
-            function removeDuplicates(myArr, prop) {
-                return myArr.filter((obj, pos, arr) => {
-                    return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
-                });
-            }
-            const activeSurveysAll = res.sections.map(s => s.survey);
-            const activeSurveys = removeDuplicates(activeSurveysAll, 'id');
-            patchState({
-                activeSurveys
+          function removeDuplicates(myArr, prop) {
+            return myArr.filter((obj, pos, arr) => {
+              return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
             });
+          }
+          const activeSurveysAll = res.sections.map(s => s.survey);
+          const activeSurveys = removeDuplicates(activeSurveysAll, "id");
+          patchState({
+            activeSurveys
+          });
         } else {
-            patchState({
-                activeSurveys: null
-            });
+          patchState({
+            activeSurveys: null
+          });
         }
       })
     );

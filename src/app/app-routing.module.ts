@@ -17,7 +17,7 @@ const routes: Routes = [
     component: ValidateComponent,
   },
   {
-    path: 'mazemap',
+    path: '',
     component: MazemapComponent,
     canActivate: [AuthRouteGuard]
   },

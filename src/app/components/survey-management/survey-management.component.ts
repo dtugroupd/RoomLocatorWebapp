@@ -17,6 +17,7 @@ import { SurveyService } from 'src/app/_services/survey.service';
 import { AddSurveySuccess, GetSurveys, GetLocations } from 'src/app/_actions/mazemap.actions';
 import { NbDialogService } from '@nebular/theme';
 import { ShowFeedbackComponent } from '../showFeedback/show-feedback.component';
+import { MapLocation } from 'src/app/models/mazemap/map-location.model';
 
 @Component({
   selector: 'app-survey-management',
@@ -38,6 +39,7 @@ export class SurveyManagementComponent implements OnInit {
 
   @Select(MazemapState.getActiveSurveys) activeSurveys$: Observable<Survey[]>;
   @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
+  @Select(MazemapState.getActiveLocation) activeLocation$: Observable<MapLocation>;
 
   ngOnInit() {
     // this.store.dispatch(new GetSurveys());

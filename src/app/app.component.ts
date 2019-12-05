@@ -106,10 +106,6 @@ export class AppComponent implements OnInit, OnDestroy {
       link: '/'
     },
     {
-      title: 'Mazemap',
-      link: '/mazemap'
-    },
-    {
       title: 'Calendar',
       link: '/calendar',
     },
@@ -146,7 +142,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.router.events.subscribe(x => {
       if (x instanceof NavigationEnd) {
         switch (x.urlAfterRedirects) {
-          case '/mazemap':
+          case '/':
             this.store.dispatch(new SetActivateFeedbackAndStatus(true));
             break;
           default:
@@ -182,8 +178,6 @@ export class AppComponent implements OnInit, OnDestroy {
   userHasAccess(link: string): Observable<boolean> {
     switch (link) {
       case '/':
-        return new Observable((observer: any) => observer.next(true));
-      case '/mazemap':
         return new Observable((observer: any) => observer.next(true));
       case '/calendar':
         return new Observable((observer: any) => observer.next(true));
