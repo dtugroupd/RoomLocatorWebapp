@@ -28,6 +28,7 @@ import { EventState } from 'src/app/_states/event.state';
 import { Event } from '../../models/calendar/event.model';
 import { untilComponentDestroyed } from '@w11k/ngx-componentdestroyed';
 import { AddEventSuccess, ClearNewEvent } from 'src/app/_actions/event.actions';
+import { User, Role } from 'src/app/models/login/user.model';
 
 declare let Mazemap: any;
 
@@ -132,8 +133,8 @@ export class MazemapComponent implements OnInit, OnDestroy {
   eventMarkers = [];
   locationLayers = [];
 
-  userIsAdmin = false;
-  userAdminLocations: string[] = [];
+  userIsGeneralAdmin: boolean = null;
+  userAdminLocations: Role[] = [];
 
   @Select(MazemapState.getActivateFeedbackAndStatus)
   activateFeedbackAndStatus$: Observable<boolean>;
@@ -142,18 +143,20 @@ export class MazemapComponent implements OnInit, OnDestroy {
     MapLocation
     >;
   @Select(EventState.getNewEvent) newEvent$: Observable<Event>;
-  @Select(TokenState.userIsAdmin) userIsAdmin$: Observable<boolean>;
-  @Select(TokenState.getUserAdminLocations) userAdminLocations$: Observable<string[]>;
+  @Select(TokenState.getUser) user$: Observable<User>;
+  @Select(TokenState.getUserAdminLocations) userAdminLocations$: Observable<Role[]>;
   @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
 
   constructor(private store: Store, private dynamicComponentService: DynamicComponentService, private action$: Actions) {
 
-    this.userIsAdmin$.subscribe(x => {
-      this.userIsAdmin = x;
+    this.user$.subscribe(x => {
+      if (x) {
+        this.userIsGeneralAdmin = x.isGeneralAdmin;
+      }
     });
 
     this.userAdminLocations$.subscribe(x => {
-      this.userAdminLocations = x;
+        this.userAdminLocations = x;
     });
 
     this.store.dispatch(new GetLocations());
@@ -295,8 +298,8 @@ export class MazemapComponent implements OnInit, OnDestroy {
       }
 
       if (this.activeLocation && this.toggledEvents) {
-        const userHasAccess = this.userIsAdmin ||
-          this.userAdminLocations.filter(x => x.includes(`admin::${this.activeLocation.name}`)).length > 0;
+        const userHasAccess = this.userIsGeneralAdmin ||
+          this.userAdminLocations.filter(x => x.locationId.includes(`${this.activeLocation.id}`)).length > 0;
         const point = [e.lngLat.lng, e.lngLat.lat];
         const bounds = this.activeLocationBounds.data.geometry.coordinates;
 
@@ -360,7 +363,6 @@ export class MazemapComponent implements OnInit, OnDestroy {
   updateLayers() {
     const zLevel = this.map.getZLevel();
 
-
     if (this.toggledSections) {
       // Hide all currently visible layers
       this.sectionLayers.forEach(l => {
@@ -390,22 +392,24 @@ export class MazemapComponent implements OnInit, OnDestroy {
   initLayers() {
     if (this.sectionLayers) {
       this.sectionLayers.forEach(layer => {
-        if (!this.map.getLayer(layer.id)) {
-          this.map.addLayer(layer);
-          this.map.layerEventHandler.on(
-            'click',
-            layer.id,
-            (e: any, features: any) => {
-              this.setActiveLayer(layer);
-            }
-          );
-          this.map.layerEventHandler.on('mousemove', layer.id, () => {
-            if (this.map.getLayer(layer.id)) {
-              this.setLayerHoverState(layer.id);
-            }
-          });
-          this.initSectionMarker(layer);
+        if (this.map) {
+          if (!this.map.getLayer(layer.id)) {
+            this.map.addLayer(layer);
+            this.map.layerEventHandler.on(
+              'click',
+              layer.id,
+              (e: any, features: any) => {
+                this.setActiveLayer(layer);
+              }
+            );
+            this.map.layerEventHandler.on('mousemove', layer.id, () => {
+              if (this.map.getLayer(layer.id)) {
+                this.setLayerHoverState(layer.id);
+              }
+            });
+            this.initSectionMarker(layer);
         }
+      }
       });
 
       this.map.layerEventHandler.on('mousemove', null, () => {

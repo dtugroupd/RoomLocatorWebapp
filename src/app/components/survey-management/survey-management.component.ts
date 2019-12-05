@@ -14,7 +14,7 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { SurveyService } from 'src/app/_services/survey.service';
-import { AddSurveySuccess, GetSurveys } from 'src/app/_actions/mazemap.actions';
+import { AddSurveySuccess, GetSurveys, GetLocations } from 'src/app/_actions/mazemap.actions';
 import { NbDialogService } from '@nebular/theme';
 import { ShowFeedbackComponent } from '../showFeedback/show-feedback.component';
 
@@ -36,12 +36,12 @@ export class SurveyManagementComponent implements OnInit {
 
   activeStyle = {'background-color': '#ddd'};
 
-  @Select(MazemapState.getSurveys) surveys$: Observable<Survey[]>;
+  @Select(MazemapState.getActiveSurveys) activeSurveys$: Observable<Survey[]>;
   @Select(MazemapState.getActiveSection) activeSection$: Observable<Section>;
 
   ngOnInit() {
-    this.store.dispatch(new GetSurveys());
-    this.surveys$.subscribe(x => {
+    // this.store.dispatch(new GetSurveys());
+    this.activeSurveys$.subscribe(x => {
       this.surveys = x;
       this.unsortedSurveys = Object.create(x);
     });

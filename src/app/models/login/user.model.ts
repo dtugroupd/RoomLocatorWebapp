@@ -23,6 +23,7 @@ export interface User {
     roles: Role[];
     profileImage: string;
     isGeneralAdmin: boolean;
+    isGeneralResearcher: boolean;
 }
 
 export interface Role {
