@@ -140,8 +140,6 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.dispatch(new GetSurveys());
-
     this.router.events.subscribe(x => {
       if (x instanceof NavigationEnd) {
         switch (x.urlAfterRedirects) {
