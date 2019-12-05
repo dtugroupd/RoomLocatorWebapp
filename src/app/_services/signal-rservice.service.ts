@@ -8,6 +8,7 @@ import { User } from '../models/login/user.model';
 import { Logout } from '../_actions/token.actions';
 import { GetEvents } from '../_actions/event.actions';
 import { NbToastrService } from '@nebular/theme';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class SignalRServiceService {
   public start(token: string) {
     this.connection = new HubConnectionBuilder()
       .configureLogging(LogLevel.Information)
-      .withUrl(`https://localhost:5001/api/socket`, { accessTokenFactory: () => token })
+      .withUrl(`${environment.backendUrl}/api/socket`, { accessTokenFactory: () => token })
       .withAutomaticReconnect()
       .build();
       this.connection.start().then(() => {
