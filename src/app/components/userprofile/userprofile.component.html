@@ -7,26 +7,21 @@
     <nb-card-header center> <h2 center>DTU Profile</h2> </nb-card-header>
 
       <nb-card-body>
-        First name:
-        <br>
-        {{user.firstName}}
-        <p nbInput type="text" name=firstname value=""></p>
-
-        Last name:
-        <br>
-        {{user.lastName}}
-        <p nbInput type="text" name=lastname value=""></p>
-
-        StudentId:
+        <img class="profileImage" [src]="base64Image">
+        <h6> {{user.fullName}}</h6>
+        <strong>
+            StudentId
+        </strong>
         <br>
         {{user.studentId}}
-        <p nbInput type="text" name=lastname value=""></p>
-
-        Role:
-        <br>
-        {{user.roles}}
-        <p nbInput type="text" name=lastname value=""></p>
-        <br>   
+        <hr/>
+        <strong>
+            Roles
+        </strong>
+        <div>
+            {{getUserRolesAsString()}}
+        </div>
+        <hr/> 
         <div>
             <button nbButton status="danger" type="button" (click)="confirmDeletion(user)">Delete my profile</button>
         </div>

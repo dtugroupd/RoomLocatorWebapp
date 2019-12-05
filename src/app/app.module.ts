@@ -80,6 +80,7 @@ const appRoutes: Routes = [
     UserDeleteComponent,
     EventCreateMapPopupComponentComponent,
     UserProfileComponent,
+    UserDeleteMeComponent
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -94,9 +95,7 @@ const appRoutes: Routes = [
     UserDeleteComponent,
     EventCreateMapPopupComponentComponent,
     EventCreateComponent,
-    UserProfileComponent,
     UserDeleteMeComponent
-
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {

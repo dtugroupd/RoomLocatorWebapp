@@ -9,7 +9,7 @@ import { AuthRouteGuard } from './_services/_guards/auth-guard.service';
 import { AccessDeniedComponent } from './components/access_denied/access-denied.component';
 import { AdminPageComponent } from './components/admin_page/admin-page.component';
 import { LoginComponent } from './components/login/login.component';
-import {UserprofileComponent} from './components/userprofile/userprofile.component';
+import { UserProfileComponent } from './components/userprofile/userprofile.component';
 
 
 const routes: Routes = [
@@ -53,7 +53,7 @@ const routes: Routes = [
   },
   {
     path: 'userprofile',
-    component: UserprofileComponent,
+    component: UserProfileComponent,
     canActivate: [AuthRouteGuard]
   },
 
