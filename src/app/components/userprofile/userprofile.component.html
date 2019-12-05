@@ -1,0 +1,39 @@
+<!--
+    author: Hamed Kadkhodaie, s083485
+    author: Amal Qasim, s132957user
+-->
+<nb-card class="profile">
+
+    <nb-card-header center> <h2 center>DTU Profile</h2> </nb-card-header>
+
+      <nb-card-body>
+        First name:
+        <br>
+        {{user.firstName}}
+        <p nbInput type="text" name=firstname value=""></p>
+
+        Last name:
+        <br>
+        {{user.lastName}}
+        <p nbInput type="text" name=lastname value=""></p>
+
+        StudentId:
+        <br>
+        {{user.studentId}}
+        <p nbInput type="text" name=lastname value=""></p>
+
+        Role:
+        <br>
+        {{user.roles}}
+        <p nbInput type="text" name=lastname value=""></p>
+        <br>   
+        <div>
+            <button nbButton status="danger" type="button" (click)="confirmDeletion(user)">Delete my profile</button>
+        </div>
+      
+    </nb-card-body>
+
+</nb-card>
+
+
+

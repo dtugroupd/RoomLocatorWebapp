@@ -18,3 +18,16 @@ export class SetAcceptedDisclaimer {
     constructor(public studentId: string) {}
     static readonly type = '[User Disclaimer] Set Accept';
 }
+
+export class DeleteUser {
+    constructor(public studentId: string) {}
+    static readonly type = '[User] Delete';
+}
+
+export class DeleteMe {
+    static readonly type = '[Me] Delete';
+}
+
+
+
+

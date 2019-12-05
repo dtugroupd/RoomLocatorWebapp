@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { MazemapComponent } from './components/mazemap/mazemap.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import {
   NbThemeModule, NbLayoutModule, NbButtonModule, NbListModule,
   NbCardModule, NbDialogModule, NbToastrModule, NbAccordionModule,
@@ -49,6 +50,9 @@ import { UserDeleteComponent } from './components/user-delete/user-delete.compon
 import { UserDisclaimerState } from './_states/user.state';
 import { ShowFeedbackComponent } from './components/showFeedback/show-feedback.component';
 import { EventCreateMapPopupComponentComponent } from './components/event-create-map-popup-component/event-create-map-popup-component.component';
+import { UserProfileComponent } from './components/userprofile/userprofile.component';
+import { UserDeleteMeComponent } from './components/user-delete-me/user-delete-me.component';
+
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
@@ -74,7 +78,8 @@ const appRoutes: Routes = [
     LoginComponent,
     EventUpdateComponent,
     UserDeleteComponent,
-    EventCreateMapPopupComponentComponent
+    EventCreateMapPopupComponentComponent,
+    UserProfileComponent,
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -88,7 +93,10 @@ const appRoutes: Routes = [
     EventUpdateComponent,
     UserDeleteComponent,
     EventCreateMapPopupComponentComponent,
-    EventCreateComponent
+    EventCreateComponent,
+    UserProfileComponent,
+    UserDeleteMeComponent
+
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {

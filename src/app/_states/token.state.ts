@@ -3,20 +3,33 @@
  * @author Anders Wiberg Olsen, s165241
  */
 
-import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { Login, SetTokenAndUser, SetIsLoading, LoginError, Logout, LoginSuccess } from '../_actions/token.actions';
-import { UserService } from '../_services/user.service';
-import { User, LoginModel, AuthenticatedModel, Role } from '../models/login/user.model';
-import { tap } from 'rxjs/operators';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { ErrorModel } from '../models/general/error.model';
-import { local } from 'd3';
+import { State, Action, StateContext, Selector } from "@ngxs/store";
+import {
+  Login,
+  SetTokenAndUser,
+  SetIsLoading,
+  LoginError,
+  Logout,
+  LoginSuccess
+} from "../_actions/token.actions";
+import { UserService } from "../_services/user.service";
+import {
+  User,
+  LoginModel,
+  AuthenticatedModel,
+  Role
+} from "../models/login/user.model";
+import { tap } from "rxjs/operators";
+import { JwtHelperService } from "@auth0/angular-jwt";
+import { ErrorModel } from "../models/general/error.model";
+import { local } from "d3";
+import { DeleteMe } from "../_actions/user.actions";
 
 export class TokenStateModel {
-    token?: string;
-    user: User;
-    loginLoading: boolean = false;
-    error: ErrorModel;
+  token?: string;
+  user: User;
+  loginLoading: boolean = false;
+  error: ErrorModel;
 }
 
 @State<TokenStateModel>({
@@ -50,7 +63,7 @@ export class TokenState {
   static getUserAdminLocations(state: TokenStateModel): Role[] {
     if (state.user && state.user.roles) {
       return state.user.roles.filter(
-        role => role.locationId && role.name === 'admin'
+        role => role.locationId && role.name === "admin"
       );
     }
   }
@@ -58,8 +71,8 @@ export class TokenState {
   @Selector()
   static getUserResearcherLocations(state: TokenStateModel): Role[] {
     if (state.user && state.user.roles) {
-        return state.user.roles.filter(
-            role => role.locationId && role.name === 'researcher'
+      return state.user.roles.filter(
+        role => role.locationId && role.name === "researcher"
       );
     }
   }
@@ -162,5 +175,18 @@ export class TokenState {
       loginLoading: false,
       error: null
     });
+  }
+
+  @Action(DeleteMe)
+  deleteMe({ getState, setState }: StateContext<TokenStateModel>) {
+    return this.userService.deleteMe().pipe(
+      tap(result => {
+        const s = getState();
+        setState({
+          ...s,
+          user: result
+        });
+      })
+    );
   }
 }

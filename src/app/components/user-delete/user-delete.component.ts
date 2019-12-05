@@ -15,6 +15,8 @@ import { AdminState } from 'src/app/_states/admin.state';
   templateUrl: './user-delete.component.html',
   styleUrls: ['./user-delete.component.scss']
 })
+
+
 export class UserDeleteComponent {
   users: any;
   user: User;
