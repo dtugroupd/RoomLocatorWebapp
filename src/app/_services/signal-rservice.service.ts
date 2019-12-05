@@ -49,5 +49,6 @@ export class SignalRServiceService {
         this.store.dispatch(new GetUsers());
       }
     });
+    this.connection.on('created-user', user => this.store.dispatch(new GetUsers()));
   }
 }
