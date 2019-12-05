@@ -20,9 +20,7 @@ import { UserDeleteMeComponent } from '../user-delete-me/user-delete-me.componen
 })
 
 export class UserprofileComponent  {
-
-  public dtuImageUrl =require("./image/dtu_corp.png");
-  
+    
   user: User;
 
   @Select( TokenState.getUser ) user$: Observable<User>;
@@ -39,8 +37,13 @@ export class UserprofileComponent  {
   const userContext = {user: u};
   const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true, context: userContext };
 
-  this.dialogService.open(UserDeleteMeComponent, settings).onClose.subscribe(() => {
-    this.store.dispatch( new Logout() );
+  this.dialogService.open(UserDeleteMeComponent, settings).onClose.subscribe(del => {
+    
+    if(del){
+      this.store.dispatch( new Logout() );
+    }
+    
+    
   });
 
 }

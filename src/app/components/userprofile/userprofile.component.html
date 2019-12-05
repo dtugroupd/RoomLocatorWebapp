@@ -1,12 +1,12 @@
 <!--
     author: Hamed Kadkhodaie, s083485
+    author: Amal Qasim, s132957user
 -->
-<nb-layout center>
+<nb-card class="profile">
 
-    <nb-layout-header center> <h2 center>DTU Profile</h2> </nb-layout-header>
+    <nb-card-header center> <h2 center>DTU Profile</h2> </nb-card-header>
 
-    <nb-layout-column>
-      
+      <nb-card-body>
         First name:
         <br>
         {{user.firstName}}
@@ -27,19 +27,13 @@
         {{user.roles}}
         <p nbInput type="text" name=lastname value=""></p>
         <br>   
-    
-    </nb-layout-column>
-
-    <nb-layout-footer>     
-      <a href="http://dtu.dk" class="btn btn-default">Go to DTU</a>
-    </nb-layout-footer> 
-
-    <nb-layout-footer>
         <div>
             <button nbButton status="danger" type="button" (click)="confirmDeletion(user)">Delete my profile</button>
         </div>
-    </nb-layout-footer>
-  </nb-layout>
+      
+    </nb-card-body>
+
+</nb-card>
 
 
 

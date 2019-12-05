@@ -26,6 +26,11 @@
     }
   }
 
+  .profile {
+    width: 100%;
+    height: 100%;
+  }
+
   .user-name,
   .user-title {
     @include nb-rtl(text-align, right);

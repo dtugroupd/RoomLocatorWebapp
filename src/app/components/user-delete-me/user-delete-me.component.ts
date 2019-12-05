@@ -1,3 +1,8 @@
+/**
+ * @author Hamed kadkhodaie, s083485
+ * @author Amal Qasim, s132957
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { NbDialogRef } from '@nebular/theme';
@@ -25,7 +30,7 @@ export class UserDeleteMeComponent {
 
   deleteUser() {
     this.store.dispatch(new DeleteMe()).subscribe(() => {
-      this.dialogRef.close();
+      this.dialogRef.close(true);
     });
   }
 
