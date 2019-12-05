@@ -2,7 +2,7 @@
  * @author Hamed kadkhodaie, s083485
  */
 
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { NbDialogService } from "@nebular/theme";
 import { User } from "src/app/models/login/user.model";
 import { Observable } from "rxjs";
