@@ -35,4 +35,26 @@
     @include nb-ltr(margin-left, 0.5rem);
     @include nb-rtl(margin-right, 0.5rem);
   }
+  .button {
+    background-color: #1c87c9;
+    border: none;
+    color: white;
+    padding: 20px 34px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+    }
+
+    a.button {
+      -webkit-appearance: button;
+      -moz-appearance: button;
+      appearance: button;
+  
+      text-decoration: none;
+      color: initial;
+  }
+
 }

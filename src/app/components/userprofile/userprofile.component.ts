@@ -20,6 +20,9 @@ import { UserDeleteMeComponent } from '../user-delete-me/user-delete-me.componen
 })
 
 export class UserprofileComponent  {
+
+  public dtuImageUrl =require("./image/dtu_corp.png");
+  
   user: User;
 
   @Select( TokenState.getUser ) user$: Observable<User>;

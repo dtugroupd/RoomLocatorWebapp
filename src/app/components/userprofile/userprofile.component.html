@@ -1,59 +1,45 @@
 <!--
     author: Hamed Kadkhodaie, s083485
 -->
+<nb-layout center>
 
+    <nb-layout-header center> <h2 center>DTU Profile</h2> </nb-layout-header>
 
-<!--
-<div class="user-container">
-    <div *ngIf="imageBackgroundStyle" class="user-picture image" [style.background-image]="imageBackgroundStyle">
-      <nb-badge *ngIf="badgeText" [text]="badgeText" [status]="badgeStatus" [position]="badgePosition"></nb-badge>
-    </div>
-    <div *ngIf="!imageBackgroundStyle" class="user-picture initials" [style.background-color]="color">
-      <ng-container *ngIf="showInitials">
-        {{ getInitials() }}
-      </ng-container>
-      <nb-badge *ngIf="badgeText" [text]="badgeText" [status]="badgeStatus" [position]="badgePosition"></nb-badge>
-    </div>
-  
-    <div class="info-container">
-      <div *ngIf="showName && name" class="user-name">{{ name }}</div>
-      <div *ngIf="showTitle && title" class="user-title">{{ title }}</div>
-    </div>
-  </div>
-  -->
+    <nb-layout-column>
+      
+        First name:
+        <br>
+        {{user.firstName}}
+        <p nbInput type="text" name=firstname value=""></p>
 
-<html>
-   
-<body>
-  <div>
-      <nb-layout-header>DTU Profile</nb-layout-header>
+        Last name:
+        <br>
+        {{user.lastName}}
+        <p nbInput type="text" name=lastname value=""></p>
 
-  </div>
-    <br>
-<div>
+        StudentId:
+        <br>
+        {{user.studentId}}
+        <p nbInput type="text" name=lastname value=""></p>
 
-  First name:<br>
-  <p nbInput type="text" name=firstname value=""></p>
-  {{user.firstName}}
-  <br>
+        Role:
+        <br>
+        {{user.roles}}
+        <p nbInput type="text" name=lastname value=""></p>
+        <br>   
+    
+    </nb-layout-column>
 
-  Last name:<br>
-  <nb-user nbInput type="text" name="{{ (user$ | async).fullName }}" > </nb-user>
-  
-  <br>
+    <nb-layout-footer>     
+      <a href="http://dtu.dk" class="btn btn-default">Go to DTU</a>
+    </nb-layout-footer> 
 
-  studienr:<br>
-  <p nbInput type="text" name="studienr" value=""></p>
-  {{user.studentId}}
-  <br>
-  
-  <button nbButton type="button" (click)="confirmDeletion(user)">Delete my profile</button> 
-
-</div>
-
-</body>
-
-</html>
+    <nb-layout-footer>
+        <div>
+            <button nbButton status="danger" type="button" (click)="confirmDeletion(user)">Delete my profile</button>
+        </div>
+    </nb-layout-footer>
+  </nb-layout>
 
 
 
