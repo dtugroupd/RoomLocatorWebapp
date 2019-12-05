@@ -1,0 +1,16 @@
+<!--
+    author: Hadi Horani, s144885
+-->
+
+<nb-card>
+    <nb-card-header>
+            Deletion of user {{user.studentId}} ({{user.fullName}})
+    </nb-card-header>
+    <nb-card-body>
+            <p>Are you sure you want to delete this user?</p>
+    </nb-card-body>
+    <nb-card-footer>
+            <button nbButton (click)="close()" status="primary" type="button">No</button>
+            <button nbButton (click)="deleteUser()" status="danger" type="button">Yes</button>
+    </nb-card-footer>
+</nb-card>

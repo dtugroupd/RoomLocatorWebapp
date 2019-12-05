@@ -10,6 +10,8 @@ import { Observable } from 'rxjs';
 import { Store,Select} from '@ngxs/store';
 import {TokenState} from 'src/app/_states/token.state'
 import { UserDeleteComponent } from '../user-delete/user-delete.component';
+import { Logout } from 'src/app/_actions/token.actions';
+import { UserDeleteMeComponent } from '../user-delete-me/user-delete-me.component';
 
 @Component({
   selector: 'app-userprofile',
@@ -18,12 +20,12 @@ import { UserDeleteComponent } from '../user-delete/user-delete.component';
 })
 
 export class UserprofileComponent  {
-  user:User;
+  user: User;
 
   @Select( TokenState.getUser ) user$: Observable<User>;
  
- constructor(private store:Store, private dialogService: NbDialogService) { 
-   this.user$.subscribe(x =>{ 
+ constructor(private store: Store, private dialogService: NbDialogService) {
+   this.user$.subscribe(x => { 
      this.user = x;
    });
  }
@@ -34,12 +36,9 @@ export class UserprofileComponent  {
   const userContext = {user: u};
   const settings = { autoFocus: false, closeOnBackdropClick: true, closeOnEsc: true, context: userContext };
 
-  this.dialogService.open(UserDeleteComponent, settings).onClose.subscribe(() => {
+  this.dialogService.open(UserDeleteMeComponent, settings).onClose.subscribe(() => {
+    this.store.dispatch( new Logout() );
   });
-}
 
-/*    deleteUser() {
-   this.store.dispatch(new DeleteUser(this.user.studentId))
-   
-      } */
+}
 }

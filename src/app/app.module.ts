@@ -50,6 +50,7 @@ import { UserDeleteComponent } from './components/user-delete/user-delete.compon
 import { UserDisclaimerState } from './_states/user.state';
 import { ShowFeedbackComponent } from './components/showFeedback/show-feedback.component';
 import { UserprofileComponent } from './components/userprofile/userprofile.component';
+import { UserDeleteMeComponent } from './components/user-delete-me/user-delete-me.component';
 
 
 const appRoutes: Routes = [
@@ -77,6 +78,7 @@ const appRoutes: Routes = [
     EventUpdateComponent,
     UserDeleteComponent,
     UserprofileComponent,
+    UserDeleteMeComponent,
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -90,6 +92,7 @@ const appRoutes: Routes = [
     EventUpdateComponent,
     UserDeleteComponent,
     UserprofileComponent,
+    UserDeleteMeComponent
 
   ],
   imports: [
