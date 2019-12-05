@@ -6,6 +6,8 @@ import { TokenState } from '../_states/token.state';
 import { Observable } from 'rxjs';
 import { User } from '../models/login/user.model';
 import { Logout } from '../_actions/token.actions';
+import { GetEvents } from '../_actions/event.actions';
+import { NbToastrService } from '@nebular/theme';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,7 @@ export class SignalRServiceService {
   public connection: HubConnection;
   private userId: string;
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private toaster: NbToastrService) {
     this.user$.subscribe(user => {
       if (user) {
         this.userId = user.id;
@@ -36,6 +38,7 @@ export class SignalRServiceService {
 
       this.connection.on('message', x => console.log(`Received Message:`, x));
       this.listenUserChanges();
+      this.listenEventChanges();
   }
 
   private listenUserChanges() {
@@ -50,5 +53,10 @@ export class SignalRServiceService {
       }
     });
     this.connection.on('created-user', user => this.store.dispatch(new GetUsers()));
+  }
+
+  private listenEventChanges() {
+    this.connection.on('events-changed', () => this.store.dispatch(new GetEvents()));
+    this.connection.on('new-event', event => this.toaster.info(`A new event was added at ${event.locationName}: ${event.title}`, "New Event!", { duration: 10000 }));
   }
 }
