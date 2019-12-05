@@ -1,5 +1,6 @@
 /**
  * @author Andreas Gøricke, s153804
+ * @author Anders Wiberg Olsen, s165241
  */
 
 
