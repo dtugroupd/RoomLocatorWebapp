@@ -26,66 +26,62 @@ import { GetCurrentFeedback } from './_actions/feedback.actions';
 import { SetTokenAndUser, Logout } from './_actions/token.actions';
 import { Token } from '@angular/compiler';
 import { UserDeleteComponent } from './components/user-delete/user-delete.component';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { SignalRServiceService } from './_services/signal-rservice.service';
 
 
-@Component( {
+@Component({
   selector: 'app-root, nb-context-menu-click',
   templateUrl: './app.component.html',
-  styleUrls: [ './app.component.scss' ],
-  styles: [ `
+  styleUrls: ['./app.component.scss'],
+  styles: [`
   :host nb-layout-header ::ng-deep nav {
     justify-content: flex-end;
   }
 `],
   animations: [
-    trigger( 'toggleMobileMenu', [
-      state( 'show', style( {
+    trigger('toggleMobileMenu', [
+      state('show', style({
         width: '80%',
         opacity: 1,
-      } ) ),
-      state( 'hide', style( {
+      })),
+      state('hide', style({
         width: '0px',
         opacity: 0.0,
-      } ) ),
-      transition( 'show => hide', [
-        animate( '0.15s ease-in-out' )
-      ] ),
-      transition( 'hide => show', [
-        animate( '0.15s ease-in-out' )
-      ] ),
-    ] ),
+      })),
+      transition('show => hide', [
+        animate('0.15s ease-in-out')
+      ]),
+      transition('hide => show', [
+        animate('0.15s ease-in-out')
+      ]),
+    ]),
   ]
-} )
+})
 
-export class AppComponent implements OnInit, OnDestroy
-{
+export class AppComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   browserRefresh: any;
   currentUser: User;
   currentToken: Token;
 
-  constructor ( private store: Store, private router: Router, private themeService: NbThemeService,
-    private nbMenuService: NbMenuService, @Inject( NB_WINDOW ) private window )
-  {
-    const preferredTheme = localStorage.getItem( "theme" );
-    if ( preferredTheme )
-    {
+  constructor(private store: Store, private router: Router, private themeService: NbThemeService,
+    private nbMenuService: NbMenuService, @Inject(NB_WINDOW) private window, private signalRService: SignalRServiceService) {
+    const preferredTheme = localStorage.getItem("theme");
+    if (preferredTheme) {
       this.selectedTheme = preferredTheme;
-      this.themeService.changeTheme( preferredTheme );
+      this.themeService.changeTheme(preferredTheme);
     }
 
-    this.subscription = router.events.subscribe( ( event ) =>
-    {
-      if ( event instanceof NavigationStart )
-      {
+    this.subscription = router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
         this.browserRefresh = !router.navigated;
 
-        if ( this.browserRefresh )
-        {
-          this.store.dispatch( new SetTokenAndUser() );
+        if (this.browserRefresh) {
+          this.store.dispatch(new SetTokenAndUser());
         }
       }
-    } );
+    });
   }
   title = 'RoomLocatorWebapp';
   activeSection: LibrarySection;
@@ -96,12 +92,13 @@ export class AppComponent implements OnInit, OnDestroy
   faBars = faBars;
   base64Image: string = "";
   selectedTheme = 'default';
-  themes = [ "Default", "Dark", "Cosmic" ];
+  themes = ["Default", "Dark", "Cosmic"];
 
-  @Select( MazemapState.getActiveSection ) activeSection$: Observable<LibrarySection>;
-  @Select( TokenState.getUser ) user$: Observable<User>;
-  @Select( TokenState.isAuthenticated ) isAuthenticated$: Observable<boolean>;
-  @Select( MazemapState.getActivateFeedbackAndStatus ) viewIsMazemap$: Observable<boolean>;
+  @Select(MazemapState.getActiveSection) activeSection$: Observable<LibrarySection>;
+  @Select(TokenState.getUser) user$: Observable<User>;
+  @Select(TokenState.isAuthenticated) isAuthenticated$: Observable<boolean>;
+  @Select(TokenState.getToken) token$: Observable<string>;
+  @Select(MazemapState.getActivateFeedbackAndStatus) viewIsMazemap$: Observable<boolean>;
 
   items = [
     { title: 'Profile' },
@@ -133,52 +130,44 @@ export class AppComponent implements OnInit, OnDestroy
   ];
 
 
-  changeTheme ( newTheme: string ): void
-  {
+  changeTheme(newTheme: string): void {
     this.selectedTheme = newTheme.toLowerCase();
-    localStorage.setItem( "theme", this.selectedTheme );
-    this.themeService.changeTheme( this.selectedTheme );
+    localStorage.setItem("theme", this.selectedTheme);
+    this.themeService.changeTheme(this.selectedTheme);
   }
 
-  ngOnInit ()
-  {
-    this.activeSection$.subscribe( x =>
-    {
+  ngOnInit() {
+    this.activeSection$.subscribe(x => {
       this.activeSection = x;
-    } );
+    });
 
-    this.user$.subscribe( x =>
-    {
-      if ( x )
-      {
-        this.store.dispatch( new GetCurrentFeedback( x.id ) );
-        this.base64Image = `data:image/png;base64,${ x.profileImage }`;
+    this.user$.subscribe(x => {
+      if (x) {
+        this.store.dispatch(new GetCurrentFeedback(x.id));
+        this.base64Image = `data:image/png;base64,${x.profileImage}`;
       }
-    } );
+    });
 
-    this.store.dispatch( new GetSurveys() );
+    this.store.dispatch(new GetSurveys());
 
-    this.router.events.subscribe( x => {
-      if ( x instanceof NavigationEnd ) {
-        switch ( x.urlAfterRedirects )
-        {
+    this.router.events.subscribe(x => {
+      if (x instanceof NavigationEnd) {
+        switch (x.urlAfterRedirects) {
           case '/mazemap':
-            this.store.dispatch( new SetActivateFeedbackAndStatus( true ) );
+            this.store.dispatch(new SetActivateFeedbackAndStatus(true));
             break;
           default:
             break;
         }
       }
-    } );
-
+    });
 
     this.nbMenuService.onItemClick()
       .pipe(
-        filter( ( { tag } ) => tag === 'my-context-menu' ),
-        map( ( { item: { title } } ) => title ),
+        filter(({ tag }) => tag === 'my-context-menu'),
+        map(({ item: { title } }) => title),
       )
-      .subscribe( title =>
-      {
+      .subscribe(title => {
 
         if ( title === 'Logout' )
         {
@@ -188,28 +177,30 @@ export class AppComponent implements OnInit, OnDestroy
         if (title === 'Profile'){
           this.router.navigateByUrl('/userprofile');  
         }
-      }
-      );
+      });
+
+    this.token$.subscribe(token => {
+      if (!token) { return; }
+
+      this.signalRService.start(token);      
+    });
+    console.error("after the subbing")
   }
 
-
-  ngOnDestroy ()
-  {
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
-  userHasAccess ( link: string ): Observable<boolean>
-  {
-    switch ( link )
-    {
+  userHasAccess(link: string): Observable<boolean> {
+    switch (link) {
       case '/':
-        return new Observable( ( observer: any ) => observer.next( true ) );
+        return new Observable((observer: any) => observer.next(true));
       case '/mazemap':
-        return new Observable( ( observer: any ) => observer.next( true ) );
+        return new Observable((observer: any) => observer.next(true));
       case '/calendar':
-        return new Observable( ( observer: any ) => observer.next( true ) );
+        return new Observable((observer: any) => observer.next(true));
       case '/admin':
-        return this.userHasRole( [ 'admin' ] ).pipe( tap( val => val ) );
+        return this.userHasRole(['admin']).pipe(tap(val => val));
       case '/survey-management':
         return this.userHasRole( [ 'library', 'researcher' ] ).pipe( tap( val => val ) );
       case '/userprofile':
@@ -220,26 +211,21 @@ export class AppComponent implements OnInit, OnDestroy
     }
   }
 
-  userHasRole ( roles: string[] ): Observable<boolean>
-  {
-    return this.user$.pipe( map( user =>
-    {
-      if ( user && user.roles )
-      {
-        return roles.filter( role => user.roles.includes( role ) ).length !== 0;
+  userHasRole(roles: string[]): Observable<boolean> {
+    return this.user$.pipe(map(user => {
+      if (user && user.roles) {
+        return roles.filter(role => user.roles.includes(role)).length !== 0;
       }
 
       return false;
-    } ) );
+    }));
   }
 
-  toggleMobileMenu ()
-  {
+  toggleMobileMenu() {
     this.mobileMenuToggled = !this.mobileMenuToggled;
   }
 
-  hideMobileMenu ()
-  {
+  hideMobileMenu() {
     this.mobileMenuToggled = false;
   }
 }
