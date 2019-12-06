@@ -53,6 +53,8 @@ import { EventCreateMapPopupComponentComponent } from './components/event-create
 import { UserProfileComponent } from './components/userprofile/userprofile.component';
 import { UserDeleteMeComponent } from './components/user-delete-me/user-delete-me.component';
 
+import { SocketStatusComponent } from './components/socket-status/socket-status.component';
+import { SocketState } from './_states/socket.state';
 
 const appRoutes: Routes = [
   { path: 'https://auth.dtu.dk/dtu/?service=se2-webapp04.compute.dtu.dk', component: AppComponent },
@@ -80,7 +82,8 @@ const appRoutes: Routes = [
     UserDeleteComponent,
     EventCreateMapPopupComponentComponent,
     UserProfileComponent,
-    UserDeleteMeComponent
+    UserDeleteMeComponent,
+    SocketStatusComponent
   ],
   entryComponents: [
     SurveyCreateActionComponent,
@@ -95,7 +98,8 @@ const appRoutes: Routes = [
     UserDeleteComponent,
     EventCreateMapPopupComponentComponent,
     EventCreateComponent,
-    UserDeleteMeComponent
+    UserDeleteMeComponent,
+    SocketStatusComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes, {
@@ -140,7 +144,8 @@ const appRoutes: Routes = [
       FeedbackState,
       AdminState,
       EventState,
-      UserDisclaimerState
+      UserDisclaimerState,
+      SocketState,
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot()

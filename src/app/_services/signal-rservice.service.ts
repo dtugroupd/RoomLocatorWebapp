@@ -9,6 +9,7 @@ import { Logout, FetchUserSuccess } from '../_actions/token.actions';
 import { GetEvents } from '../_actions/event.actions';
 import { NbToastrService } from '@nebular/theme';
 import { environment } from 'src/environments/environment';
+import { SocketConnected, SocketConnecting } from '../_actions/socket.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -31,15 +32,19 @@ export class SignalRServiceService {
     this.connection = new HubConnectionBuilder()
       .configureLogging(LogLevel.Information)
       .withUrl(`${environment.backendUrl}/api/socket`, { accessTokenFactory: () => token })
-      .withAutomaticReconnect()
+      .withAutomaticReconnect([1000, 1000, 2000, 2000, 5000, 5000, 10000, 10000, 300000])
       .build();
       this.connection.start().then(() => {
         console.info("Connected using SignalR");
+        this.store.dispatch(new SocketConnected(this.connection.connectionId));
       }).catch(err => console.error(`SignalR Connection failed with ${err}`));
 
       this.connection.on('message', x => console.log(`Received Message:`, x));
       this.listenUserChanges();
       this.listenEventChanges();
+      this.connection.onreconnected(() => this.store.dispatch(new SocketConnected(this.connection.connectionId)));
+      this.connection.onreconnecting(() => this.store.dispatch(new SocketConnecting()));
+      this.connection.onclose(() => console.warn("closing connection"))
   }
 
   private listenUserChanges() {

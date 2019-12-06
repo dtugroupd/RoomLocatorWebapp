@@ -141,3 +141,12 @@ $nb-enable-css-custom-properties: true; // <-- enable css custom properties
 .no-padding {
     padding: 0 !important;
 }
+
+app-socket-status {
+    padding: 0;
+}
+
+img.logo {
+    height: 24px;
+    width: 24px;
+}

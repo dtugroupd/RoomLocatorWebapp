@@ -25,7 +25,7 @@ import { GetCurrentFeedback } from './_actions/feedback.actions';
 import { SetTokenAndUser, Logout } from './_actions/token.actions';
 import { Token } from '@angular/compiler';
 import { UserDeleteComponent } from './components/user-delete/user-delete.component';
-import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { HubConnectionBuilder, LogLevel, StreamInvocationMessage } from '@microsoft/signalr';
 import { SignalRServiceService } from './_services/signal-rservice.service';
 
 
@@ -63,6 +63,7 @@ export class AppComponent implements OnInit, OnDestroy {
   browserRefresh: any;
   currentUser: User;
   currentToken: Token;
+  logoHref: string = 'assets/cclogo.png';
 
   constructor(private store: Store, private router: Router, private themeService: NbThemeService,
     private nbMenuService: NbMenuService, @Inject(NB_WINDOW) private window, private signalRService: SignalRServiceService) {
@@ -134,6 +135,14 @@ export class AppComponent implements OnInit, OnDestroy {
       this.activeSection = x;
     });
 
+    this.themeService.onThemeChange().subscribe(theme => {
+      if (theme.name == 'default') {
+        this.logoHref = 'assets/cclogo.png';
+      } else {
+        this.logoHref = 'assets/cclogo-white.png';
+      }
+    });
+
     this.user$.subscribe(x => {
       if (x) {
         this.base64Image = `data:image/png;base64,${x.profileImage}`;
@@ -172,7 +181,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.token$.subscribe(token => {
       if (!token) { return; }
 
-      this.signalRService.start(token);      
+      this.signalRService.start(token);
     });
     console.error("after the subbing")
   }
@@ -198,7 +207,6 @@ export class AppComponent implements OnInit, OnDestroy {
         return this.userHasRole( [ 'researcher', 'admin' ] ).pipe( tap( val => val ) );
       default:
         return new Observable( ( observer: any ) => observer.next( false ) );
-        
     }
   }
 
