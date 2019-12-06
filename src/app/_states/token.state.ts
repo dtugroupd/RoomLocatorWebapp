@@ -25,9 +25,7 @@ import {
 import { tap } from "rxjs/operators";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { ErrorModel } from "../models/general/error.model";
-import { local } from "d3";
 import { DeleteMe } from "../_actions/user.actions";
-import { dispatch } from 'rxjs/internal/observable/pairs';
 
 export class TokenStateModel {
   token?: string;
@@ -111,28 +109,34 @@ export class TokenState {
       patchState({ user: null, loginLoading: false, error: null });
     } else {
       patchState({ token });
+      console.warn("1 will fetch")
       return dispatch(new FetchUser());
     }
   }
 
   @Action(FetchUser)
   fetchUser( { dispatch }: StateContext<TokenStateModel>) {
+    console.warn("2 fetching")
     return this.userService.fetchUser().pipe(
       tap((user: User) => {
+        console.warn("3 I succeeded")
         dispatch(new FetchUserSuccess(user))
       }, err => {
+        console.warn("3 i failed")
         dispatch(new FetchUserError(err.error));
       })
     )
   }
 
   @Action(FetchUserSuccess)
-  fetchUserSuccess({patchState}: StateContext<TokenStateModel>, user: User) {
+  fetchUserSuccess({patchState}: StateContext<TokenStateModel>, { user }: FetchUserSuccess) {
+    console.warn('4 i have a success')
     patchState({ user, loginLoading: false, error: null });
   }
 
   @Action(FetchUserError)
-  fetchUserError({patchState}: StateContext<TokenStateModel>, error: ErrorModel) {
+  fetchUserError({patchState}: StateContext<TokenStateModel>, { error }: FetchUserError) {
+    console.warn("4 i have a failure")
     patchState({ error, loginLoading: false });
   }
 
