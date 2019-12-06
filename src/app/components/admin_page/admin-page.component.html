@@ -46,7 +46,7 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index">
+        <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index" (click)="setClickedRow(i)">
         </tr>
 
 
@@ -57,6 +57,6 @@
         <nb-select placeholder="Select a role" [(selected)]="selectedRole">
             <nb-option *ngFor="let role of roles" [value]="role.name">{{role.name}}</nb-option>
         </nb-select>
-        <button nbButton outline status="success" type="button" (click)="saveNewRole()" *ngIf="selectedRole != null">Save</button>
+        <button nbButton outline status="success" type="button" (click)="saveNewRole()" *ngIf="selectedRole != null">Save</button> {{selectedRow}} {{selectedUserId}} as
     </div>
 </div>
