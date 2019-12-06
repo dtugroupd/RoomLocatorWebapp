@@ -1,5 +1,5 @@
 import { State, Selector, Action, StateContext } from '@ngxs/store';
-import { SocketConnecting, SocketConnected, SetSocketStatus } from '../_actions/socket.actions';
+import { SocketConnecting, SocketConnected } from '../_actions/socket.actions';
 
 export class SocketStateModel {
     status: string;
