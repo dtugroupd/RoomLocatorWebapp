@@ -10,7 +10,10 @@ import {
   SetIsLoading,
   LoginError,
   Logout,
-  LoginSuccess
+  LoginSuccess,
+  FetchUserSuccess,
+  FetchUser,
+  FetchUserError
 } from "../_actions/token.actions";
 import { UserService } from "../_services/user.service";
 import {
@@ -24,6 +27,7 @@ import { JwtHelperService } from "@auth0/angular-jwt";
 import { ErrorModel } from "../models/general/error.model";
 import { local } from "d3";
 import { DeleteMe } from "../_actions/user.actions";
+import { dispatch } from 'rxjs/internal/observable/pairs';
 
 export class TokenStateModel {
   token?: string;
@@ -95,7 +99,7 @@ export class TokenState {
   }
 
   @Action(SetTokenAndUser)
-  setTokenAndUser({ patchState, setState }: StateContext<TokenStateModel>) {
+  setTokenAndUser({ patchState, setState, dispatch }: StateContext<TokenStateModel>) {
     const jwtHelper = new JwtHelperService();
     const token = localStorage.getItem("token");
 
@@ -107,17 +111,29 @@ export class TokenState {
       patchState({ user: null, loginLoading: false, error: null });
     } else {
       patchState({ token });
-      return this.userService.fetchUser().pipe(
-        tap(
-          (user: User) => {
-            setState({ user, token, loginLoading: false, error: null });
-          },
-          x => {
-            patchState({ loginLoading: false, error: x.error });
-          }
-        )
-      );
+      return dispatch(new FetchUser());
     }
+  }
+
+  @Action(FetchUser)
+  fetchUser( { dispatch }: StateContext<TokenStateModel>) {
+    return this.userService.fetchUser().pipe(
+      tap((user: User) => {
+        dispatch(new FetchUserSuccess(user))
+      }, err => {
+        dispatch(new FetchUserError(err.error));
+      })
+    )
+  }
+
+  @Action(FetchUserSuccess)
+  fetchUserSuccess({patchState}: StateContext<TokenStateModel>, user: User) {
+    patchState({ user, loginLoading: false, error: null });
+  }
+
+  @Action(FetchUserError)
+  fetchUserError({patchState}: StateContext<TokenStateModel>, error: ErrorModel) {
+    patchState({ error, loginLoading: false });
   }
 
   @Action(Login)

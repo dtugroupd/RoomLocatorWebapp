@@ -1,4 +1,4 @@
-import { LoginModel } from '../models/login/user.model';
+import { LoginModel, User } from '../models/login/user.model';
 import { ErrorModel } from '../models/general/error.model';
 
 /**
@@ -13,6 +13,20 @@ export class Login {
 
 export class SetTokenAndUser {
     static readonly type = '[Token] SetTokenAndUser';
+}
+
+export class FetchUser {
+    static readonly type = '[Token] Fetch User';
+}
+
+export class FetchUserSuccess {
+    static readonly type = '[Token] Fetch User Success';
+    constructor(public user: User) { }
+}
+
+export class FetchUserError {
+    static readonly type = '[Token] Fetch User Failed';
+    constructor(public error: ErrorModel) { }
 }
 
 export class SetIsLoading {
@@ -32,3 +46,4 @@ export class LoginError {
 export class Logout {
     static readonly type = '[Token] Logout';
 }
+

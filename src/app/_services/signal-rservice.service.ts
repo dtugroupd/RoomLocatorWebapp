@@ -5,7 +5,7 @@ import { GetUsersSuccess, GetUsers } from '../_actions/admin.actions';
 import { TokenState } from '../_states/token.state';
 import { Observable } from 'rxjs';
 import { User } from '../models/login/user.model';
-import { Logout } from '../_actions/token.actions';
+import { Logout, FetchUserSuccess } from '../_actions/token.actions';
 import { GetEvents } from '../_actions/event.actions';
 import { NbToastrService } from '@nebular/theme';
 import { environment } from 'src/environments/environment';
@@ -54,6 +54,7 @@ export class SignalRServiceService {
       }
     });
     this.connection.on('created-user', user => this.store.dispatch(new GetUsers()));
+    this.connection.on('updated-user', user => this.store.dispatch(new FetchUserSuccess(user)));
   }
 
   private listenEventChanges() {
