@@ -44,6 +44,7 @@ export class SurveyService extends BaseService {
   }
 
   downloadSurveyAnswers(id: number) {
+    console.warn("Downloading!!");
     return this.http.get(`${this.backendBaseUrl}/api/v1/survey/downloadsurveyanswers/${id}`, { responseType: 'blob', observe: 'response' })
       .subscribe(res => {
         const filename = res.headers.get('Content-Disposition').split(/[;'=]/).pop();
@@ -54,6 +55,10 @@ export class SurveyService extends BaseService {
 
   getSurveys() {
     return this.http.get<Survey[]>(`${this.backendBaseUrl}/api/v1/survey`);
+  }
+
+  getLocationSurveys(locationId: string) {
+    return this.http.get<Survey[]>(`${this.backendBaseUrl}/api/v1/survey/getlocationsurveys/${locationId}`);
   }
 
   downLoadFile(data: any, type: string) {

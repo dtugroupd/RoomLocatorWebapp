@@ -66,3 +66,8 @@ export class AddEventToLocation {
     static readonly type = '[Location.Event] Add';
     constructor(public payload: Event) { }
 }
+
+export class GetLocationSurveys {
+    static readonly type = '[Location.Surveys] Get'
+    constructor(public payload: string) { }
+}

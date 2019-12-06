@@ -337,11 +337,13 @@ export class MazemapComponent implements OnInit, OnDestroy {
   initLocationLayers() {
     if (this.locationLayers) {
       this.locationLayers.forEach(l => {
-        this.map.addLayer(l);
-        this.map.layerEventHandler.on('click', l.id, () => {
-          this.store.dispatch(new SetActiveLocation(l.id));
-          this.activeLocationBounds = l.bounds;
-        });
+        if (!this.map.getLayer(l.id)) {
+          this.map.addLayer(l);
+          this.map.layerEventHandler.on('click', l.id, () => {
+            this.store.dispatch(new SetActiveLocation(l.id));
+            this.activeLocationBounds = l.bounds;
+          });
+        }
       });
     }
   }

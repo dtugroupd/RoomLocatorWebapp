@@ -1,18 +1,35 @@
 <!-- @author Amal Qasim, s132957 -->
- <nb-card id="feedbackDialog">
+ <nb-card id="feedbackDialog" style="max-height: 500px">
    
-   <nb-card-header>
-     Feedback
-     <button nbButton outline type="button" style="float: right;" class="close" aria-label="Close" (click) = "close()" >
-        <span aria-hidden="true">&times;</span>
-      </button>
-   </nb-card-header>
+  <nb-card-header>
+    Feedback
+    <button nbButton outline type="button" style="float: right;" class="close" aria-label="Close" (click) = "close()" >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </nb-card-header>
 
-  <nb-card-body>
+  <nb-card-body style="overflow: auto">
 
-          <p nbInput *ngFor = "let surveyAnswer of survey.surveyAnswers">
-             {{ surveyAnswer.comment }}
-          </p>
+    <div *ngIf="survey.surveyAnswers.length === 0">
+      <p style="font-size: 16px">
+        There is no feedback to see yet.
+      </p>
+    </div>
+    <div *ngFor = "let surveyAnswer of survey.surveyAnswers, let i = index" style="margin-bottom: 25px;">
+        <h6>{{ i+1 }}</h6>
+        <div *ngFor="let q of surveyAnswer.questionAnswers">
+          {{q.text}}<br/>
+          <strong>{{q.score}}</strong>
+          <hr/>
+        </div>
+        <div *ngIf="surveyAnswer.comment">
+          <strong>
+            Comment
+          </strong>
+          <br/>
+            {{ surveyAnswer.comment }}
+        </div>
+    </div>
 
     
   </nb-card-body>    

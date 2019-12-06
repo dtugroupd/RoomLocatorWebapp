@@ -46,7 +46,7 @@ export class SurveyCreateActionComponent implements OnInit {
   showCreateSurveyToast(position, status, sectionId) {
     this.toastrService.show(
       status || 'Success',
-      `Survey created on section ${sectionId}`,
+      `Saved survey`,
       { position, status });
   }
 }

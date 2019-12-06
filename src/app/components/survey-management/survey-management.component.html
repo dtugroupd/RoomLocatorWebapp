@@ -21,10 +21,10 @@
                         <nb-accordion-item-body>
                             <div style="width: 100%; margin-bottom: 20px;">
                                 <nb-actions style="float: right" size="large">
-                                    <nb-action *ngIf="!isActive(i)" title="Add to selected section"><fa-icon [icon]="faPlusSquare"></fa-icon></nb-action>
+                                    <!-- <nb-action *ngIf="!isActive(i)" title="Add to selected section"><fa-icon [icon]="faPlusSquare"></fa-icon></nb-action> -->
                                     <nb-action title="Answers" [badgeText]="surveyResponseNum(survey)" badgeStatus="info" badgePosition="top right" (click) = "open(survey)"><fa-icon [icon]="faComments"></fa-icon></nb-action>
                                     <nb-action *ngIf="survey.surveyAnswers.length > 0" title="Download answers as .csv" (click)="downloadFile(survey.id)"><fa-icon [icon]="faDownload"></fa-icon></nb-action>
-                                    <nb-action title="Delete"><fa-icon [icon]="faTrashAlt"></fa-icon></nb-action>
+                                    <!-- <nb-action title="Delete"><fa-icon [icon]="faTrashAlt"></fa-icon></nb-action> -->
                                 </nb-actions>
                             </div>
                             {{ survey.description }}

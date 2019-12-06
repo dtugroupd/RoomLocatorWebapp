@@ -17,7 +17,8 @@ import {
   GetLocations,
   SetActiveLocation,
   ResetActiveLocation,
-  AddEventToLocation
+  AddEventToLocation,
+  GetLocationSurveys
 } from "../_actions/mazemap.actions";
 import { MazemapService } from "../_services/mazemap.service";
 import { tap } from "rxjs/operators";
@@ -141,7 +142,7 @@ export class MazemapState {
 
   @Action(SetActiveLocation)
   getLocation(
-    { patchState }: StateContext<MazemapStateModel>,
+    { patchState, dispatch }: StateContext<MazemapStateModel>,
     { payload }: SetActiveLocation
   ) {
     return this.mazemapService.getLocation(payload).pipe(
@@ -149,25 +150,28 @@ export class MazemapState {
         patchState({
           activeLocation: res
         });
-
-        if (res) {
-          function removeDuplicates(myArr, prop) {
-            return myArr.filter((obj, pos, arr) => {
-              return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
-            });
-          }
-          const activeSurveysAll = res.sections.map(s => s.survey);
-          const activeSurveys = removeDuplicates(activeSurveysAll, "id");
-          patchState({
-            activeSurveys
-          });
-        } else {
+        if (this.router.url === '/survey-management' && payload) {
+          dispatch(new GetLocationSurveys(res.id));
+        }
+      },
+        () => {
           patchState({
             activeSurveys: null
           });
         }
-      })
-    );
+      ));
+    }
+
+  @Action(GetLocationSurveys)
+  getLocationSurveys({ patchState }: StateContext<MazemapStateModel>, { payload }: GetLocationSurveys) {
+    this.surveyService.getLocationSurveys(payload).subscribe(res => {
+      patchState({
+        activeSurveys: res
+      });
+    },
+      () => {
+        console.warn("Could not get location surveys.");
+      });
   }
 
   @Action(ResetActiveLocation)
@@ -227,6 +231,12 @@ export class MazemapState {
         setState(
           patch({
             surveys: append([res])
+          })
+        );
+
+        setState(
+          patch({
+            activeSurveys: append([res])
           })
         );
         const newActiveLocation = state.activeLocation;

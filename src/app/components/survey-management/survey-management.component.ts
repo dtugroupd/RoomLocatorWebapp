@@ -44,8 +44,10 @@ export class SurveyManagementComponent implements OnInit {
   ngOnInit() {
     // this.store.dispatch(new GetSurveys());
     this.activeSurveys$.subscribe(x => {
-      this.surveys = x;
-      this.unsortedSurveys = Object.create(x);
+      if (x) {
+        this.surveys = x;
+        this.unsortedSurveys = Object.create(x);
+      }
     });
 
     this.activeSection$.subscribe(x => {
