@@ -99,7 +99,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   items = [
     { title: 'Profile' },
-    { title: 'Logout' },
+    { title: 'Sign out' },
   ];
 
   menuItems: NbMenuItem[] = [
@@ -159,7 +159,7 @@ export class AppComponent implements OnInit, OnDestroy {
       )
       .subscribe(title => {
 
-        if ( title === 'Logout' )
+        if ( title === 'Sign out' )
         {
           this.store.dispatch( new Logout() );
         } 

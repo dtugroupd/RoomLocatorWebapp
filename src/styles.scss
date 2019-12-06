@@ -39,3 +39,7 @@
 .mapboxgl-popup-anchor-left .mapboxgl-popup-tip  {
     border-right-color: var(--background-basic-color-1);
 }
+
+nb-dialog-container  {
+    overflow: auto;
+}
