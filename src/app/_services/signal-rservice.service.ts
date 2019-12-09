@@ -60,6 +60,10 @@ export class SignalRServiceService {
     });
     this.connection.on('created-user', user => this.store.dispatch(new GetUsers()));
     this.connection.on('updated-user', user => this.store.dispatch(new FetchUserSuccess(user)));
+    this.connection.on('updated-role', roles => {
+      console.warn('Updated Roles', roles, roles.map(x => x.name));
+      this.toaster.primary(`New roles: ${roles.map(x => x.name)}`, 'Your roles was updated!');
+    });
   }
 
   private listenEventChanges() {
