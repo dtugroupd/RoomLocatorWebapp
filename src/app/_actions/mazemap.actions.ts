@@ -1,3 +1,7 @@
+/**
+ * @author Thomas Lien Christensen, s165242
+ */
+
 import { SurveyToCreate } from '../models/survey/survey-to-create.model';
 import { SurveyAnswerSubmition } from '../models/survey/survey-answer-submition.model';
 import { Event } from '../models/calendar/event.model';

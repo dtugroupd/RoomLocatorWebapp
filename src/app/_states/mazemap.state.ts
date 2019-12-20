@@ -3,7 +3,7 @@
  * @author Hadi Horani, s144885
  */
 
-import { State, Action, StateContext, Selector, Store } from "@ngxs/store";
+import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
 import {
   SetActiveSection,
   SetActivateFeedbackAndStatus,
@@ -19,16 +19,16 @@ import {
   ResetActiveLocation,
   AddEventToLocation,
   GetLocationSurveys
-} from "../_actions/mazemap.actions";
-import { MazemapService } from "../_services/mazemap.service";
-import { tap } from "rxjs/operators";
-import { SurveyService } from "../_services/survey.service";
-import { Survey } from "../models/survey/survey.model";
-import { patch, updateItem, append } from "@ngxs/store/operators";
-import { Section } from "../models/mazemap/section.model";
-import { MapLocation } from "../models/mazemap/map-location.model";
-import { Router } from "@angular/router";
-import { TokenStateModel, TokenState } from "./token.state";
+} from '../_actions/mazemap.actions';
+import { MazemapService } from '../_services/mazemap.service';
+import { tap } from 'rxjs/operators';
+import { SurveyService } from '../_services/survey.service';
+import { Survey } from '../models/survey/survey.model';
+import { patch, updateItem, append } from '@ngxs/store/operators';
+import { Section } from '../models/mazemap/section.model';
+import { MapLocation } from '../models/mazemap/map-location.model';
+import { Router } from '@angular/router';
+import { TokenState } from './token.state';
 
 export class MazemapStateModel {
   locations: MapLocation[];
@@ -40,7 +40,7 @@ export class MazemapStateModel {
 }
 
 @State<MazemapStateModel>({
-  name: "MazeMap",
+  name: 'MazeMap',
   defaults: {
     locations: undefined,
     activeLocation: null,
@@ -93,7 +93,7 @@ export class MazemapState {
     return this.mazemapService.getLocations().pipe(
       tap(res => {
         let locations = res;
-        if (this.router.url === "/survey-management") {
+        if (this.router.url === '/survey-management') {
           const user = this.store.selectSnapshot(TokenState.getUser);
           const researcherUserLocations = this.store.selectSnapshot(
             TokenState.getUserResearcherLocations
@@ -170,7 +170,7 @@ export class MazemapState {
       });
     },
       () => {
-        console.warn("Could not get location surveys.");
+        console.warn('Could not get location surveys.');
       });
   }
 
