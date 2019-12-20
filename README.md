@@ -1,4 +1,4 @@
-# Web Application: DTU Building Status
+# Web Application: Campus Connect
 
 This platform calculates and shows environmental status, activity etc. for locations at DTU Campus. This is a part of the course Software Engineering 2, Group D's solution.
 
