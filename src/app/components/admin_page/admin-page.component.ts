@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { UserDeleteComponent } from '../user-delete/user-delete.component';
 import { NbDialogService } from '@nebular/theme';
 import { AdminState } from 'src/app/_states/admin.state';
+import { GetUser } from 'src/app/_actions/user.actions';
 
 
 @Component( {
@@ -53,9 +54,10 @@ export class AdminPageComponent implements OnInit
 
   ngOnInit ()
   {
-    this.store.dispatch( new GetUsers() ).subscribe( x =>
+    this.store.dispatch(new GetUsers());
+    this.users$.subscribe( x =>
     {
-      this.users = x.users.users;
+      this.users = x;
       this.dataSource = new MatTableDataSource( this.users );
 
       this.dataSource.filterPredicate = ( item, filter: string ) => {
