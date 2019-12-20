@@ -7,7 +7,7 @@
 
     <input nbInput matInput fullWidth (keyup)="applyFilter($event.target.value)" placeholder="Filter" id="userSearch">
     <br>
-    <table mat-table [dataSource]="users$" class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
         <ng-container matColumnDef="image">
             <th class="header" mat-header-cell *matHeaderCellDef></th>
