@@ -1,5 +1,6 @@
 /**
  * @author Andreas Gøricke, s153804
+ * @author Thomas Lien Christensen, s165242
  * @author Anders Wiberg Olsen, s165241
  */
 
@@ -55,22 +56,26 @@ export class EventState {
     }
 
     @Action(AddEvent)
-    addEvent({ setState, dispatch }: StateContext<EventStateModel>, { payload }: AddEvent) {
+    addEvent({ dispatch }: StateContext<EventStateModel>, { payload }: AddEvent) {
         return this.eventService.createEvent(payload).subscribe(
             result => {
-                setState(
-                    patch({
-                        events: append([result])
-                    })
-                );
-                setState(
-                    patch({
-                        newEvent: result
-                    })
-                );
-                dispatch(new AddEventSuccess());
+                dispatch(new AddEventSuccess(result));
             },
             () => dispatch(new AddEventError())
+        );
+    }
+
+    @Action(AddEventSuccess)
+    addEventSuccess({ setState }: StateContext<EventStateModel>, { payload }: AddEventSuccess) {
+        setState(
+            patch({
+            events: append([payload])
+            })
+        );
+        setState(
+            patch({
+            newEvent: payload
+            })
         );
     }
 
